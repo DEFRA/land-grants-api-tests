@@ -1,4 +1,4 @@
-# CDP Node.js Environment Test Suite Template
+land-grants-api-tests
 
 The template to create a service that runs WDIO tests against an environment.
 
