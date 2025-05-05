@@ -1,65 +1,95 @@
-land-grants-api-tests
+# Data-Driven Test Framework for Land Grants API
 
 This repository contains the acceptance tests for the Land Grants API located at https://github.com/DEFRA/land-grants-api.
 
-These tests will run against the Dev / Test / Prod environment, when a new version of the Land Grant API service is deployed in those environments. 
+These tests will run against the Dev / Test environments, when a new version of the Land Grant API service is deployed in those environments.
 
-The repository is based on a CDP journey test suite, amended to run Jest tests against the REST API of the service.
+The repository is based on a CDP journey test suite, amended to run Jest tests against the REST APIs of the service.
 
-- [Local](#local)
-  - [Requirements](#requirements)
-    - [Node.js](#nodejs)
-  - [Setup](#setup)
-  - [Running local tests](#running-local-tests)
-- [Licence](#licence)
-  - [About the licence](#about-the-licence)
 
-## Local Development
+## How to Use
 
-### Requirements
+### 1. Create a CSV Data File
 
-#### Node.js
+Create a CSV file in the `data/` directory with your test cases:
 
-Please install [Node.js](http://nodejs.org/) `>= v20` and [npm](https://nodejs.org/) `>= v9`. You will find it
-easier to use the Node Version Manager [nvm](https://github.com/creationix/nvm)
-
-To use the correct version of Node.js for this application, via nvm:
-
-```bash
-nvm use
+```csv
+sheetId,parcelId,expectedStatusCode,expectedMessage,expectedSizeUnit,expectedSizeValue,expectedActionCode
+SX0679,9238,200,success,ha,440,CMOR1
+AB1234,9999,404,Land parcel not found,,,
 ```
 
-### Setup
+### 2. Create a Test Spec
 
-Install application dependencies:
+Create a test spec file in the `specs/` directory:
+
+```javascript
+import request from 'supertest'
+import { readCsv } from '../utils/csvReader'
+import { runAllTests, validateResponse } from '../utils/testHelper'
+
+describe('Your API Test', () => {
+  let testData = []
+
+  beforeAll(async () => {
+    testData = await readCsv('./test/data/yourData.csv')
+  })
+
+  it('should validate all test cases', async () => {
+    const testFunction = async (testCase) => {
+      const response = await request(global.baseUrl)
+        .get(`/your-endpoint/${testCase.someId}`)
+        .set('Accept', 'application/json')
+
+      // Define custom validators if needed
+      const customValidator = (response, testCase) => {
+        // Your custom validation logic
+      }
+
+      validateResponse(response, testCase, {
+        allureReport: true,
+        customValidators: [customValidator]
+      })
+    }
+
+    const results = await runAllTests(testData, testFunction, {
+      allureReport: true
+    })
+
+    if (results.failed > 0) {
+      throw new Error(`${results.failed} out of ${results.total} tests failed`)
+    }
+  })
+})
+```
+
+### 3. Run Tests and Generate Reports
 
 ```bash
+# Install dependencies
 npm install
+
+# Run the tests
+npm test
+
+# Generate Allure report
+npm run report
+
+# View the report
+npm run report:open
 ```
 
-### Running local tests
-
-Start application you are testing on the url specified in `baseUrl`
-
-```bash
-npm run test
-```
-
-
-## Licence
-
+### Licence
 THIS INFORMATION IS LICENSED UNDER THE CONDITIONS OF THE OPEN GOVERNMENT LICENCE found at:
 
-<http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3>
+http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3
 
 The following attribution statement MUST be cited in your products and applications when using this information.
 
-> Contains public sector information licensed under the Open Government licence v3
+Contains public sector information licensed under the Open Government licence v3
 
 ### About the licence
 
-The Open Government Licence (OGL) was developed by the Controller of Her Majesty's Stationery Office (HMSO) to enable
-information providers in the public sector to license the use and re-use of their information under a common open
-licence.
+The Open Government Licence (OGL) was developed by the Controller of Her Majesty's Stationery Office (HMSO) to enable information providers in the public sector to license the use and re-use of their information under a common open licence.
 
 It is designed to encourage use and re-use of information freely and flexibly, with only a few conditions.

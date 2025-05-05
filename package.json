@@ -16,6 +16,8 @@
   "scripts": {
     "clean": "rm -rf allure-results && rm -rf allure-report",
     "test": "npm run clean && jest",
+    "test:report": "npm run clean && jest && npm run report",
+    "test:allure": "npm run clean && JEST_ALLURE=1 jest && npm run report",
     "format": "prettier --write 'test/**/*.{js,md,json,config.js}'",
     "format:check": "prettier --check 'test/**/*.{js,md,json,config.js}'",
     "git:pre-commit-hook": "npm run format:check && npm run lint",
@@ -24,10 +26,13 @@
     "postinstall": "npm run setup:husky",
     "setup:husky": "node -e \"try { (await import('husky')).default() } catch (e) { if (e.code !== 'ERR_MODULE_NOT_FOUND') throw e }\" --input-type module",
     "report": "allure generate allure-results --single-file --clean",
+    "report:open": "allure open allure-report",
     "report:publish": "npm run report; ./bin/publish-tests.sh"
   },
   "dependencies": {
     "allure-commandline": "2.32.0",
+    "axios": "1.9.0",
+    "csv-parser": "3.2.0",
     "esm-module-alias": "2.2.1",
     "global-agent": "3.0.0",
     "undici": "7.3.0"
