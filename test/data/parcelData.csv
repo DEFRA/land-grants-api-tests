@@ -1,0 +1,3 @@
+sheetId,parcelId,expectedStatusCode,expectedMessage,expectedSizeUnit,expectedSizeValue,expectedActionCode
+SX0679,9238,200,success,ha,440,CMOR1
+AB1234,9999,404,Land parcel not found,,,
