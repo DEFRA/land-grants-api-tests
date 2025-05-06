@@ -176,7 +176,7 @@ export const validateResponse = (response, testCase, options = {}) => {
   }
 
   // Store any validation errors
-  let validationErrors = []
+  const validationErrors = []
 
   // Define validation steps that might be run inside Allure steps
   const validateStatusCodeFn = () => {

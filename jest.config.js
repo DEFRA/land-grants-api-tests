@@ -13,11 +13,7 @@ export default {
   silent: false,
   watchPathIgnorePatterns: ['globalConfig'],
   testMatch: ['**/*.spec.js'],
-  reporters: [
-    'default', 
-    ['github-actions', { silent: false }], 
-    'summary'
-  ],
+  reporters: ['default', ['github-actions', { silent: false }], 'summary'],
   setupFiles: ['<rootDir>/.jest/setup.js'],
   coveragePathIgnorePatterns: [
     '<rootDir>/node_modules/',

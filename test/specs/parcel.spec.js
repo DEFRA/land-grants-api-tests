@@ -21,42 +21,38 @@ describe('GET /parcel endpoint', () => {
       const { sheetId, parcelId } = testCase
       const parcelIdentifier = `${sheetId}-${parcelId}`
 
-      try {
-        // Make the real API request
-        const response = await request(global.baseUrl)
-          .get(`/parcel/${parcelIdentifier}`)
-          .set('Accept', 'application/json')
-        // Validate basic status code match before other validations
-        validateStatusCode(response, testCase)
+      // Make the real API request
+      const response = await request(global.baseUrl)
+        .get(`/parcel/${parcelIdentifier}`)
+        .set('Accept', 'application/json')
+      // Validate basic status code match before other validations
+      validateStatusCode(response, testCase)
 
-        // For 200 responses, perform detailed validations
-        if (response.status === 200) {
-          // Validate success message
-          validateSuccessMessage(response, testCase)
-          // Validate parcel structure
-          validateParcelStructure(response)
-          // Validate size unit
-          validateSizeUnit(response, testCase)
-          // Validate size value
-          validateSizeValue(response, testCase)
-          // Validate action code
-          validateActionCode(response, testCase)
-        } else {
-          // Validate error message for non-200 responses
-          validateErrorMessage(response, testCase)
-        }
-
-        // Validate the full response using our utility
-        validateResponse(response, testCase, {
-          customValidators: [validateParcelFields],
-          allureReport: options.allureReport,
-          throwOnError: true // Ensure errors are thrown to fail the test
-        })
-
-        return response
-      } catch (error) {
-        throw error
+      // For 200 responses, perform detailed validations
+      if (response.status === 200) {
+        // Validate success message
+        validateSuccessMessage(response, testCase)
+        // Validate parcel structure
+        validateParcelStructure(response)
+        // Validate size unit
+        validateSizeUnit(response, testCase)
+        // Validate size value
+        validateSizeValue(response, testCase)
+        // Validate action code
+        validateActionCode(response, testCase)
+      } else {
+        // Validate error message for non-200 responses
+        validateErrorMessage(response, testCase)
       }
+
+      // Validate the full response using our utility
+      validateResponse(response, testCase, {
+        customValidators: [validateParcelFields],
+        allureReport: options.allureReport,
+        throwOnError: true // Ensure errors are thrown to fail the test
+      })
+
+      return response
     }
 
     // Run tests with our helper that handles test result tracking

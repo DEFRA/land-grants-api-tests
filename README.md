@@ -7,63 +7,7 @@ These tests will run against the Dev / Test environments, when a new version of 
 The repository is based on a CDP journey test suite, amended to run Jest tests against the REST APIs of the service.
 
 
-## How to Use
-
-### 1. Create a CSV Data File
-
-Create a CSV file in the `data/` directory with your test cases:
-
-```csv
-sheetId,parcelId,expectedStatusCode,expectedMessage,expectedSizeUnit,expectedSizeValue,expectedActionCode
-SX0679,9238,200,success,ha,440,CMOR1
-AB1234,9999,404,Land parcel not found,,,
-```
-
-### 2. Create a Test Spec
-
-Create a test spec file in the `specs/` directory:
-
-```javascript
-import request from 'supertest'
-import { readCsv } from '../utils/csvReader'
-import { runAllTests, validateResponse } from '../utils/testHelper'
-
-describe('Your API Test', () => {
-  let testData = []
-
-  beforeAll(async () => {
-    testData = await readCsv('./test/data/yourData.csv')
-  })
-
-  it('should validate all test cases', async () => {
-    const testFunction = async (testCase) => {
-      const response = await request(global.baseUrl)
-        .get(`/your-endpoint/${testCase.someId}`)
-        .set('Accept', 'application/json')
-
-      // Define custom validators if needed
-      const customValidator = (response, testCase) => {
-        // Your custom validation logic
-      }
-
-      validateResponse(response, testCase, {
-        allureReport: true,
-        customValidators: [customValidator]
-      })
-    }
-
-    const results = await runAllTests(testData, testFunction, {
-      allureReport: true
-    })
-
-    if (results.failed > 0) {
-      throw new Error(`${results.failed} out of ${results.total} tests failed`)
-    }
-  })
-})
-```
-
-### 3. Run Tests and Generate Reports
+## Run Tests and Generate Reports
 
 ```bash
 # Install dependencies
