@@ -15,7 +15,12 @@ export const readCsv = (filePath) => {
     }
     fs.createReadStream(filePath)
       .pipe(csv())
-      .on('data', (data) => results.push(data))
+      .on('data', (data) => {
+        // Ignore rows where all values are empty
+        if (Object.values(data).some((value) => value.trim() !== '')) {
+          results.push(data)
+        }
+      })
       .on('end', () => {
         console.log(
           `Read ${results.length} records from ${path.basename(filePath)}`
