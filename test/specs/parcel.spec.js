@@ -23,7 +23,7 @@ describe('GET /parcel endpoint', () => {
 
       // Make the real API request
       const response = await request(global.baseUrl)
-        .get(`/parcel/${parcelIdentifier}`)
+        .get(`/parcels/${parcelIdentifier}`)
         .set('Accept', 'application/json')
       // Validate basic status code match before other validations
       validateStatusCode(response, testCase)
