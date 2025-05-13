@@ -1,6 +1,7 @@
 import request from 'supertest'
 import { validateResponse } from '../utils/testRunnerHelper.js'
 import { runTestsAndRecordResults } from '../utils/recordResults'
+import { PARCELS_ENDPOINT } from '../utils/apiEndpoints'
 import {
   validateParcelFields,
   validateStatusCode,
@@ -12,7 +13,7 @@ import {
   validateActionCode
 } from '../utils/parcelHelper'
 
-describe('GET /parcel endpoint', () => {
+describe('Parcels endpoint', () => {
   it('should validate parcels from CSV data', async () => {
     const dataFile = './test/data/parcelData.csv'
 
@@ -23,7 +24,7 @@ describe('GET /parcel endpoint', () => {
 
       // Make the real API request
       const response = await request(global.baseUrl)
-        .get(`/parcels/${parcelIdentifier}`)
+        .get(`${PARCELS_ENDPOINT}/${parcelIdentifier}`)
         .set('Accept', 'application/json')
       // Validate basic status code match before other validations
       validateStatusCode(response, testCase)
@@ -60,10 +61,10 @@ describe('GET /parcel endpoint', () => {
   })
 })
 
-describe('Hitting /parcel', () => {
-  it('should return success', async () => {
+describe('Parcels endpoint', () => {
+  it('should validate individual parcels when not passed as csv data', async () => {
     const res = await request(global.baseUrl)
-      .get('/parcel/SX0679-9238')
+      .get(`${PARCELS_ENDPOINT}/SX0679-9238`)
       .set('Accept', 'application/json')
       .expect(200)
       .expect('Content-Type', 'application/json; charset=utf-8')
