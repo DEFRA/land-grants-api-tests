@@ -16,8 +16,6 @@
   "scripts": {
     "clean": "rm -rf allure-results && rm -rf allure-report",
     "test": "npm run clean && jest",
-    "test:report": "npm run clean && jest && npm run report",
-    "test:allure": "npm run clean && JEST_ALLURE=1 jest && npm run report",
     "format": "prettier --write 'test/**/*.{js,md,json,config.js}'",
     "format:check": "prettier --check 'test/**/*.{js,md,json,config.js}'",
     "git:pre-commit-hook": "npm run format:check && npm run lint",

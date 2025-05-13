@@ -1,11 +1,14 @@
 # Data-Driven Test Framework for Land Grants API
 
-This repository contains the acceptance tests for the Land Grants API located at https://github.com/DEFRA/land-grants-api.
+This repository hosts the acceptance tests for the Land Grants API, available at https://github.com/DEFRA/land-grants-api.
 
-These tests will run against the Dev / Test environments, when a new version of the Land Grant API service is deployed in those environments.
+The tests are designed to run in the Dev and Test environments whenever a new version of the Land Grants API service is deployed.
 
-The repository is based on a CDP journey test suite, amended to run Jest tests against the REST APIs of the service.
+Built on a CDP journey test suite, this repository has been enhanced to support data-driven tests by reading test data from a CSV file and executing them against the service's REST APIs.
 
+## Local Development
+
+Ensure you have Land-Grants-API service running locally.
 
 ## Run Tests and Generate Reports
 
