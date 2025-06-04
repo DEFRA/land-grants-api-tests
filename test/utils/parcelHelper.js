@@ -56,8 +56,7 @@ export function validateParcelStructure(response) {
  * Custom validator for parcel fields
  */
 export function validateParcelFields(response, testCase) {
-
-  console.log("running validateParcelFields")
+  console.log('running validateParcelFields')
   // Only validate successful responses
   if (response.status !== 200) {
     return // Non-200 responses are validated elsewhere
@@ -205,7 +204,7 @@ export function validateAvailableArea(response, testCase) {
   const expectedAvailableAreaUnit = testCase.expectedAvailableAreaUnit
   const expectedAvailableArea = Number(testCase.expectedAvailableAreaValue)
 
-  parcel.actions.forEach(action => {
+  parcel.actions.forEach((action) => {
     const actualActionCode = action.code
     const actualActionDescription = action.description
     const actualAvailableAreaUnit = action.availableArea.unit
@@ -234,16 +233,14 @@ export function validateAvailableArea(response, testCase) {
         `Available area validation failed: expected ${expectedAvailableArea} but got ${actualAvailableArea}`
       )
     }
-
-  });
+  })
 }
 
 /**
  * Validate actions if expected
  */
 export function validateParcelActions(parcel, testCase) {
-
-  console.log("running validateParcelActions")
+  console.log('running validateParcelActions')
   if (!testCase.expectedActionCode) return
 
   if (
