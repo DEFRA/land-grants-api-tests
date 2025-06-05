@@ -231,13 +231,13 @@ export function validateAvailableArea(response, testCase) {
   const expectedActionCode = testCase.expectedActionCode
   const expectedActionDescription = testCase.expectedActionDescription
   const expectedAvailableAreaUnit = testCase.expectedAvailableAreaUnit
-  const expectedAvailableArea = Number(testCase.expectedAvailableAreaValue)
+  const expectedAvailableAreaValue = Number(testCase.expectedAvailableAreaValue)
 
   parcel.actions.forEach((action) => {
     const actualActionCode = action.code
     const actualActionDescription = action.description
     const actualAvailableAreaUnit = action.availableArea.unit
-    const actualAvailableArea = action.availableArea.value
+    const actualAvailableAreaValue = action.availableArea.value
 
     if (actualActionCode === expectedActionCode) {
       if (actualActionDescription !== expectedActionDescription) {
@@ -248,13 +248,13 @@ export function validateAvailableArea(response, testCase) {
 
       if (actualAvailableAreaUnit !== expectedAvailableAreaUnit) {
         throw new Error(
-          `Available Area Unit validation failed: expected ${expectedAvailableAreaUnit} but got ${actualAvailableAreaUnit}`
+          `Available area unit validation failed: expected ${expectedAvailableAreaUnit} but got ${actualAvailableAreaUnit}`
         )
       }
 
-      if (expectedAvailableArea !== actualAvailableArea) {
+      if (expectedAvailableAreaValue !== actualAvailableAreaValue) {
         throw new Error(
-          `Available area validation failed: expected ${expectedAvailableArea} but got ${actualAvailableArea}`
+          `Available area value validation failed: expected ${expectedAvailableAreaValue} but got ${actualAvailableAreaValue}`
         )
       }
     }
