@@ -56,7 +56,6 @@ export function validateParcelStructure(response) {
  * Custom validator for parcel fields
  */
 export function validateParcelFields(response, testCase) {
-  console.log('running validateParcelFields')
   // Only validate successful responses
   if (response.status !== 200) {
     return // Non-200 responses are validated elsewhere
@@ -115,7 +114,7 @@ export function validateParcelSize(parcel, testCase) {
   // Check value
   if (testCase.expectedSizeValue) {
     const expectedValue = Number(testCase.expectedSizeValue)
-    const actualValue = parcel.size.value
+    const actualValue = Number(parcel.size.value)
 
     if (isNaN(expectedValue)) {
       throw new Error(
@@ -195,48 +194,6 @@ export function validateActionCode(response, testCase) {
 }
 
 /**
- * Validates actions array from the parcel
- */
-export function validateAvailableArea(response, testCase) {
-  const { parcel } = response.body
-  const expectedActionCode = testCase.expectedActionCode
-  const expectedActionDescription = testCase.expectedActionDescription
-  const expectedAvailableAreaUnit = testCase.expectedAvailableAreaUnit
-  const expectedAvailableArea = Number(testCase.expectedAvailableAreaValue)
-
-  parcel.actions.forEach((action) => {
-    const actualActionCode = action.code
-    const actualActionDescription = action.description
-    const actualAvailableAreaUnit = action.availableArea.unit
-    const actualAvailableArea = action.availableArea.value
-
-    if (actualActionCode !== expectedActionCode) {
-      throw new Error(
-        `Action Code validation failed: expected ${expectedActionCode} but got ${actualActionCode}`
-      )
-    }
-
-    if (actualActionDescription !== expectedActionDescription) {
-      throw new Error(
-        `Action description validation failed: expected ${expectedActionDescription} but got ${actualActionDescription}`
-      )
-    }
-
-    if (actualAvailableAreaUnit !== expectedAvailableAreaUnit) {
-      throw new Error(
-        `Available Area Unit validation failed: expected ${expectedAvailableAreaUnit} but got ${actualAvailableAreaUnit}`
-      )
-    }
-
-    if (expectedAvailableArea !== actualAvailableArea) {
-      throw new Error(
-        `Available area validation failed: expected ${expectedAvailableArea} but got ${actualAvailableArea}`
-      )
-    }
-  })
-}
-
-/**
  * Validate actions if expected
  */
 export function validateParcelActions(parcel, testCase) {
@@ -265,4 +222,42 @@ export function validateParcelActions(parcel, testCase) {
       `Expected action code '${testCase.expectedActionCode}' but found: [${availableCodes}]`
     )
   }
+}
+
+/**
+ * Validate available area from the parcel
+ */
+export function validateAvailableArea(response, testCase) {
+  const { parcel } = response.body
+  const expectedActionCode = testCase.expectedActionCode
+  const expectedActionDescription = testCase.expectedActionDescription
+  const expectedAvailableAreaUnit = testCase.expectedAvailableAreaUnit
+  const expectedAvailableArea = Number(testCase.expectedAvailableAreaValue)
+
+  parcel.actions.forEach((action) => {
+    const actualActionCode = action.code
+    const actualActionDescription = action.description
+    const actualAvailableAreaUnit = action.availableArea.unit
+    const actualAvailableArea = action.availableArea.value
+
+    if (actualActionCode === expectedActionCode) {
+      if (actualActionDescription !== expectedActionDescription) {
+        throw new Error(
+          `Action description validation failed: expected ${expectedActionDescription} but got ${actualActionDescription}`
+        )
+      }
+
+      if (actualAvailableAreaUnit !== expectedAvailableAreaUnit) {
+        throw new Error(
+          `Available Area Unit validation failed: expected ${expectedAvailableAreaUnit} but got ${actualAvailableAreaUnit}`
+        )
+      }
+
+      if (expectedAvailableArea !== actualAvailableArea) {
+        throw new Error(
+          `Available area validation failed: expected ${expectedAvailableArea} but got ${actualAvailableArea}`
+        )
+      }
+    }
+  })
 }
