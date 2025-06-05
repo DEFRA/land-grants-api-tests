@@ -197,7 +197,6 @@ export function validateActionCode(response, testCase) {
  * Validate actions if expected
  */
 export function validateParcelActions(parcel, testCase) {
-  console.log('running validateParcelActions')
   if (!testCase.expectedActionCode) return
 
   if (
