@@ -114,7 +114,7 @@ export function validateParcelSize(parcel, testCase) {
   // Check value
   if (testCase.expectedSizeValue) {
     const expectedValue = Number(testCase.expectedSizeValue)
-    const actualValue = parcel.size.value
+    const actualValue = Number(parcel.size.value)
 
     if (isNaN(expectedValue)) {
       throw new Error(
@@ -158,7 +158,7 @@ export function validateSizeValue(response, testCase) {
 
   const { parcel } = response.body
   const expectedValue = Number(testCase.expectedSizeValue)
-  const actualValue = parcel.size.value
+  const actualValue = Number(parcel.size.value)
 
   if (actualValue !== expectedValue) {
     throw new Error(
@@ -221,4 +221,42 @@ export function validateParcelActions(parcel, testCase) {
       `Expected action code '${testCase.expectedActionCode}' but found: [${availableCodes}]`
     )
   }
+}
+
+/**
+ * Validate available area from the parcel
+ */
+export function validateAvailableArea(response, testCase) {
+  const { parcel } = response.body
+  const expectedActionCode = testCase.expectedActionCode
+  const expectedActionDescription = testCase.expectedActionDescription
+  const expectedAvailableAreaUnit = testCase.expectedAvailableAreaUnit
+  const expectedAvailableAreaValue = Number(testCase.expectedAvailableAreaValue)
+
+  parcel.actions.forEach((action) => {
+    const actualActionCode = action.code
+    const actualActionDescription = action.description
+    const actualAvailableAreaUnit = action.availableArea.unit
+    const actualAvailableAreaValue = action.availableArea.value
+
+    if (actualActionCode === expectedActionCode) {
+      if (actualActionDescription !== expectedActionDescription) {
+        throw new Error(
+          `Action description validation failed: expected ${expectedActionDescription} but got ${actualActionDescription}`
+        )
+      }
+
+      if (actualAvailableAreaUnit !== expectedAvailableAreaUnit) {
+        throw new Error(
+          `Available area unit validation failed: expected ${expectedAvailableAreaUnit} but got ${actualAvailableAreaUnit}`
+        )
+      }
+
+      if (expectedAvailableAreaValue !== actualAvailableAreaValue) {
+        throw new Error(
+          `Available area value validation failed: expected ${expectedAvailableAreaValue} but got ${actualAvailableAreaValue}`
+        )
+      }
+    }
+  })
 }

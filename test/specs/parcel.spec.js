@@ -10,7 +10,8 @@ import {
   validateParcelStructure,
   validateSizeUnit,
   validateSizeValue,
-  validateActionCode
+  validateActionCode,
+  validateAvailableArea
 } from '../utils/parcelHelper'
 
 describe('Parcels endpoint', () => {
@@ -41,6 +42,8 @@ describe('Parcels endpoint', () => {
         validateSizeValue(response, testCase)
         // Validate action code
         validateActionCode(response, testCase)
+        // Validate available area value
+        validateAvailableArea(response, testCase)
       } else {
         // Validate error message for non-200 responses
         validateErrorMessage(response, testCase)
@@ -64,13 +67,13 @@ describe('Parcels endpoint', () => {
 describe('Parcels endpoint', () => {
   it('should validate individual parcels when not passed as csv data', async () => {
     const res = await request(global.baseUrl)
-      .get(`${PARCELS_ENDPOINT}/SX0679-9238`)
+      .get(`${PARCELS_ENDPOINT}/SD6743-6006`)
       .set('Accept', 'application/json')
       .expect(200)
       .expect('Content-Type', 'application/json; charset=utf-8')
 
     expect(res.body.message).toEqual('success')
-    expect(res.body.parcel.parcelId).toEqual('9238')
-    expect(res.body.parcel.sheetId).toEqual('SX0679')
+    expect(res.body.parcel.parcelId).toEqual('6006')
+    expect(res.body.parcel.sheetId).toEqual('SD6743')
   })
 })
