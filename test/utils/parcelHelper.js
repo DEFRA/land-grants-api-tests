@@ -114,7 +114,7 @@ export function validateParcelSize(parcel, testCase) {
   // Check value
   if (testCase.expectedSizeValue) {
     const expectedValue = Number(testCase.expectedSizeValue)
-    const actualValue = Number(parcel.size.value)
+    const actualValue = parcel.size.value
 
     if (isNaN(expectedValue)) {
       throw new Error(
@@ -158,7 +158,7 @@ export function validateSizeValue(response, testCase) {
 
   const { parcel } = response.body
   const expectedValue = Number(testCase.expectedSizeValue)
-  const actualValue = Number(parcel.size.value)
+  const actualValue = parcel.size.value
 
   if (actualValue !== expectedValue) {
     throw new Error(
