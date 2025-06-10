@@ -51,7 +51,7 @@ export const runAllTests = async (dataFile, testFunction, options = {}) => {
 
     // Process each test case
     for (const [index, testCase] of testCases.entries()) {
-      const testId = testCase.testId || `Case-${index + 1}`
+      const testId = testCase.TestDescription || `Case-${index + 1}`
 
       try {
         if (testOptions.verbose) {
@@ -78,7 +78,7 @@ export const runAllTests = async (dataFile, testFunction, options = {}) => {
         })
 
         if (testOptions.verbose) {
-          console.log(`✅ Test case ${testId} passed`)
+          console.log(`✅ Test case: ${testId} passed`)
         }
       } catch (error) {
         failures++
@@ -91,17 +91,17 @@ export const runAllTests = async (dataFile, testFunction, options = {}) => {
         })
 
         // Log error
-        console.error(`❌ Test case ${testId} failed: ${error.message}`)
+        console.error(`❌ Test case: ${testId} failed: ${error.message}`)
 
         // Attach error to Allure if available
         if (allure && testOptions.allureReport) {
-          attachToAllure(`Error in test ${testId}`, { error: error.message })
+          attachToAllure(`Error in test: ${testId}`, { error: error.message })
         }
 
         // Stop if requested
         if (testOptions.stopOnError) {
           throw new Error(
-            `Test execution stopped after failure in test case ${testId}`
+            `Test execution stopped after failure in test case: ${testId}`
           )
         }
       }
