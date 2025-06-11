@@ -96,6 +96,8 @@ export const runAllTests = async (dataFile, testFunction, options = {}) => {
         // Attach error to Allure if available
         if (allure && testOptions.allureReport) {
           attachToAllure(`Error in test: ${testId}`, { error: error.message })
+          // Mark the Allure test as failed
+          safeAllureCall(allure, 'status', 'failed')
         }
 
         // Stop if requested
