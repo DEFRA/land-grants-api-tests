@@ -5,7 +5,7 @@
  * @param {Object} options - Test options including runAllTests options
  * @returns {Promise<void>} - Resolves when all tests complete, rejects if any test fails
  */
-import { getAllure, safeAllureCall } from './allureHelper.js'
+import { getAllure, safeAllureCall, cleanupAllure } from './allureHelper.js'
 
 export const runTestsAndRecordResults = async (
   dataFile,
@@ -55,6 +55,9 @@ export const runTestsAndRecordResults = async (
       safeAllureCall(allure, 'status', 'failed')
       safeAllureCall(allure, 'description', errorMessage)
     }
+  } finally {
+    // Clean up Allure resources
+    await cleanupAllure()
   }
 
   // Explicitly fail the test if any test cases failed
