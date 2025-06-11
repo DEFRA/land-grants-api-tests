@@ -6,6 +6,7 @@
  * @returns {Promise<void>} - Resolves when all tests complete, rejects if any test fails
  */
 import { getAllure, safeAllureCall, cleanupAllure } from './allureHelper.js'
+import fs from 'node:fs'
 
 export const runTestsAndRecordResults = async (
   dataFile,
@@ -34,6 +35,7 @@ export const runTestsAndRecordResults = async (
     const failedTests = results.filter((r) => !r.success)
     if (failedTests.length > 0) {
       testFailed = true
+      fs.writeFileSync('FAILED', JSON.stringify(results))
       const failedIds = failedTests.map((t) => t.testId).join(', ')
       const errors = failedTests
         .map((t) => `${t.testId}: ${t.error}`)
