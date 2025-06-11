@@ -2,7 +2,8 @@ import {
   getAllure,
   attachToAllure,
   allureStep,
-  safeAllureCall
+  safeAllureCall,
+  cleanupAllure
 } from './allureHelper.js'
 import { readCsv } from './csvReader.js'
 
@@ -147,6 +148,8 @@ export const runAllTests = async (dataFile, testFunction, options = {}) => {
         safeAllureCall(allure, 'status', 'failed')
       }
     }
+    // Clean up Allure resources
+    await cleanupAllure()
   }
   return results
 }

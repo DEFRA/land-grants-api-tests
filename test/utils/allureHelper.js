@@ -110,9 +110,28 @@ export const allureStep = async (name, fn) => {
   }
 }
 
+/**
+ * Cleanup Allure resources
+ */
+export const cleanupAllure = async () => {
+  try {
+    const allure = getAllure()
+    if (allure) {
+      // Wait for any pending Allure operations to complete
+      await new Promise((resolve) => setTimeout(resolve, 100))
+      // Reset the instance
+      allureInstance = null
+      allureChecked = false
+    }
+  } catch (error) {
+    console.error('Error cleaning up Allure:', error)
+  }
+}
+
 export default {
   getAllure,
   safeAllureCall,
   attachToAllure,
-  allureStep
+  allureStep,
+  cleanupAllure
 }
