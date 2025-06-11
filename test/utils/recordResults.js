@@ -5,6 +5,8 @@
  * @param {Object} options - Test options including runAllTests options
  * @returns {Promise<void>} - Resolves when all tests complete, rejects if any test fails
  */
+import { getAllure, safeAllureCall } from './allureHelper.js'
+
 export const runTestsAndRecordResults = async (
   dataFile,
   testFunction,
@@ -37,10 +39,22 @@ export const runTestsAndRecordResults = async (
         .map((t) => `${t.testId}: ${t.error}`)
         .join('\n  ')
       errorMessage = `${failedTests.length} test cases failed: ${failedIds}\n  ${errors}`
+      // Mark the Allure test as failed
+      const allure = getAllure()
+      if (allure && testOptions.allureReport) {
+        safeAllureCall(allure, 'status', 'failed')
+        safeAllureCall(allure, 'description', errorMessage)
+      }
     }
   } catch (error) {
     testFailed = true
     errorMessage = `Test execution error: ${error.message}`
+    // Mark the Allure test as failed
+    const allure = getAllure()
+    if (allure && testOptions.allureReport) {
+      safeAllureCall(allure, 'status', 'failed')
+      safeAllureCall(allure, 'description', errorMessage)
+    }
   }
 
   // Explicitly fail the test if any test cases failed
