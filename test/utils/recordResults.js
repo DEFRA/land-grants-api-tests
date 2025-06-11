@@ -59,6 +59,10 @@ export const runTestsAndRecordResults = async (
 
   // Explicitly fail the test if any test cases failed
   if (testFailed) {
+    const allure = getAllure()
+    if (allure && testOptions.allureReport) {
+      safeAllureCall(allure, 'status', 'failed')
+    }
     throw new Error(errorMessage)
   }
 }
