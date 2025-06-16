@@ -182,7 +182,7 @@ export function validateAvailableArea(response, testCase) {
     if (actualActionCode === expectedActionCode) {
       const actualActionDescription = action.description
       const actualAvailableAreaUnit = action.availableArea.unit
-      const actualAvailableAreaValue = action.availableArea.value
+      const actualAvailableAreaValue = Number(action.availableArea.value)
       if (actualActionDescription !== expectedActionDescription) {
         throw new Error(
           `Action description validation failed: expected ${expectedActionDescription} but got ${actualActionDescription}`
@@ -353,7 +353,7 @@ export function validateParcelAvailableArea(parcel, testCase) {
 
       const actualActionDescription = action.description
       const actualAvailableAreaUnit = action.availableArea.unit
-      const actualAvailableAreaValue = action.availableArea.value
+      const actualAvailableAreaValue = Number(action.availableArea.value)
       if (actualActionDescription !== expectedActionDescription) {
         throw new Error(
           `Action description validation failed: expected ${expectedActionDescription} but got ${actualActionDescription}`
