@@ -250,7 +250,7 @@ export function validateParcelFields(response, testCase) {
  * Validate size fields if expected
  */
 export function validateParcelSize(parcel, testCase) {
-  // Skip if no size is available in the request
+  // Skip if parcel size is not requested
   if (!testCase.fields.includes('size')) {
     return
   }
@@ -296,6 +296,7 @@ export function validateParcelSize(parcel, testCase) {
  * Validate actions if expected
  */
 export function validateParcelActions(parcel, testCase) {
+  // Skip if parcels actions are not requested
   if (
     !testCase.fields.includes('actions') &&
     !testCase.fields.includes('actions.availableArea')

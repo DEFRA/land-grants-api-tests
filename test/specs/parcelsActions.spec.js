@@ -18,7 +18,7 @@ afterAll(async () => {
 })
 
 describe('Parcels endpoint', () => {
-  it('should validate parcels from CSV data', async () => {
+  it('should validate parcels actions from CSV data', async () => {
     const dataFile = './test/data/parcelsActionsData.csv'
 
     // validating each test case
