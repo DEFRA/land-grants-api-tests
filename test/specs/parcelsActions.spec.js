@@ -10,12 +10,12 @@ import {
   validateParcelsStructure,
   validateActionCode
 } from '../utils/parcelsHelper.js'
-import { cleanupAllure } from '../utils/allureHelper.js'
+// import { cleanupAllure } from '../utils/allureHelper.js'
 
 // Add afterAll hook to clean up resources
-afterAll(async () => {
-  await cleanupAllure()
-})
+// afterAll(async () => {
+//   await cleanupAllure()
+// })
 
 describe('Parcels endpoint', () => {
   it('should validate parcels actions from CSV data', async () => {
