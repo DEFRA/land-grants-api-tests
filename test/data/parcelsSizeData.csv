@@ -1,0 +1,5 @@
+TestDescription,parcelIds,fields,expectedStatusCode,expectedMessage,expectedSheetId,expectedParcelId,expectedSizeUnit,expectedSizeValue,Comments
+1.Request parcels endpoint for parcel size of a single parcel-Validate size of parcel 1 of 1,SD6743-7268,size,200,success,SD6743,7268,ha,0.6564,
+2.Request parcels endpoint for parcel size of Multiple parcels-Validate size of parcel 1 of 2,"SD6743-7268,SD7846-7013",size,200,success,SD6743,7268,ha,0.6564,
+3.Request parcels endpoint for parcel size of Multiple parcels-Validate size of parcel 2 of 2,"SD6743-7268,SD7846-7013",size,200,success,SD7846,7013,ha,8.9902,
+4.Request parcels endpoint for parcel size of a parcel which doesn't exist,AB1234-9999,size,500,,,,,,TO DO: Update status to 404 after bug fix
