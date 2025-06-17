@@ -155,13 +155,24 @@ export function validateActionCode(response, testCase) {
       `Action code validation failed: expected '${testCase.expectedActionCode}' but found: [${availableCodes}]`
     )
   }
+  if (testCase.expectedGuidanceUrl) {
+    if (actionWithCode.guidanceUrl !== testCase.expectedGuidanceUrl) {
+      throw new Error(
+        `guidanceUrl validation failed: expected ${testCase.expectedGuidanceUrl} but got ${actionWithCode.guidanceUrl}`
+      )
+    }
+  }
 }
 
 /**
  * Validate available area from the parcel
  */
 export function validateAvailableArea(response, testCase) {
-  if (!testCase.fields.includes('actions.availableArea')) return
+  if (
+    !testCase.fields.includes('actions.availableArea') ||
+    !testCase.expectedAvailableAreaValue
+  )
+    return
 
   const expectedActionCode = testCase.expectedActionCode
   const expectedActionDescription = testCase.expectedActionDescription
