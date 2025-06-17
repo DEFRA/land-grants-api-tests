@@ -1,11 +1,11 @@
 import request from 'supertest'
 import { PARCELS_ENDPOINT } from '../utils/apiEndpoints.js'
-import { cleanupAllure } from '../utils/allureHelper.js'
+// import { cleanupAllure } from '../utils/allureHelper.js'
 
 // Add afterAll hook to clean up resources
-afterAll(async () => {
-  await cleanupAllure()
-})
+// afterAll(async () => {
+//   await cleanupAllure()
+// })
 
 describe('Parcels endpoint', () => {
   it('should validate parcels', async () => {
