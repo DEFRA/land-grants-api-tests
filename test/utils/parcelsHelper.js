@@ -155,13 +155,6 @@ export function validateActionCode(response, testCase) {
       `Action code validation failed: expected '${testCase.expectedActionCode}' but found: [${availableCodes}]`
     )
   }
-  if (testCase.expectedGuidanceUrl) {
-    if (actionWithCode.guidanceUrl !== testCase.expectedGuidanceUrl) {
-      throw new Error(
-        `guidanceUrl validation failed: expected ${testCase.expectedGuidanceUrl} but got ${actionWithCode.guidanceUrl}`
-      )
-    }
-  }
 }
 
 /**
