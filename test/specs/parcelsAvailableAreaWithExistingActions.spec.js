@@ -20,7 +20,8 @@ import {
 
 describe('Parcels endpoint', () => {
   it('should validate parcels available area from CSV data', async () => {
-    const dataFile = './test/data/parcelsAvailableAreaData.csv'
+    const dataFile =
+      './test/data/parcelsAvailableAreaWithExistingActionsData.csv'
 
     // validating each test case
     const validateParcel = async (testCase, options = {}) => {

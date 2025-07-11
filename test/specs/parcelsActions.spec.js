@@ -8,7 +8,8 @@ import {
   validateSuccessMessage,
   validateErrorMessage,
   validateParcelsStructure,
-  validateActionCode
+  validateActionCode,
+  validateAvailableArea
 } from '../utils/parcelsHelper.js'
 // import { cleanupAllure } from '../utils/allureHelper.js'
 
@@ -18,7 +19,7 @@ import {
 // })
 
 describe('Parcels endpoint', () => {
-  it('should validate parcels actions from CSV data', async () => {
+  it('should validate parcels actions and available area from CSV data', async () => {
     const dataFile = './test/data/parcelsActionsData.csv'
 
     // validating each test case
@@ -43,6 +44,8 @@ describe('Parcels endpoint', () => {
         validateParcelsStructure(response, testCase)
         // Validate action code
         validateActionCode(response, testCase)
+        // Validate available area value
+        validateAvailableArea(response, testCase)
       } else {
         // Validate error message for non-200 responses
         validateErrorMessage(response, testCase)
