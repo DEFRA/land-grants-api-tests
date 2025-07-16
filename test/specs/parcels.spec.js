@@ -50,25 +50,25 @@ describe('Parcels endpoint', () => {
           'CMOR1: Assess moorland and produce a written record'
         )
         expect(action.availableArea.unit).toEqual('ha')
-        expect(action.availableArea.value).toEqual(8.99010296)
+        expect(action.availableArea.value).toEqual(8.99052969)
       } else if (action.code === 'UPL1') {
         expect(action.description).toEqual(
           'UPL1: Moderate livestock grazing on moorland'
         )
         expect(action.availableArea.unit).toEqual('ha')
-        expect(action.availableArea.value).toEqual(8.99010296)
+        expect(action.availableArea.value).toEqual(8.99052969)
       } else if (action.code === 'UPL2') {
         expect(action.description).toEqual(
           'UPL2: Low livestock grazing on moorland'
         )
         expect(action.availableArea.unit).toEqual('ha')
-        expect(action.availableArea.value).toEqual(8.99010296)
+        expect(action.availableArea.value).toEqual(8.99052969)
       } else if (action.code === 'UPL3') {
         expect(action.description).toEqual(
           'UPL3: Limited livestock grazing on moorland'
         )
         expect(action.availableArea.unit).toEqual('ha')
-        expect(action.availableArea.value).toEqual(8.99010296)
+        expect(action.availableArea.value).toEqual(8.99052969)
       }
     })
 
@@ -81,25 +81,25 @@ describe('Parcels endpoint', () => {
           'CMOR1: Assess moorland and produce a written record'
         )
         expect(action.availableArea.unit).toEqual('ha')
-        expect(action.availableArea.value).toEqual(3.44324521)
+        expect(action.availableArea.value).toEqual(3.44324524)
       } else if (action.code === 'UPL1') {
         expect(action.description).toEqual(
           'UPL1: Moderate livestock grazing on moorland'
         )
         expect(action.availableArea.unit).toEqual('ha')
-        expect(action.availableArea.value).toEqual(3.44324521)
+        expect(action.availableArea.value).toEqual(3.44324524)
       } else if (action.code === 'UPL2') {
         expect(action.description).toEqual(
           'UPL2: Low livestock grazing on moorland'
         )
         expect(action.availableArea.unit).toEqual('ha')
-        expect(action.availableArea.value).toEqual(3.44324521)
+        expect(action.availableArea.value).toEqual(3.44324524)
       } else if (action.code === 'UPL3') {
         expect(action.description).toEqual(
           'UPL3: Limited livestock grazing on moorland'
         )
         expect(action.availableArea.unit).toEqual('ha')
-        expect(action.availableArea.value).toEqual(3.44324521)
+        expect(action.availableArea.value).toEqual(3.44324524)
       }
     })
   })
