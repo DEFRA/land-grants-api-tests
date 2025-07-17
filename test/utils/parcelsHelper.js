@@ -124,11 +124,7 @@ export function validateSizeValue(response, testCase) {
  * Validates action code from the parcel
  */
 export function validateActionCode(response, testCase) {
-  if (
-    !testCase.fields.includes('actions') &&
-    !testCase.fields.includes('actions.availableArea')
-  )
-    return
+  if (!testCase.fields.includes('actions')) return
 
   const parcels = response.body.parcels
 
@@ -162,7 +158,7 @@ export function validateActionCode(response, testCase) {
  */
 export function validateAvailableArea(response, testCase) {
   if (
-    !testCase.fields.includes('actions.availableArea') ||
+    !testCase.fields.includes('actions') ||
     !testCase.expectedAvailableAreaValue
   )
     return
@@ -301,11 +297,7 @@ export function validateParcelSize(parcel, testCase) {
  */
 export function validateParcelActions(parcel, testCase) {
   // Skip if parcels actions are not requested
-  if (
-    !testCase.fields.includes('actions') &&
-    !testCase.fields.includes('actions.availableArea')
-  )
-    return
+  if (!testCase.fields.includes('actions')) return
 
   if (
     !parcel.actions ||
@@ -336,7 +328,7 @@ export function validateParcelActions(parcel, testCase) {
  */
 export function validateParcelAvailableArea(parcel, testCase) {
   // Skip if availableArea is not requested
-  if (!testCase.fields.includes('actions.availableArea')) {
+  if (!testCase.fields.includes('actions')) {
     return
   }
 

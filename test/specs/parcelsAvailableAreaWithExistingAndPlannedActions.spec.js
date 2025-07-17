@@ -20,20 +20,22 @@ import {
 
 describe('Parcels endpoint', () => {
   it('should validate parcels available area from CSV data', async () => {
-    const dataFile = './test/data/parcelsAvailableAreaData.csv'
+    const dataFile =
+      './test/data/parcelsAvailableAreaWithExistingAndPlannedActionsData.csv'
 
     // validating each test case
     const validateParcel = async (testCase, options = {}) => {
       const parcelIds = testCase.parcelIds.split(',')
       const fields = testCase.fields.split(',')
+      const plannedActions = JSON.parse(testCase.plannedActions)
 
       // Make the real API request
       const response = await request(global.baseUrl)
         .post(PARCELS_ENDPOINT)
-        .send({ parcelIds, fields })
+        .send({ parcelIds, fields, plannedActions })
         .set('Accept', 'application/json')
 
-      // Validate basic status code match before other validations
+      // // Validate basic status code match before other validations
       validateStatusCode(response, testCase)
 
       // For 200 responses, perform detailed validations
