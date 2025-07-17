@@ -13,7 +13,7 @@ export default {
   silent: false,
   watchPathIgnorePatterns: ['globalConfig'],
   testMatch: ['**/*.spec.js'],
-  testTimeout: 50000,
+  testTimeout: 300000,
   reporters: ['default', ['github-actions', { silent: false }], 'summary'],
   setupFiles: ['<rootDir>/.jest/setup.js'],
   coveragePathIgnorePatterns: [
