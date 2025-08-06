@@ -7,7 +7,8 @@ import {
   validatePayment,
   validateParcelItems,
   validateAgreementLevelItems,
-  validatePaymentAmountsAndDates
+  validatePaymentAmountsAndDates,
+  validateErrorMessage
 } from '../utils/paymentsHelper.js'
 
 describe('Payments endpoint', () => {
@@ -40,12 +41,14 @@ describe('Payments endpoint', () => {
 
         // Validate agreement level items
         validateAgreementLevelItems(response, testCase)
+
+        // Validate payment amounts and dates
+        validatePaymentAmountsAndDates(response, testCase)
+      } else {
+        // Validate error message for non-200 responses
+        validateErrorMessage(response, testCase)
       }
-
-      // Validate payment amounts and dates
-      validatePaymentAmountsAndDates(response, testCase)
     }
-
     // Run tests with our helper that handles test result tracking
     await runTestsAndRecordResults(dataFile, validatePayments)
   })
