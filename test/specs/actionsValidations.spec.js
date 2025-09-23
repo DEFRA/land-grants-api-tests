@@ -9,7 +9,7 @@ import { validateErrorMessage } from '../utils/validationsHelper.js'
 
 describe('Validations endpoint', () => {
   it('should validate error messages', async () => {
-    const dataFile = './test/data/validationsData.csv'
+    const dataFile = './test/data/actionsValidationsData.csv'
 
     const validateMessages = async (testCase, options = {}) => {
       const landActions = JSON.parse(testCase.landActions)
