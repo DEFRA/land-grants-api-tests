@@ -1,4 +1,4 @@
-// Helper functions for /actions/validate endpoint API testing
+// Helper functions for /application/validate endpoint API testing
 /**
  * Validate response status code
  */
@@ -43,7 +43,10 @@ export function validateErrorMessage(response, testCase) {
 
   // If valid is false, check error messages
 
-  if (String(testCase.valid).toLowerCase() === 'false') {
+  if (
+    String(testCase.valid).toLowerCase() === 'false' &&
+    response.status === 200
+  ) {
     console.log('checking error messages...')
     const errorMessages = response.body.errorMessages
 
@@ -88,21 +91,25 @@ export function validateErrorMessage(response, testCase) {
         )
       }
     })
-  }
-}
-
-export function applicationValidationCheck(response, testCase, columnName) {
-  // Check if message is valid
-
-  if (
-    String(response.body.valid) !== String(testCase[columnName]).toLowerCase()
+  } else if (
+    String(testCase.valid).toLowerCase() === 'false' &&
+    response.status === 400
   ) {
-    throw new Error(
-      `Validation failed: expected valid to be ${testCase[columnName]} but got ${response.body.valid}`
-    )
+    response.body.errorMessages.forEach((errorMessage, index) => {
+      if (
+        errorMessage.description !==
+        testCase[`errorMessages_description${index + 1}`]
+      ) {
+        throw new Error(
+          `Validation failed: expected error message to be "${testCase[`errorMessages_description${index + 1}`]}" but got "${errorMessage.description}"`
+        )
+      }
+    })
   }
 }
 
+/** Validate application validation run details
+ */
 export function applicationValidationRunCheck(response, testCase, runId) {
   // Check if id matches
   if (response.body.applicationValidationRun.id !== runId) {
