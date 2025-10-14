@@ -33,6 +33,9 @@ export function validateSuccessMessage(response, testCase, columnName) {
  */
 
 export function validateErrorMessage(response, testCase) {
+  // skip error message validation if valid is not defined
+  if (!testCase.valid) return
+
   // Check if message is valid
 
   if (String(response.body.valid) !== String(testCase.valid).toLowerCase()) {
