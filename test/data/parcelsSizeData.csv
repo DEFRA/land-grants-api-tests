@@ -2,4 +2,4 @@ TestDescription,parcelIds,fields,expectedStatusCode,expectedMessage,expectedShee
 1.Request parcels endpoint for parcel size of a single parcel-Validate size of parcel 1 of 1,SD5267-5941,size,200,success,SD5267,5941,ha,5.1185,
 2.Request parcels endpoint for parcel size of Multiple parcels-Validate size of parcel 1 of 2,"SD5267-5941,SD7846-7013",size,200,success,SD5267,5941,ha,5.1185,
 3.Request parcels endpoint for parcel size of Multiple parcels-Validate size of parcel 2 of 2,"SD5267-5941,SD7846-7013",size,200,success,SD7846,7013,ha,8.9902,
-4.Request parcels endpoint for parcel size of a parcel which doesn't exist,AB1234-9999,size,404,Land parcel not found: AB1234-9999,,,,,
+4.Request parcels endpoint for parcel size of a parcel which doesn't exist,AB1234-9999,size,404,Land parcels not found: AB1234-9999,,,,,
