@@ -2,7 +2,8 @@ import request from 'supertest'
 import { runTestsAndRecordResults } from '../utils/recordResults.js'
 import {
   APPLICATION_VALIDATIONS_ENDPOINT,
-  APPLICATION_VALIDATION_RUN_ENDPOINT
+  APPLICATION_VALIDATION_RUN_ENDPOINT,
+  BEARER_TOKEN
 } from '../utils/apiEndpoints.js'
 import {
   validateStatusCode,
@@ -27,6 +28,7 @@ describe('Validations endpoint', () => {
         .post(APPLICATION_VALIDATIONS_ENDPOINT)
         .send({ applicationId, requester, sbi, applicantCrn, landActions })
         .set('Accept', 'application/json')
+        .set('Authorization', `${BEARER_TOKEN}`)
 
       // Validate basic status code match before other validations
       validateStatusCode(
@@ -54,6 +56,7 @@ describe('Validations endpoint', () => {
         const validationRunResponse = await request(global.baseUrl)
           .post(APPLICATION_VALIDATION_RUN_ENDPOINT + `/${runId}`)
           .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${BEARER_TOKEN}`)
 
         // Validate basic status code match before other validations
         validateStatusCode(

@@ -1,6 +1,6 @@
 import request from 'supertest'
 import { runTestsAndRecordResults } from '../utils/recordResults.js'
-import { PAYMENTS_ENDPOINT } from '../utils/apiEndpoints.js'
+import { PAYMENTS_ENDPOINT, BEARER_TOKEN } from '../utils/apiEndpoints.js'
 import {
   validateStatusCode,
   validateSuccessMessage,
@@ -24,6 +24,7 @@ describe('Payments endpoint', () => {
         .post(PAYMENTS_ENDPOINT)
         .send({ startDate, landActions })
         .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${BEARER_TOKEN}`)
 
       // Validate basic status code match before other validations
       validateStatusCode(response, testCase)
