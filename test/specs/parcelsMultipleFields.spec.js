@@ -1,6 +1,6 @@
 import request from 'supertest'
 import { runTestsAndRecordResults } from '../utils/recordResults.js'
-import { PARCELS_ENDPOINT } from '../utils/apiEndpoints.js'
+import { PARCELS_ENDPOINT, BEARER_TOKEN } from '../utils/apiEndpoints.js'
 import { validateResponse } from '../utils/testRunnerHelper.js'
 import {
   validateParcelFields,
@@ -34,6 +34,7 @@ describe('Parcels endpoint', () => {
         .post(PARCELS_ENDPOINT)
         .send({ parcelIds, fields })
         .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${BEARER_TOKEN}`)
 
       // Validate basic status code match before other validations
       validateStatusCode(response, testCase)

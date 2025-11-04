@@ -1,5 +1,5 @@
 import request from 'supertest'
-import { PARCELS_ENDPOINT } from '../utils/apiEndpoints.js'
+import { PARCELS_ENDPOINT, BEARER_TOKEN } from '../utils/apiEndpoints.js'
 // import { cleanupAllure } from '../utils/allureHelper.js'
 
 // Add afterAll hook to clean up resources
@@ -18,6 +18,7 @@ describe('Parcels endpoint', () => {
       .post(PARCELS_ENDPOINT)
       .send({ parcelIds, fields })
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${BEARER_TOKEN}`)
       .expect(200)
       .expect('Content-Type', 'application/json; charset=utf-8')
 
