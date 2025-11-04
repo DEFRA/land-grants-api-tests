@@ -28,7 +28,7 @@ describe('Validations endpoint', () => {
         .post(APPLICATION_VALIDATIONS_ENDPOINT)
         .send({ applicationId, requester, sbi, applicantCrn, landActions })
         .set('Accept', 'application/json')
-        .set('Authorization', `${BEARER_TOKEN}`)
+        .set('Authorization', `Bearer ${BEARER_TOKEN}`)
 
       // Validate basic status code match before other validations
       validateStatusCode(
