@@ -17,12 +17,12 @@ describe('Payments endpoint', () => {
 
     const validatePayments = async (testCase, options = {}) => {
       const startDate = testCase.startDate
-      const landActions = JSON.parse(testCase.landActions)
+      const parcel = JSON.parse(testCase.parcel)
 
       // Make the real API request
       const response = await request(global.baseUrl)
         .post(PAYMENTS_ENDPOINT)
-        .send({ startDate, landActions })
+        .send({ startDate, parcel })
         .set('Accept', 'application/json')
         .set('Authorization', `Bearer ${BEARER_TOKEN}`)
 
