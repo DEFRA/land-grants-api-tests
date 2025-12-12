@@ -7,9 +7,15 @@ TestDescription,parcelIds,fields,expectedStatusCode,expectedMessage,expectedShee
 3. Single existing incompatible action with no remaining area for new action,SD4963-4622,actions,200,success,SD4963,4622,UPL2,Low livestock grazing on moorland,ha,0,
 4. Single existing incompatible action-Existing and new actions are on different land covers ,SD7164-8058,actions,200,success,SD7164,8058,CMOR1,Assess moorland and produce a written record,ha,3.1254,
 5. Single existing incompatible action with remaining area available for new action ,SD5253-5484,actions,200,success,SD5253,5484,CMOR1,Assess moorland and produce a written record,ha,0.3732,
- 6. Multiple existing incompatible actions-Existing and new actions are on different land covers ,SD7948-4156,actions,200,success,SD7948,4156,UPL1,Moderate livestock grazing on moorland,ha,3.2844,
+6. Multiple existing incompatible actions-Existing and new actions are on different land covers ,SD7948-4156,actions,200,success,SD7948,4156,UPL1,Moderate livestock grazing on moorland,ha,3.2844,
 7. Multiple existing incompatible actions with single stack on mixed land covers ,SD8447-1509,actions,200,success,SD8447,1509,CMOR1,Assess moorland and produce a written record,ha,1.143,
 8. Multiple existing Incompatible actions with multiple stacks on mixed landcovers,SD4957-8307,actions,200,success,SD4957,8307,UPL1,Moderate livestock grazing on moorland,ha,4.3456,
 9. Multiple existing compatible actions on same land cover with single stack ,SD8743-3264,actions,200,success,SD8743,3264,CMOR1,Assess moorland and produce a written record,ha,10.6612,
 10. Mutiple existing compatible and incompatible actions ,SD6441-1283,actions,200,success,SD6441,1283,UPL1,Moderate livestock grazing on moorland,ha,2.2364,
 11. Multiple existing compatible and incompatible actions-applying for a same action which already exists ,SD6441-1283,actions,200,success,SD6441,1283,UPL2,Low livestock grazing on moorland,ha,2.2364,
+12.Land parcel with expired agreement,SD5154-3984,actions,200,success,SD5154,3984,CMOR1,Assess moorland and produce a written record,ha,1.2801,There is an expired agreement on this land parcel
+13a.Land parcel with active and  expired agreements-CMOR1,SD8250-8623,actions,200,success,SD8250,8623,CMOR1,Assess moorland and produce a written record,ha,4,There is one active and one expired agreement on this land parcel
+13b.Land parcel with active and  expired agreements-UPL1,SD8250-8623,actions,200,success,SD8250,8623,UPL1,Moderate livestock grazing on moorland,ha,7.0543,There is one active and one expired agreement on this land parcel
+13c.Land parcel with active and  expired agreements-UPL2,SD8250-8623,actions,200,success,SD8250,8623,UPL2,Low livestock grazing on moorland,ha,7.0543,There is one active and one expired agreement on this land parcel
+13d.Land parcel with active and  expired agreements-UPL3,SD8250-8623,actions,200,success,SD8250,8623,UPL3,Limited livestock grazing on moorland,ha,7.0543,There is one active and one expired agreement on this land parcel
+14.Land parcel with future dated agreement,SD7544-8174,actions,200,success,SD7544,8174,CMOR1,Assess moorland and produce a written record,ha,1.7466,There is a future dated  agreement on this land parcel
