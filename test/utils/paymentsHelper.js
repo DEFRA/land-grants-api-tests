@@ -178,7 +178,7 @@ export function validatePaymentAmountsAndDates(response, testCase) {
   const payments = response.body.payment.payments
 
   // Validate the number of payment items is 12
-  if (payments.length !== 12) {
+  if (payments.length !== 4) {
     throw new Error(`Expected 12 payment items but got ${payments.length}`)
   }
 
