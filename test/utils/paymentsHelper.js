@@ -177,9 +177,9 @@ export function validatePaymentAmountsAndDates(response, testCase) {
 
   const payments = response.body.payment.payments
 
-  // Validate the number of payment items is 12
+  // Validate the number of payment items is 4
   if (payments.length !== 4) {
-    throw new Error(`Expected 12 payment items but got ${payments.length}`)
+    throw new Error(`Expected 4 payment items but got ${payments.length}`)
   }
 
   // Validate first payment amount
@@ -191,7 +191,7 @@ export function validatePaymentAmountsAndDates(response, testCase) {
   }
 
   // Validate payment amount from 2nd payment onwards
-  const PaymentAmount = Number(testCase.Payment2ToPayment12_totalPaymentPence)
+  const PaymentAmount = Number(testCase.Payment2ToPayment4_totalPaymentPence)
   payments.forEach((payment, index) => {
     if (index >= 1 && payment.totalPaymentPence !== PaymentAmount) {
       throw new Error(
