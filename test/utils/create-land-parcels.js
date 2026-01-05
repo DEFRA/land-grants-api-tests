@@ -10,9 +10,9 @@ export async function createLandParcels() {
   const mm = String(now.getMonth() + 1).padStart(2, '0') // Months are 0-based
   const yy = String(now.getFullYear()).slice(-2)
   const ddmmyy = dd + mm + yy
-  const mmss =
-    String(now.getMinutes()).padStart(2, '0') +
-    String(now.getSeconds()).padStart(2, '0')
+  const hhmm =
+    String(now.getHours()).padStart(2, '0') +
+    String(now.getMinutes()).padStart(2, '0')
 
   // Input and output paths
   const inputPath = path.join(
@@ -38,8 +38,8 @@ export async function createLandParcels() {
       // Update first row (assuming header is not included in rows)
       if (rows.length > 0) {
         // rows[0].ID = randomUUID(); // Uncomment if unique ID is needed
-        rows[0].SHEET_ID = 'TEST' + ddmmyy
-        rows[0].PARCEL_ID = mmss
+        rows[0].SHEET_ID = ddmmyy
+        rows[0].PARCEL_ID = hhmm
       }
 
       // Write updated CSV
