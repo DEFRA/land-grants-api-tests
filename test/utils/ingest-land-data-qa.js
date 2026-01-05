@@ -1,9 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { config as dotenvConfig } from 'dotenv'
-
-// Load .env from the parent directory (project root)
-dotenvConfig({ path: '../../.env' })
+import 'dotenv/config'
 
 // the client IDs and secrets for the different environments
 // set these values here or your preferred way to store them
