@@ -4,6 +4,15 @@ import { createLandCovers } from '../../utils/createLandCovers.js'
 import request from 'supertest'
 import { PARCELS_ENDPOINT, BEARER_TOKEN } from '../../utils/apiEndpoints.js'
 
+/* This test case runs only on the 'dev' environment
+It performs the following steps:
+- Creates a new land parcel csv file with one new unique fake land parcel and one existing land parcel
+- Creates a new land cover csv file with land covers for above fake land parcel and land covers for one existing land parcel
+- Upload these files to s3 bucket
+- Ingest the land_parcels and land_covers files
+- Calls parcels api for both land parcels and do assertions for size, available area etc., to validate parcel loaded successfully and no duplicate land covers loaded
+*/
+
 // Get current date and time
 const now = new Date()
 const dd = String(now.getDate()).padStart(2, '0')
