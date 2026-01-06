@@ -45,10 +45,6 @@ describe('Land data ingest', () => {
     ]
     const fields = ['size', 'actions']
 
-    console.log('Fetching parcel details for validation...')
-    console.log(`Parcel IDs: ${parcelIds}`)
-    console.log(`fields: ${fields}`)
-
     // Making the post request and validating the response status
     const res = await request(global.baseUrl)
       .post(PARCELS_ENDPOINT)
