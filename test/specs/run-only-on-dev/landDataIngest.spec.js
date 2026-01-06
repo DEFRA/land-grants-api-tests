@@ -4,6 +4,8 @@ import { createLandCovers } from '../../utils/createLandCovers.js'
 import request from 'supertest'
 import { PARCELS_ENDPOINT, BEARER_TOKEN } from '../../utils/apiEndpoints.js'
 
+const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
 /* This test case runs only on the 'dev' environment
 It performs the following steps:
 - Creates a new land parcel csv file with one new unique fake land parcel and one existing land parcel
@@ -44,6 +46,8 @@ describe('Land data ingest', () => {
       `${SHEET_ID2}-${PARCEL_ID2}`
     ]
     const fields = ['size', 'actions']
+
+    await pause(30000)
 
     // Making the post request and validating the response status
     const res = await request(global.baseUrl)
