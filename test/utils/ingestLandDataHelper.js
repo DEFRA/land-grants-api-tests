@@ -6,8 +6,6 @@ import 'dotenv/config'
 // set these values here or your preferred way to store them
 const CLIENT_ID_DEV = process.env.dev_ClientID
 const CLIENT_SECRET_DEV = process.env.dev_ClientSecret
-const CLIENT_ID_TEST = process.env.test_ClientID
-const CLIENT_SECRET_TEST = process.env.test_ClientSecret
 
 const config = {
   dev: {
@@ -17,14 +15,6 @@ const config = {
     apiBaseUrl: 'https://land-grants-api.api.dev.cdp-int.defra.cloud',
     tokenUrl:
       'https://land-grants-api-c63f2.auth.eu-west-2.amazoncognito.com/oauth2/token'
-  },
-  test: {
-    clientId: CLIENT_ID_TEST || '',
-    clientSecret: CLIENT_SECRET_TEST || '',
-    cdpUrl: 'https://cdp-uploader.test.cdp-int.defra.cloud',
-    apiBaseUrl: 'https://land-grants-api.api.test.cdp-int.defra.cloud',
-    tokenUrl:
-      'https://land-grants-api-6bf3a.auth.eu-west-2.amazoncognito.com/oauth2/token'
   }
 }
 
