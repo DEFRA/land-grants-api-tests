@@ -1,3 +1,4 @@
+import { getSpecsForEnv } from './filter.specs.js'
 /**
  * @type {Config}
  */
@@ -12,7 +13,7 @@ export default {
   clearMocks: true,
   silent: false,
   watchPathIgnorePatterns: ['globalConfig'],
-  testMatch: ['**/*.spec.js'],
+  testMatch: getSpecsForEnv(),
   testTimeout: 300000,
   reporters: ['default', ['github-actions', { silent: false }], 'summary'],
   setupFiles: ['<rootDir>/.jest/setup.js'],

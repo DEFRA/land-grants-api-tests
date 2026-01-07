@@ -5,6 +5,7 @@
 .server
 node_modules
 npm-debug.log
+test/land-data/
 coverage
 .cache
 .png
