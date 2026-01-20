@@ -29,6 +29,8 @@ describe('Validations endpoint', () => {
         .send({ applicationId, requester, sbi, applicantCrn, landActions })
         .set('Accept', 'application/json')
         .set('Authorization', `Bearer ${BEARER_TOKEN}`)
+        .set('x-api-key', `${process.env.API_KEY}`)
+        .set('Accept-Encoding', '*')
 
       // Validate basic status code match before other validations
       validateStatusCode(
@@ -57,6 +59,8 @@ describe('Validations endpoint', () => {
           .post(APPLICATION_VALIDATION_RUN_ENDPOINT + `/${runId}`)
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${BEARER_TOKEN}`)
+          .set('x-api-key', `${process.env.API_KEY}`)
+          .set('Accept-Encoding', '*')
 
         // Validate basic status code match before other validations
         validateStatusCode(

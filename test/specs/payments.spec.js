@@ -25,6 +25,8 @@ describe('Payments endpoint', () => {
         .send({ startDate, parcel })
         .set('Accept', 'application/json')
         .set('Authorization', `Bearer ${BEARER_TOKEN}`)
+        .set('x-api-key', `${process.env.API_KEY}`)
+        .set('Accept-Encoding', '*')
 
       // Validate basic status code match before other validations
       validateStatusCode(response, testCase)
