@@ -6,7 +6,7 @@ import { PARCELS_ENDPOINT, BEARER_TOKEN } from '../../utils/apiEndpoints.js'
 
 const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
-/* This test case runs only on the 'dev' environment
+/* This test case runs only on the 'dev' environment when running tests locally.
 It performs the following steps:
 - Creates a new land parcel csv file with one new unique fake land parcel and one existing land parcel
 - Creates a new land cover csv file with land covers for above fake land parcel and land covers for one existing land parcel
@@ -55,6 +55,8 @@ describe('Land data ingest', () => {
       .send({ parcelIds, fields })
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${BEARER_TOKEN}`)
+      .set('x-api-key', `${process.env.API_KEY}`)
+      .set('Accept-Encoding', '*')
       .expect(200)
       .expect('Content-Type', 'application/json; charset=utf-8')
 
