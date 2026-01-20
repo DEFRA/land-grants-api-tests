@@ -16,6 +16,7 @@
   "scripts": {
     "clean": "rm -rf allure-results && rm -rf allure-report",
     "test": "npm run clean && jest",
+    "test:local": "ENVIRONMENT=local npm run test",
     "test:dev": "ENVIRONMENT=dev npm run test",
     "test:test": "ENVIRONMENT=test npm run test",
     "format": "prettier --write 'test/**/*.{js,md,json,config.js}'",
