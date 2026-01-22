@@ -120,6 +120,33 @@ export function validateParcelItems(response, testCase) {
     const expectedParcelItemAnnualPaymentPence = Number(
       testCase[`parcelItem${parcelItemId}_annualPaymentPence`]
     )
+    const expectedParcelItemCode = testCase[`parcelItem${parcelItemId}_code`]
+    const expectedParcelItemDurationYears = Number(
+      testCase[`parcelItem${parcelItemId}_durationYears`]
+    )
+    const expectedParcelItemversion =
+      testCase[`parcelItem${parcelItemId}_version`]
+
+    // Validate parcelItem code for each parcelItemId
+    if (actualItem.code !== expectedParcelItemCode) {
+      throw new Error(
+        `Expected ParcelItem ${parcelItemId} code is ${expectedParcelItemCode} but got ${actualItem.code}`
+      )
+    }
+
+    // Validate durationYears for each parcelItemId
+    if (actualItem.durationYears !== expectedParcelItemDurationYears) {
+      throw new Error(
+        `Expected ParcelItem ${parcelItemId} durationYears is ${expectedParcelItemDurationYears} but got ${actualItem.durationYears}`
+      )
+    }
+
+    // Validate version for each parcelItemId
+    if (String(actualItem.version) !== expectedParcelItemversion) {
+      throw new Error(
+        `Expected ParcelItem ${parcelItemId} version is ${expectedParcelItemversion} but got ${actualItem.version}`
+      )
+    }
 
     // Validate annualPaymentPence for each parcelItemId
     if (
