@@ -1,6 +1,6 @@
 import request from 'supertest'
 import { runTestsAndRecordResults } from '../utils/recordResults.js'
-import { PARCELS_ENDPOINT, BEARER_TOKEN } from '../utils/apiEndpoints.js'
+import { PARCELS_ENDPOINT_V2, BEARER_TOKEN } from '../utils/apiEndpoints.js'
 import { validateResponse } from '../utils/testRunnerHelper.js'
 import {
   validateParcelFields,
@@ -8,37 +8,32 @@ import {
   validateSuccessMessage,
   validateErrorMessage,
   validateParcelsStructure,
+  validateSizeUnit,
+  validateSizeValue,
   validateActionCode,
-  validateAvailableArea
+  validateAvailableArea,
+  validateSSSIConsentRequired
 } from '../utils/parcelsHelper.js'
-// import { cleanupAllure } from '../utils/allureHelper.js'
 
-// Add afterAll hook to clean up resources
-// afterAll(async () => {
-//   await cleanupAllure()
-// })
-
-describe('Parcels endpoint', () => {
-  it('should validate parcels available area taking existing agreements and planned actions into account', async () => {
-    const dataFile =
-      './test/data/parcelsAvailableAreaWithExistingAndPlannedActionsData.csv'
+describe('Parcels V2 endpoint', () => {
+  it('should validate version2 parcels size, actions, SSSI consent required and available area from CSV data', async () => {
+    const dataFile = './test/data/parcelsMultipleFieldsData_v2.csv'
 
     // validating each test case
     const validateParcel = async (testCase, options = {}) => {
       const parcelIds = testCase.parcelIds.split(',')
       const fields = testCase.fields.split(',')
-      const plannedActions = JSON.parse(testCase.plannedActions)
 
       // Make the real API request
       const response = await request(global.baseUrl)
-        .post(PARCELS_ENDPOINT)
-        .send({ parcelIds, fields, plannedActions })
+        .post(PARCELS_ENDPOINT_V2)
+        .send({ parcelIds, fields })
         .set('Accept', 'application/json')
         .set('Authorization', `Bearer ${BEARER_TOKEN}`)
         .set('x-api-key', `${process.env.API_KEY}`)
         .set('Accept-Encoding', '*')
 
-      // // Validate basic status code match before other validations
+      // Validate basic status code match before other validations
       validateStatusCode(response, testCase)
 
       // For 200 responses, perform detailed validations
@@ -47,10 +42,16 @@ describe('Parcels endpoint', () => {
         validateSuccessMessage(response, testCase)
         // Validate parcel structure
         validateParcelsStructure(response, testCase)
+        // Validate size unit
+        validateSizeUnit(response, testCase)
+        // Validate size value
+        validateSizeValue(response, testCase)
         // Validate action code
         validateActionCode(response, testCase)
         // Validate available area value
         validateAvailableArea(response, testCase)
+        // Validate SSSI consent required
+        validateSSSIConsentRequired(response, testCase)
       } else {
         // Validate error message for non-200 responses
         validateErrorMessage(response, testCase)

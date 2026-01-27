@@ -1,6 +1,6 @@
 import request from 'supertest'
 import { runTestsAndRecordResults } from '../utils/recordResults.js'
-import { PARCELS_ENDPOINT, BEARER_TOKEN } from '../utils/apiEndpoints.js'
+import { BEARER_TOKEN, PARCELS_ENDPOINT_V2 } from '../utils/apiEndpoints.js'
 import { validateResponse } from '../utils/testRunnerHelper.js'
 import {
   validateParcelFields,
@@ -9,19 +9,14 @@ import {
   validateErrorMessage,
   validateParcelsStructure,
   validateActionCode,
-  validateAvailableArea
+  validateAvailableArea,
+  validateSSSIConsentRequired
 } from '../utils/parcelsHelper.js'
-// import { cleanupAllure } from '../utils/allureHelper.js'
 
-// Add afterAll hook to clean up resources
-// afterAll(async () => {
-//   await cleanupAllure()
-// })
-
-describe('Parcels endpoint', () => {
-  it('should validate parcels available area taking existing agreements into account', async () => {
+describe('Parcels V2 endpoint', () => {
+  it('should validate version2 parcels available area taking existing agreements into account', async () => {
     const dataFile =
-      './test/data/parcelsAvailableAreaWithExistingActionsData.csv'
+      './test/data/parcelsAvailableAreaWithExistingAgreementsData_v2.csv'
 
     // validating each test case
     const validateParcel = async (testCase, options = {}) => {
@@ -30,7 +25,7 @@ describe('Parcels endpoint', () => {
 
       // Make the real API request
       const response = await request(global.baseUrl)
-        .post(PARCELS_ENDPOINT)
+        .post(PARCELS_ENDPOINT_V2)
         .send({ parcelIds, fields })
         .set('Accept', 'application/json')
         .set('Authorization', `Bearer ${BEARER_TOKEN}`)
@@ -50,6 +45,8 @@ describe('Parcels endpoint', () => {
         validateActionCode(response, testCase)
         // Validate available area value
         validateAvailableArea(response, testCase)
+        // Validate SSSI consent required
+        validateSSSIConsentRequired(response, testCase)
       } else {
         // Validate error message for non-200 responses
         validateErrorMessage(response, testCase)

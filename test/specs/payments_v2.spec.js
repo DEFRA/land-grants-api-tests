@@ -12,7 +12,7 @@ import {
 } from '../utils/paymentsHelper.js'
 
 describe('Payments endpoint v2.0.0', () => {
-  it('should validate payment amounts and dates', async () => {
+  it('should validate version2 payment amounts and dates', async () => {
     const dataFile = './test/data/paymentsData_v2.csv'
 
     const validatePayments = async (testCase, options = {}) => {

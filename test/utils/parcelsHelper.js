@@ -1,4 +1,5 @@
 // Helper functions for /parcels endpoint API testing
+
 /**
  * Validate response status code
  */
@@ -384,6 +385,45 @@ export function validateParcelAvailableArea(parcel, testCase) {
             `Expected availableArea.value ${expectedAvailableAreaValue} but got ${actualAvailableAreaValue}`
           )
         }
+      }
+    }
+  })
+}
+
+/**
+ * Validate SSSI Consent Required field if expected
+ */
+export function validateSSSIConsentRequired(response, testCase) {
+  // Skip if SSSI Consent Required is not requested
+  if (!testCase.fields.includes('actions.sssiConsentRequired')) {
+    return
+  }
+  const parcels = response.body.parcels
+
+  // fetching the required parcel for validation
+  const parcel = parcels.find(
+    (parcel) =>
+      parcel.sheetId === testCase.expectedSheetId &&
+      parcel.parcelId === testCase.expectedParcelId
+  )
+
+  // validate SSSI Consent Required for each action
+  parcel.actions.forEach((action) => {
+    const actualActionCode = action.code
+
+    if (actualActionCode === testCase.expectedActionCode) {
+      // Check if sssiConsentRequired exists
+      if (action.sssiConsentRequired === undefined) {
+        throw new Error('Response does not contain sssiConsentRequired data')
+      }
+      const actualSSSIConsentRequired = String(action.sssiConsentRequired)
+      const expectedSSSIConsentRequired =
+        testCase.expectedSSSIConsentRequired.toLowerCase()
+
+      if (actualSSSIConsentRequired !== expectedSSSIConsentRequired) {
+        throw new Error(
+          `SSSI Consent Required validation failed: expected ${expectedSSSIConsentRequired} but got ${actualSSSIConsentRequired}`
+        )
       }
     }
   })

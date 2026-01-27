@@ -11,9 +11,9 @@ import {
   validateErrorMessage
 } from '../utils/paymentsHelper.js'
 
-describe('Payments endpoint', () => {
-  it('should validate payment amounts and dates', async () => {
-    const dataFile = './test/data/paymentsData.csv'
+describe('Payments v1 endpoint', () => {
+  it('should validate version1 payment amounts and dates', async () => {
+    const dataFile = './test/data/paymentsData_v1.csv'
 
     const validatePayments = async (testCase, options = {}) => {
       const startDate = testCase.startDate

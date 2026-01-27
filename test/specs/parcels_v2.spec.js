@@ -1,21 +1,15 @@
 import request from 'supertest'
-import { PARCELS_ENDPOINT, BEARER_TOKEN } from '../utils/apiEndpoints.js'
-// import { cleanupAllure } from '../utils/allureHelper.js'
+import { BEARER_TOKEN, PARCELS_ENDPOINT_V2 } from '../utils/apiEndpoints.js'
 
-// Add afterAll hook to clean up resources
-// afterAll(async () => {
-//   await cleanupAllure()
-// })
-
-describe('Parcels endpoint', () => {
-  it('should validate parcels', async () => {
+describe('Parcels V2 endpoint', () => {
+  it('should validate version2 parcels size, actions, available area', async () => {
     // Post request body fields
     const parcelIds = ['SD7846-7013', 'SD5267-5941']
     const fields = ['size', 'actions']
 
     // Making the post request and validating the response status
     const res = await request(global.baseUrl)
-      .post(PARCELS_ENDPOINT)
+      .post(PARCELS_ENDPOINT_V2)
       .send({ parcelIds, fields })
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${BEARER_TOKEN}`)
