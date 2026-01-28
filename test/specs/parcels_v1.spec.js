@@ -1,20 +1,19 @@
 import request from 'supertest'
 import { runTestsAndRecordResults } from '../utils/recordResults.js'
 import { PARCELS_ENDPOINT, BEARER_TOKEN } from '../utils/apiEndpoints.js'
-import { validateResponse } from '../utils/testRunnerHelper.js'
 import {
-  validateParcelFields,
   validateStatusCode,
   validateSuccessMessage,
   validateParcelsStructure,
   validateActionCode,
   validateAvailableArea,
   validateSizeUnit,
-  validateSizeValue
+  validateSizeValue,
+  validateErrorMessage
 } from '../utils/parcelsHelper.js'
 
 describe('Parcels V1 endpoint', () => {
-  it('should validate version1 parcels size, actions, available area taking existing agreements and planned actions into account', async () => {
+  it('Should validate version1 parcels size, actions, available area taking existing agreements and planned actions into account', async () => {
     const dataFile = './test/data/parcelsData_v1.csv'
 
     // validating each test case
@@ -60,18 +59,11 @@ describe('Parcels V1 endpoint', () => {
         validateActionCode(response, testCase)
         // Validate available area value
         validateAvailableArea(response, testCase)
+      } else {
+        // Validate error message for non-200 responses
+        validateErrorMessage(response, testCase)
       }
-
-      // Validate the full response using our utility
-      validateResponse(response, testCase, {
-        customValidators: [validateParcelFields],
-        allureReport: options.allureReport,
-        throwOnError: true // Ensure errors are thrown to fail the test
-      })
-
-      return response
     }
-
     // Run tests with our helper that handles test result tracking
     await runTestsAndRecordResults(dataFile, validateParcel)
   })

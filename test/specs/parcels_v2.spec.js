@@ -1,9 +1,7 @@
 import request from 'supertest'
 import { runTestsAndRecordResults } from '../utils/recordResults.js'
 import { PARCELS_ENDPOINT_V2, BEARER_TOKEN } from '../utils/apiEndpoints.js'
-import { validateResponse } from '../utils/testRunnerHelper.js'
 import {
-  validateParcelFields,
   validateStatusCode,
   validateSuccessMessage,
   validateParcelsStructure,
@@ -11,11 +9,12 @@ import {
   validateAvailableArea,
   validateSizeUnit,
   validateSizeValue,
-  validateSSSIConsentRequired
+  validateSSSIConsentRequired,
+  validateErrorMessage
 } from '../utils/parcelsHelper.js'
 
 describe('Parcels V2 endpoint', () => {
-  it('should validate version2 parcels size, actions, available area taking existing agreements and planned actions into account', async () => {
+  it('Should validate version2 parcels size, actions, SSSI Consent Required and available area taking existing agreements and planned actions into account', async () => {
     const dataFile = './test/data/parcelsData_v2.csv'
 
     // validating each test case
@@ -63,16 +62,10 @@ describe('Parcels V2 endpoint', () => {
         validateAvailableArea(response, testCase)
         // Validate SSSI consent required
         validateSSSIConsentRequired(response, testCase)
+      } else {
+        // Validate error message for non-200 responses
+        validateErrorMessage(response, testCase)
       }
-
-      // Validate the full response using our utility
-      validateResponse(response, testCase, {
-        customValidators: [validateParcelFields],
-        allureReport: options.allureReport,
-        throwOnError: true // Ensure errors are thrown to fail the test
-      })
-
-      return response
     }
 
     // Run tests with our helper that handles test result tracking
