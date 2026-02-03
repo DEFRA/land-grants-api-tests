@@ -1,20 +1,19 @@
 import request from 'supertest'
 import { runTestsAndRecordResults } from '../utils/recordResults.js'
 import {
-  APPLICATION_VALIDATIONS_ENDPOINT,
-  APPLICATION_VALIDATION_RUN_ENDPOINT,
+  APPLICATION_VALIDATIONS_ENDPOINT_V2,
   BEARER_TOKEN
 } from '../utils/apiEndpoints.js'
 import {
   validateStatusCode,
   validateSuccessMessage,
   validateErrorMessage,
-  applicationValidationRunCheck
+  validateApplicationRules
 } from '../utils/validationsHelper.js'
 
-describe('Validations endpoint', () => {
+describe('Validations V2 endpoint', () => {
   it('should validate land actions in the application', async () => {
-    const dataFile = './test/data/applicationsValidationsData.csv'
+    const dataFile = './test/data/applicationsValidationsData_v2.csv'
 
     const validateMessages = async (testCase, options = {}) => {
       const applicationId = testCase.applicationId
@@ -25,7 +24,7 @@ describe('Validations endpoint', () => {
 
       // Make the API request to /application/validate endpoint
       const validationResponse = await request(global.baseUrl)
-        .post(APPLICATION_VALIDATIONS_ENDPOINT)
+        .post(APPLICATION_VALIDATIONS_ENDPOINT_V2)
         .send({ applicationId, requester, sbi, applicantCrn, landActions })
         .set('Accept', 'application/json')
         .set('Authorization', `Bearer ${BEARER_TOKEN}`)
@@ -49,38 +48,38 @@ describe('Validations endpoint', () => {
         )
 
         // validate application validation response
-        validateErrorMessage(validationResponse, testCase)
+        validateApplicationRules(validationResponse, testCase)
 
-        // Extract the runId from the validation response
-        const runId = validationResponse.body.id
+        // // Extract the runId from the validation response
+        // const runId = validationResponse.body.id
 
-        // Make the API request to /application/validation-run/{id} endpoint
-        const validationRunResponse = await request(global.baseUrl)
-          .post(APPLICATION_VALIDATION_RUN_ENDPOINT + `/${runId}`)
-          .set('Accept', 'application/json')
-          .set('Authorization', `Bearer ${BEARER_TOKEN}`)
-          .set('x-api-key', `${process.env.API_KEY}`)
-          .set('Accept-Encoding', '*')
+        // // Make the API request to /application/validation-run/{id} endpoint
+        // const validationRunResponse = await request(global.baseUrl)
+        //   .post(APPLICATION_VALIDATION_RUN_ENDPOINT + `/${runId}`)
+        //   .set('Accept', 'application/json')
+        //   .set('Authorization', `Bearer ${BEARER_TOKEN}`)
+        //   .set('x-api-key', `${process.env.API_KEY}`)
+        //   .set('Accept-Encoding', '*')
 
-        // Validate basic status code match before other validations
-        validateStatusCode(
-          validationRunResponse,
-          testCase,
-          'expectedValidationRunStatusCode'
-        )
+        // // Validate basic status code match before other validations
+        // validateStatusCode(
+        //   validationRunResponse,
+        //   testCase,
+        //   'expectedValidationRunStatusCode'
+        // )
 
-        // For 200 responses, perform detailed validations
-        if (validationRunResponse.status === 200) {
-          // Validate success message
-          validateSuccessMessage(
-            validationRunResponse,
-            testCase,
-            'expectedValidationRunMessage'
-          )
+        // // For 200 responses, perform detailed validations
+        // if (validationRunResponse.status === 200) {
+        //   // Validate success message
+        //   validateSuccessMessage(
+        //     validationRunResponse,
+        //     testCase,
+        //     'expectedValidationRunMessage'
+        //   )
 
-          // validate application validation run
-          applicationValidationRunCheck(validationRunResponse, testCase, runId)
-        }
+        //   // validate application validation run
+        //   applicationValidationRunCheck(validationRunResponse, testCase, runId)
+        // }
       } else {
         // For non-200 responses, validate status code
         validateStatusCode(
