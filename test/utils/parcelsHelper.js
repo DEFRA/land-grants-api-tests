@@ -428,3 +428,41 @@ export function validateSSSIConsentRequired(response, testCase) {
     }
   })
 }
+
+/**
+ * Validate HEFER Required field if expected
+ */
+export function validateHEFERRequired(response, testCase) {
+  // Skip if HEFER Required is not requested
+  if (!testCase.fields.includes('actions.heferRequired')) {
+    return
+  }
+  const parcels = response.body.parcels
+
+  // fetching the required parcel for validation
+  const parcel = parcels.find(
+    (parcel) =>
+      parcel.sheetId === testCase.expectedSheetId &&
+      parcel.parcelId === testCase.expectedParcelId
+  )
+
+  // validate SSSI Consent Required for each action
+  parcel.actions.forEach((action) => {
+    const actualActionCode = action.code
+
+    if (actualActionCode === testCase.expectedActionCode) {
+      // Check if heferRequired exists
+      if (action.heferRequired === undefined) {
+        throw new Error('Response does not contain heferRequired data')
+      }
+      const actualHEFERRequired = String(action.heferRequired)
+      const expectedHEFERRequired = testCase.expectedHEFERRequired.toLowerCase()
+
+      if (actualHEFERRequired !== expectedHEFERRequired) {
+        throw new Error(
+          `HEFER Required validation failed: expected ${expectedHEFERRequired} but got ${actualHEFERRequired}`
+        )
+      }
+    }
+  })
+}
