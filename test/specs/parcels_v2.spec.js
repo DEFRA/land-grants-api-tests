@@ -10,6 +10,7 @@ import {
   validateSizeUnit,
   validateSizeValue,
   validateSSSIConsentRequired,
+  validateHEFERRequired,
   validateErrorMessage
 } from '../utils/parcelsHelper.js'
 
@@ -62,6 +63,8 @@ describe('Parcels V2 endpoint', () => {
         validateAvailableArea(response, testCase)
         // Validate SSSI consent required
         validateSSSIConsentRequired(response, testCase)
+        // Validate HEFER required
+        validateHEFERRequired(response, testCase)
       } else {
         // Validate error message for non-200 responses
         validateErrorMessage(response, testCase)
