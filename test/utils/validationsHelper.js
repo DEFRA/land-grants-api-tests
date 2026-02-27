@@ -269,7 +269,7 @@ export function validateApplicationRules(response, testCase) {
           const caveat = rule.caveat
           const actualRuleCaveatCode = caveat.code
           const actualRuleCaveatDescription = caveat.description
-          // const actualActionCode = caveat.metadata.actionCode
+          const actualActionCode = caveat.metadata.actionCode
           const actualParcelId = caveat.metadata.parcelId
           const actualSheetId = caveat.metadata.sheetId
           const actualPercentageOverlap = caveat.metadata.percentageOverlap
@@ -282,7 +282,10 @@ export function validateApplicationRules(response, testCase) {
             testCase[
               `actions${actionIndex + 1}_rules${ruleIndex + 1}_caveat_description`
             ]
-          // const expectedActionCode = testCase[`actions${action_index + 1}_rules${rule_index + 1}_caveat_metadata_actionCode`]
+          const expectedActionCode =
+            testCase[
+              `actions${actionIndex + 1}_rules${ruleIndex + 1}_caveat_metadata_actionCode`
+            ]
           const expectedParcelId =
             testCase[
               `actions${actionIndex + 1}_rules${ruleIndex + 1}_caveat_metadata_parcelId`
@@ -312,11 +315,11 @@ export function validateApplicationRules(response, testCase) {
             )
           }
 
-          // if (actualActionCode !== expectedActionCode) {
-          //   throw new Error(
-          //     `Validation failed: expected actions${action_index + 1}_rules${rule_index + 1}_caveat_metadata_actionCode to be ${expectedActionCode} but got ${actualActionCode}`
-          //   )
-          // }
+          if (actualActionCode !== expectedActionCode) {
+            throw new Error(
+              `Validation failed: expected actions${actionIndex + 1}_rules${ruleIndex + 1}_caveat_metadata_actionCode to be ${expectedActionCode} but got ${actualActionCode}`
+            )
+          }
 
           if (String(actualParcelId) !== String(expectedParcelId)) {
             throw new Error(
