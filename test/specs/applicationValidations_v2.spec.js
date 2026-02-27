@@ -2,13 +2,15 @@ import request from 'supertest'
 import { runTestsAndRecordResults } from '../utils/recordResults.js'
 import {
   APPLICATION_VALIDATIONS_ENDPOINT_V2,
+  APPLICATION_VALIDATION_RUN_ENDPOINT,
   BEARER_TOKEN
 } from '../utils/apiEndpoints.js'
 import {
   validateStatusCode,
   validateSuccessMessage,
   validateErrorMessage,
-  validateApplicationRules
+  validateApplicationRules,
+  applicationValidationRunCheck
 } from '../utils/validationsHelper.js'
 
 describe('Validations V2 endpoint', () => {
@@ -50,36 +52,36 @@ describe('Validations V2 endpoint', () => {
         // validate application validation response
         validateApplicationRules(validationResponse, testCase)
 
-        // // Extract the runId from the validation response
-        // const runId = validationResponse.body.id
+        // Extract the runId from the validation response
+        const runId = validationResponse.body.id
 
-        // // Make the API request to /application/validation-run/{id} endpoint
-        // const validationRunResponse = await request(global.baseUrl)
-        //   .post(APPLICATION_VALIDATION_RUN_ENDPOINT + `/${runId}`)
-        //   .set('Accept', 'application/json')
-        //   .set('Authorization', `Bearer ${BEARER_TOKEN}`)
-        //   .set('x-api-key', `${process.env.API_KEY}`)
-        //   .set('Accept-Encoding', '*')
+        // Make the API request to /application/validation-run/{id} endpoint
+        const validationRunResponse = await request(global.baseUrl)
+          .post(APPLICATION_VALIDATION_RUN_ENDPOINT + `/${runId}`)
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${BEARER_TOKEN}`)
+          .set('x-api-key', `${process.env.API_KEY}`)
+          .set('Accept-Encoding', '*')
 
-        // // Validate basic status code match before other validations
-        // validateStatusCode(
-        //   validationRunResponse,
-        //   testCase,
-        //   'expectedValidationRunStatusCode'
-        // )
+        // Validate basic status code match before other validations
+        validateStatusCode(
+          validationRunResponse,
+          testCase,
+          'expectedValidationRunStatusCode'
+        )
 
-        // // For 200 responses, perform detailed validations
-        // if (validationRunResponse.status === 200) {
-        //   // Validate success message
-        //   validateSuccessMessage(
-        //     validationRunResponse,
-        //     testCase,
-        //     'expectedValidationRunMessage'
-        //   )
+        // For 200 responses, perform detailed validations
+        if (validationRunResponse.status === 200) {
+          // Validate success message
+          validateSuccessMessage(
+            validationRunResponse,
+            testCase,
+            'expectedValidationRunMessage'
+          )
 
-        //   // validate application validation run
-        //   applicationValidationRunCheck(validationRunResponse, testCase, runId)
-        // }
+          // validate application validation run
+          applicationValidationRunCheck(validationRunResponse, testCase, runId)
+        }
       } else {
         // For non-200 responses, validate status code
         validateStatusCode(
