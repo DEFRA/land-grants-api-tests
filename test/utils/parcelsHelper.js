@@ -466,3 +466,50 @@ export function validateHEFERRequired(response, testCase) {
     }
   })
 }
+
+/**
+ * Validate Action Groups field if expected
+ */
+export function validateActionGroups(response, testCase) {
+  // Skip if groups is not requested
+  if (!testCase.fields.includes('groups')) {
+    return
+  }
+  const actualGroups = response.body.groups
+  const expectedGroups = JSON.parse(testCase.expectedGroups)
+
+  // Validate if groups data is available in the response
+  if (
+    !actualGroups ||
+    !Array.isArray(actualGroups) ||
+    actualGroups.length === 0
+  ) {
+    throw new Error(
+      'Response does not contain groups data or groups array is empty'
+    )
+  }
+
+  // Validate groups length
+  if (actualGroups.length !== expectedGroups.length) {
+    throw new Error(
+      `Expected groups length ${expectedGroups.length} but got ${actualGroups.length}`
+    )
+  }
+
+  // Validate each expected group against the actual groups
+  expectedGroups.forEach((expectedGroup) => {
+    const actualGroup = actualGroups.find(
+      (actualGroup) => expectedGroup.name === actualGroup.name
+    )
+
+    // Compare actions arrays by content (order-sensitive)
+    if (
+      JSON.stringify(expectedGroup.actions) !==
+      JSON.stringify(actualGroup.actions)
+    ) {
+      throw new Error(
+        `Expected actions for group '${expectedGroup.name}' is ${JSON.stringify(expectedGroup.actions)} but got ${JSON.stringify(actualGroup.actions)}`
+      )
+    }
+  })
+}
