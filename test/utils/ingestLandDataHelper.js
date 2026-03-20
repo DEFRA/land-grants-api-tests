@@ -105,17 +105,41 @@ async function checkUploadStatus(uploadId, accessToken, environment) {
   }
 }
 
+/**
+ * Upload file to endpoint with authentication
+ * @param {string} uploadUrl - Upload URL
+ * @param {string} filePath - Path to file to upload
+ * @param {string} accessToken - Bearer token
+ * @returns {Promise<void>}
+ */
 async function uploadFileToS3(uploadUrl, filePath, accessToken) {
   try {
     console.log(`✓ Uploading file to S3 ${uploadUrl}`)
-    const fileContent = fs.readFileSync(filePath, 'utf-8')
+
+    const fileContent = fs.readFileSync(filePath)
     const fileName = path.basename(filePath)
+    const contentType = filePath.endsWith('.csv')
+      ? 'text/csv'
+      : 'application/zip'
+
+    if (fileContent.length === 0) {
+      throw new Error(`File is empty: ${filePath}`)
+    }
+
+    // Quick sanity check that the file looks like a zip
+    if (contentType === 'application/zip') {
+      const signature = fileContent.slice(0, 4).toString('hex')
+      if (signature !== '504b0304') {
+        console.log(`✗ ZIP signature mismatch: ${signature}`)
+        throw new Error(`File does not look like a ZIP: ${filePath}`)
+      }
+    }
 
     await fetch(uploadUrl, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        'content-type': 'text/csv',
+        'content-type': contentType,
         'x-filename': fileName
       },
       body: fileContent,
