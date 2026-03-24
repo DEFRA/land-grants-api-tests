@@ -112,7 +112,12 @@ export function validateErrorMessage(response, testCase) {
 
 /** Validate application validation run details
  */
-export function applicationValidationRunCheck(response, testCase, runId) {
+export function applicationValidationRunCheck(
+  response,
+  applicationId,
+  testCase,
+  runId
+) {
   // Check if id matches
   if (response.body.applicationValidationRun.id !== runId) {
     throw new Error(
@@ -123,10 +128,10 @@ export function applicationValidationRunCheck(response, testCase, runId) {
   // Check if applicationId matches
   if (
     String(response.body.applicationValidationRun.application_id) !==
-    String(testCase.applicationId)
+    applicationId
   ) {
     throw new Error(
-      `Validation failed: expected applicationId to be ${testCase.applicationId} but got ${response.body.applicationValidationRun.application_id}`
+      `Validation failed: expected applicationId to be ${applicationId} but got ${response.body.applicationValidationRun.application_id}`
     )
   }
 
@@ -191,10 +196,13 @@ export function validateApplicationRules(response, testCase) {
       const actualSheetId = action.sheetId
       const actualParcelId = action.parcelId
       const actualResult = action.hasPassed
+      const actualConfigVersion = action.version
       const expectedCode = testCase[`actions${actionIndex + 1}_actionCode`]
       const expectedSheetId = testCase[`actions${actionIndex + 1}_sheetId`]
       const expectedParcelId = testCase[`actions${actionIndex + 1}_parcelId`]
       const expectedResult = testCase[`actions${actionIndex + 1}_hasPassed`]
+      const expectedConfigVersion =
+        testCase[`actions${actionIndex + 1}_version`]
 
       if (actualCode !== expectedCode) {
         throw new Error(
@@ -217,6 +225,12 @@ export function validateApplicationRules(response, testCase) {
       if (String(actualResult) !== String(expectedResult).toLowerCase()) {
         throw new Error(
           `Validation failed: expected actions${actionIndex + 1}_hasPassed to be ${expectedResult} but got ${actualResult}`
+        )
+      }
+
+      if (actualConfigVersion !== expectedConfigVersion) {
+        throw new Error(
+          `Validation failed: expected actions${actionIndex + 1}_version to be ${expectedConfigVersion} but got ${actualConfigVersion}`
         )
       }
 
@@ -265,7 +279,10 @@ export function validateApplicationRules(response, testCase) {
         }
 
         // check caveat details if a consent is required from Natural England'
-        if (actualRuleReason === 'A consent is required from Natural England') {
+        if (
+          actualRuleReason === 'A consent is required from Natural England' ||
+          actualRuleReason === 'A hefer is needed from Historic England'
+        ) {
           const caveat = rule.caveat
           const actualRuleCaveatCode = caveat.code
           const actualRuleCaveatDescription = caveat.description
