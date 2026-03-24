@@ -17,7 +17,10 @@ describe('Validations V1 endpoint', () => {
     const dataFile = './test/data/applicationsValidationsData_v1.csv'
 
     const validateMessages = async (testCase, options = {}) => {
-      const applicationId = testCase.applicationId
+      const applicationId =
+        testCase.applicationId && testCase.applicationId.trim() !== ''
+          ? testCase.applicationId
+          : `app-${Math.random().toString(36).substring(2, 10)}`
       const requester = testCase.requester
       const sbi = testCase.sbi
       const applicantCrn = testCase.applicantCrn
@@ -79,7 +82,12 @@ describe('Validations V1 endpoint', () => {
           )
 
           // validate application validation run
-          applicationValidationRunCheck(validationRunResponse, testCase, runId)
+          applicationValidationRunCheck(
+            validationRunResponse,
+            applicationId,
+            testCase,
+            runId
+          )
         }
       } else {
         // For non-200 responses, validate status code

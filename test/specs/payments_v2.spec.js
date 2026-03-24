@@ -19,10 +19,21 @@ describe('Payments endpoint v2.0.0', () => {
       const startDate = testCase.startDate
       const parcel = JSON.parse(testCase.parcel)
 
+      const applicationId =
+        testCase.applicationId !== '' ? testCase.applicationId : null
+
+      // Build the payload conditionally
+      const payload = { startDate, parcel }
+      if (applicationId !== null) {
+        payload.applicationId = applicationId
+      }
+
+      console.log('Testing with payload:', payload)
+
       // Make the real API request
       const response = await request(global.baseUrl)
         .post(PAYMENTS_ENDPOINT_V2)
-        .send({ startDate, parcel })
+        .send(payload)
         .set('Accept', 'application/json')
         .set('Authorization', `Bearer ${BEARER_TOKEN}`)
         .set('x-api-key', `${process.env.API_KEY}`)
