@@ -9,3 +9,4 @@ export const APPLICATION_VALIDATIONS_ENDPOINT_V2 =
   '/api/v2/application/validate'
 export const APPLICATION_VALIDATION_RUN_ENDPOINT = '/application/validation-run'
 export const BEARER_TOKEN = process.env.BEARER_TOKEN
+export const WMP_VALIDATIONS_ENDPOINT = '/api/v1/wmp/validate'
