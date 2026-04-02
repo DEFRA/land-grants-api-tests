@@ -379,3 +379,71 @@ export function validateApplicationRules(response, testCase) {
     })
   }
 }
+
+/**
+ * Validate WMP application specific rules and their results
+ */
+export function wmpValidateApplicationRules(response, testCase) {
+  const result = response.body.result
+  // Check if application is valid
+  const actualHasPassed = result.hasPassed
+  const actualCode = result.code
+  const actualActionConfigVersion = result.actionConfigVersion
+  const expectedHasPassed = testCase.hasPassed
+  const expectedCode = testCase.code
+  const expectedActionConfigVersion = testCase.actionConfigVersion
+
+  if (String(actualHasPassed) !== String(expectedHasPassed).toLowerCase()) {
+    throw new Error(
+      `Validation failed: expected hasPassed to be ${expectedHasPassed} but got ${actualHasPassed}`
+    )
+  }
+
+  if (actualCode !== expectedCode) {
+    throw new Error(
+      `Validation failed: expected code to be ${expectedCode} but got ${actualCode}`
+    )
+  }
+
+  if (actualActionConfigVersion !== expectedActionConfigVersion) {
+    throw new Error(
+      `Validation failed: expected action config version to be ${expectedActionConfigVersion} but got ${actualActionConfigVersion}`
+    )
+  }
+
+  const rules = result.rules
+  rules.forEach((rule, index) => {
+    const actualRuleName = rule.name
+    const actualRulePassed = rule.passed
+    const actualRuleReason = rule.reason
+    const actualRuleDescription = rule.description
+    const expectedRuleName = testCase[`rules${index + 1}_name`]
+    const expectedRulePassed = testCase[`rules${index + 1}_passed`]
+    const expectedRuleReason = testCase[`rules${index + 1}_reason`]
+    const expectedRuleDescription = testCase[`rules${index + 1}_description`]
+
+    if (actualRuleName !== expectedRuleName) {
+      throw new Error(
+        `Validation failed: expected rules${index + 1}_name to be ${expectedRuleName} but got ${actualRuleName}`
+      )
+    }
+
+    if (String(actualRulePassed) !== String(expectedRulePassed).toLowerCase()) {
+      throw new Error(
+        `Validation failed: expected rules${index + 1}_passed to be ${expectedRulePassed} but got ${actualRulePassed}`
+      )
+    }
+
+    if (actualRuleReason !== expectedRuleReason) {
+      throw new Error(
+        `Validation failed: expected rules${index + 1}_reason to be ${expectedRuleReason} but got ${actualRuleReason}`
+      )
+    }
+
+    if (actualRuleDescription !== expectedRuleDescription) {
+      throw new Error(
+        `Validation failed: expected rules${index + 1}_description to be ${expectedRuleDescription} but got ${actualRuleDescription}`
+      )
+    }
+  })
+}
