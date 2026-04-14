@@ -37,16 +37,16 @@ describe('Payments v1 endpoint', () => {
         validateSuccessMessage(response, testCase)
 
         // Validate agreement start date, end date, frequency, agreement total amount and annual amount
-        validatePayment(response, testCase)
+        validatePayment(response, testCase, 'sfi')
 
         // Validate parcel items
         validateParcelItems(response, testCase)
 
         // Validate agreement level items
-        validateAgreementLevelItems(response, testCase)
+        validateAgreementLevelItems(response, testCase, 'sfi')
 
         // Validate payment amounts and dates
-        validatePaymentAmountsAndDates(response, testCase)
+        validatePaymentAmountsAndDates(response, testCase, 'sfi')
       } else {
         // Validate error message for non-200 responses
         validateErrorMessage(response, testCase)
