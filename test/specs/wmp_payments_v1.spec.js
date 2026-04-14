@@ -1,6 +1,6 @@
 import request from 'supertest'
 import { runTestsAndRecordResults } from '../utils/recordResults.js'
-import { BEARER_TOKEN, PAYMENTS_ENDPOINT_V2 } from '../utils/apiEndpoints.js'
+import { BEARER_TOKEN, WMP_PAYMENTS_ENDPOINT } from '../utils/apiEndpoints.js'
 import {
   validateStatusCode,
   validateSuccessMessage,
@@ -11,28 +11,36 @@ import {
   validateErrorMessage
 } from '../utils/paymentsHelper.js'
 
-describe('Payments endpoint v2.0.0', () => {
-  it('should validate version2 payment amounts and dates', async () => {
-    const dataFile = './test/data/paymentsData_v2.csv'
+describe('WMP Payments endpoint v1.0.0', () => {
+  it('should validate WMP(PA3) payment amounts and dates', async () => {
+    const dataFile = './test/data/wmp_paymentsData_v1.csv'
 
     const validatePayments = async (testCase, options = {}) => {
       const startDate = testCase.startDate
-      const parcel = JSON.parse(testCase.parcel)
-
-      const applicationId =
-        testCase.applicationId !== '' ? testCase.applicationId : null
+      const parcelIds = testCase.parcelIds.split(',')
+      const oldWoodlandAreaHa =
+        testCase.oldWoodlandAreaHa !== ''
+          ? Number(testCase.oldWoodlandAreaHa)
+          : null
+      const newWoodlandAreaHa =
+        testCase.newWoodlandAreaHa !== ''
+          ? Number(testCase.newWoodlandAreaHa)
+          : null
 
       // Build the payload conditionally
-      const payload = { startDate, parcel }
-      if (applicationId !== null) {
-        payload.applicationId = applicationId
+      const payload = { startDate, parcelIds }
+      if (oldWoodlandAreaHa !== null) {
+        payload.oldWoodlandAreaHa = oldWoodlandAreaHa
+      }
+      if (newWoodlandAreaHa !== null) {
+        payload.newWoodlandAreaHa = newWoodlandAreaHa
       }
 
       console.log('Testing with payload:', payload)
 
       // Make the real API request
       const response = await request(global.baseUrl)
-        .post(PAYMENTS_ENDPOINT_V2)
+        .post(WMP_PAYMENTS_ENDPOINT)
         .send(payload)
         .set('Accept', 'application/json')
         .set('Authorization', `Bearer ${BEARER_TOKEN}`)
@@ -48,16 +56,16 @@ describe('Payments endpoint v2.0.0', () => {
         validateSuccessMessage(response, testCase)
 
         // Validate agreement start date, end date, frequency, agreement total amount and annual amount
-        validatePayment(response, testCase, 'sfi')
+        validatePayment(response, testCase, 'wmp')
 
         // Validate parcel items
         validateParcelItems(response, testCase)
 
         // Validate agreement level items
-        validateAgreementLevelItems(response, testCase, 'sfi')
+        validateAgreementLevelItems(response, testCase, 'wmp')
 
         // Validate payment amounts and dates
-        validatePaymentAmountsAndDates(response, testCase, 'sfi')
+        validatePaymentAmountsAndDates(response, testCase, 'wmp')
       } else {
         // Validate error message for non-200 responses
         validateErrorMessage(response, testCase)
