@@ -15,7 +15,11 @@ import {
 
 describe('Validations V2 endpoint', () => {
   it('should validate land actions in the application', async () => {
-    const dataFile = './test/data/applicationsValidationsData_v2.csv'
+    const dataFiles = [
+      './test/data/applicationsValidationsData_CMOR1,UPL1,UPL2andUPL3_v2.csv',
+      './test/data/applicationsValidationsData_UPL8andUPL10_v2.csv',
+      './test/data/applicationsValidationsData_CLIG3_v2.csv'
+    ]
 
     const validateMessages = async (testCase, options = {}) => {
       const applicationId =
@@ -108,6 +112,8 @@ describe('Validations V2 endpoint', () => {
       }
     }
     // Run tests with our helper that handles test result tracking
-    await runTestsAndRecordResults(dataFile, validateMessages)
+    for (const dataFile of dataFiles) {
+      await runTestsAndRecordResults(dataFile, validateMessages)
+    }
   })
 })
