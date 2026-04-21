@@ -13,7 +13,7 @@ import {
 
 describe('WMP Payments endpoint v1.0.0', () => {
   it('should validate WMP(PA3) payment amounts and dates', async () => {
-    const dataFile = './test/data/wmp_paymentsData_v1.csv'
+    const dataFile = './test/data/wmp/payments/wmp_paymentsData_v1.csv'
 
     const validatePayments = async (testCase, options = {}) => {
       const startDate = testCase.startDate
