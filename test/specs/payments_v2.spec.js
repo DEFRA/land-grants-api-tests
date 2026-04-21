@@ -14,9 +14,9 @@ import {
 describe('Payments endpoint v2.0.0', () => {
   it('should validate version2 payment amounts and dates', async () => {
     const dataFiles = [
-      './test/data/paymentsData_CMOR1,UPL1,UPL2andUPL3_v2.csv',
-      './test/data/paymentsData_UPL8andUPL10_v2.csv',
-      './test/data/paymentsData_CLIG3_v2.csv'
+      './test/data/sfi/payments/paymentsData_CMOR1,UPL1,UPL2andUPL3_v2.csv',
+      './test/data/sfi/payments/paymentsData_UPL8andUPL10_v2.csv',
+      './test/data/sfi/payments/paymentsData_CLIG3_v2.csv'
     ]
 
     const validatePayments = async (testCase, options = {}) => {

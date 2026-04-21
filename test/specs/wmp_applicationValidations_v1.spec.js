@@ -13,7 +13,8 @@ import {
 
 describe('WMP Validations V1 endpoint', () => {
   it('should validate WMP(PA3) application', async () => {
-    const dataFile = './test/data/wmp_applicationsValidationsData_v1.csv'
+    const dataFile =
+      './test/data/wmp/validations/wmp_applicationsValidationsData_v1.csv'
 
     const validateMessages = async (testCase, options = {}) => {
       const parcelIds = testCase.parcelIds.split(',')
