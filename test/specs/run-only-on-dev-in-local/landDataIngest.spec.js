@@ -109,25 +109,25 @@ describe.each(fileVariants)(
             'Assess moorland and produce a written record'
           )
           expect(action.availableArea.unit).toEqual('ha')
-          expect(action.availableArea.value).toEqual(7.0197)
+          expect(action.availableArea.value).toEqual(7.5011)
         } else if (action.code === 'UPL1') {
           expect(action.description).toEqual(
             'Moderate livestock grazing on moorland'
           )
           expect(action.availableArea.unit).toEqual('ha')
-          expect(action.availableArea.value).toEqual(7.0197)
+          expect(action.availableArea.value).toEqual(7.5011)
         } else if (action.code === 'UPL2') {
           expect(action.description).toEqual(
             'Low livestock grazing on moorland'
           )
           expect(action.availableArea.unit).toEqual('ha')
-          expect(action.availableArea.value).toEqual(7.0197)
+          expect(action.availableArea.value).toEqual(7.5011)
         } else if (action.code === 'UPL3') {
           expect(action.description).toEqual(
             'Limited livestock grazing on moorland'
           )
           expect(action.availableArea.unit).toEqual('ha')
-          expect(action.availableArea.value).toEqual(7.0197)
+          expect(action.availableArea.value).toEqual(7.5011)
         }
       })
 

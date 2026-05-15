@@ -16,7 +16,8 @@ describe('Payments endpoint v2.0.0', () => {
     const dataFiles = [
       './test/data/sfi/payments/paymentsData_CMOR1,UPL1,UPL2andUPL3_v2.csv',
       './test/data/sfi/payments/paymentsData_UPL8andUPL10_v2.csv',
-      './test/data/sfi/payments/paymentsData_CLIG3_v2.csv'
+      './test/data/sfi/payments/paymentsData_CLIG3_v2.csv',
+      './test/data/sfi/payments/paymentsData_CSAM3_v2.csv'
     ]
 
     const validatePayments = async (testCase, options = {}) => {
