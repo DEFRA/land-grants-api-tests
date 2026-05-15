@@ -21,7 +21,8 @@ describe('Parcels V2 endpoint', () => {
       './test/data/sfi/parcels/parcelsData_groups.csv',
       './test/data/sfi/parcels/parcelsData_CMOR1,UPL1,UPL2andUPL3_v2.csv',
       './test/data/sfi/parcels/parcelsData_UPL8andUPL10_v2.csv',
-      './test/data/sfi/parcels/parcelsData_CLIG3_v2.csv'
+      './test/data/sfi/parcels/parcelsData_CLIG3_v2.csv',
+      './test/data/sfi/parcels/parcelsData_CSAM3_v2.csv'
     ]
 
     // validating each test case
