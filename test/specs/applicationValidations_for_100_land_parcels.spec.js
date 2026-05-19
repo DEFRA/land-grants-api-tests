@@ -41,21 +41,14 @@ describe('Validations V2 endpoint test with 100 land parcels', () => {
         'expectedValidationStatusCode'
       )
 
-      // For 200 responses, perform detailed validations
-      if (validationResponse.status === 200) {
-        // Validate success message
-        validateSuccessMessage(
-          validationResponse,
-          testCase,
-          'expectedValidationMessage'
-        )
-      } else {
-        // For non-200 responses, validate status code
-        console.log(
-          `Received non-200 response: ${validationResponse.status} - ${validationResponse.text}`
-        )
-      }
+      // Validate success message
+      validateSuccessMessage(
+        validationResponse,
+        testCase,
+        'expectedValidationMessage'
+      )
     }
+
     // Run tests with our helper that handles test result tracking
     for (const dataFile of dataFiles) {
       await runTestsAndRecordResults(dataFile, validateMessages)
