@@ -5,51 +5,40 @@ import { createSecureContext } from './secure-context.js'
 
 const port = 5432
 const isLocal = process.env.ENVIRONMENT === 'local'
-const isTest = process.env.ENVIRONMENT !== 'local'
 const passwordForLocalDev = process.env.POSTGRES_PASSWORD
 const host = process.env.POSTGRES_HOST
 const user = process.env.POSTGRES_USERNAME
 const database = process.env.POSTGRES_DATABASE
 const region = process.env.POSTGRES_REGION
 
-async function getToken() {
+async function getToken(options) {
   if (isLocal) {
-    return passwordForLocalDev
+    return options.password
   } else {
     const signer = new Signer({
-      hostname: host,
-      port,
-      username: user,
+      hostname: options.host,
+      port: options.port,
+      username: options.user,
       credentials: fromNodeProviderChain(),
-      region
+      region: options.region
     })
     return signer.getAuthToken()
   }
 }
 
 export function getDBOptions() {
-  if (isTest) {
-    return {
-      host,
-      user,
-      database,
-      password: passwordForLocalDev,
-      port
-    }
-  }
   return {
+    host,
     user,
     database,
-    host,
-    passwordForLocalDev,
-    isLocal,
-    region,
-    loadPostgresData: false
+    password: passwordForLocalDev,
+    port,
+    region
   }
 }
 
 export function createDBPool(options) {
-  if (isTest) {
+  if (isLocal) {
     return new Pool({
       port: options.port,
       user: options.user,
