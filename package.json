@@ -44,6 +44,8 @@
   "devDependencies": {
     "@babel/core": "7.26.0",
     "@babel/preset-env": "7.26.0",
+    "@aws-sdk/credential-providers": "^3.1041.0",
+    "@aws-sdk/rds-signer": "^3.1041.0",
     "allure-jest": "3.0.9",
     "babel-jest": "29.7.0",
     "babel-loader": "9.2.1",
