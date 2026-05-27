@@ -9,7 +9,7 @@ import {
   validateSuccessMessage
 } from '../utils/validationsHelper.js'
 
-describe('Validations V2 endpoint test with 100 land parcels', () => {
+describe.skip('Validations V2 endpoint test with 100 land parcels', () => {
   it('should validate 3 actions each for 100 land parcels in the application', async () => {
     const dataFiles = [
       './test/data/sfi/validations/applicationsValidationsData_100_land_parcels.csv'

@@ -13,25 +13,31 @@ const database = process.env.POSTGRES_DATABASE
 const region = process.env.POSTGRES_REGION
 
 async function getToken(options) {
-  console.log('getToken called')
-  console.log(JSON.stringify(options, null, 2))
-  console.log('isLocal')
-  console.log(isLocal)
-  if (isLocal) {
-    console.log('Using local database password for authentication')
-    return options.password
-  } else {
-    console.log('Generating IAM auth token for RDS connection')
-    const signer = new Signer({
-      hostname: options.host,
-      port: options.port,
-      username: options.user,
-      credentials: fromNodeProviderChain(),
-      region: options.region
-    })
-    console.log('signer created')
-    console.log(signer)
-    return signer.getAuthToken()
+  try {
+    console.log('getToken called')
+    console.log(JSON.stringify(options, null, 2))
+    console.log('isLocal')
+    console.log(isLocal)
+    if (isLocal) {
+      console.log('Using local database password for authentication')
+      return options.password
+    } else {
+      console.log('Generating IAM auth token for RDS connection')
+      const signer = new Signer({
+        hostname: options.host,
+        port: options.port,
+        username: options.user,
+        credentials: fromNodeProviderChain(),
+        region: options.region
+      })
+      console.log('signer created')
+      console.log(signer)
+      return signer.getAuthToken()
+    }
+  } catch (error) {
+    console.log('Failed to get Postgres authentication token')
+    console.log(error)
+    throw error
   }
 }
 
@@ -55,11 +61,11 @@ export function createDBPool(options) {
   console.log(isLocal)
   if (isLocal) {
     return new Pool({
-      port: options.port,
-      user: options.user,
-      password: options.password,
-      host: options.host,
-      database: options.database
+      port: options?.port,
+      user: options?.user,
+      password: options?.password,
+      host: options?.host,
+      database: options?.database
     })
   }
 
@@ -68,14 +74,21 @@ export function createDBPool(options) {
   console.log('context created')
   console.log(context)
   return new Pool({
-    port: options.port,
-    user: options.user,
+    port: options?.port,
+    user: options?.user,
     password: async () => {
-      console.log('Getting database authentication token')
-      return await getToken(options)
+      console.log('Getting Postgres authentication token')
+      try {
+        const token = await getToken(options)
+        return token
+      } catch (error) {
+        console.log('Failed to get Postgres authentication token')
+        console.log(error)
+        throw error
+      }
     },
-    host: options.host,
-    database: options.database,
+    host: options?.host,
+    database: options?.database,
     maxLifetimeSeconds: 60 * 10, // This should be set to less than the RDS Token lifespan (15 minutes)
     min: 2, // Minimum number of connections to keep warm, Reduces cold-start latency and connection churn
     max: 10, // Maximum number of connections the pool can create, we keep this at 10, as we use aurora, which scales number of connections automatically
