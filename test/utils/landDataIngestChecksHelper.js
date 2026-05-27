@@ -1,26 +1,7 @@
 import 'dotenv/config'
-import { createDBPool, getDBOptions } from './postgres.js'
+// import { createDBPool, getDBOptions } from './postgres.js'
 
 async function getLandDataCounts() {
-  const options = getDBOptions()
-  console.log('Database connection options:')
-  console.log(options.host)
-  console.log(options.user)
-  console.log(options.database)
-  console.log(options.password)
-  console.log(options.port)
-  console.log(options.region)
-  const pool = createDBPool(options)
-  console.log('pool created')
-  const client = await pool.connect()
-  console.log('client connected')
-  const testQuery = 'SELECT 1'
-  await client.query(testQuery)
-  console.log('testQuery executed')
-  await client.end()
-  console.log('client disconnected')
-  console.log('Successfully connected to the database')
-
   // const uniqueParcelsSql = `
   //     SELECT COUNT(DISTINCT (sheet_id, parcel_id)) AS count FROM land_parcels
   //   `
