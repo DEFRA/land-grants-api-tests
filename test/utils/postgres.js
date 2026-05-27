@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { fromNodeProviderChain } from '@aws-sdk/credential-providers'
 import { Signer } from '@aws-sdk/rds-signer'
 import { Pool } from 'pg'
@@ -40,7 +41,8 @@ export function getDBOptions() {
 }
 
 export function createDBPool(options) {
-  console.log('Creating DB pool with options:', options)
+  console.log('environment is local:')
+  console.log(isLocal)
   if (isLocal) {
     return new Pool({
       port: options.port,
