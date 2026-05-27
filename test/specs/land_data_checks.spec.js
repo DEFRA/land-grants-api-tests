@@ -33,7 +33,7 @@ describe('Land data checks', () => {
     await client.release()
     // console.log('Successfully connected to the database')
 
-    // expect(true).toBe('true')
+    expect(result).toBeDefined()
     // const landDataCounts = await getLandDataCounts()
     // expect(landDataCounts).toBe(1) // Placeholder assertion to confirm test runs successfully
     // expect(landDataCounts.uniqueParcelsCount).toEqual(
