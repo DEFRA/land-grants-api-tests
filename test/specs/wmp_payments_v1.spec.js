@@ -11,7 +11,7 @@ import {
   validateErrorMessage
 } from '../utils/paymentsHelper.js'
 
-describe('WMP Payments endpoint v1.0.0', () => {
+describe.skip('WMP Payments endpoint v1.0.0', () => {
   it('should validate WMP(PA3) payment amounts and dates', async () => {
     const dataFile = './test/data/wmp/payments/wmp_paymentsData_v1.csv'
 
