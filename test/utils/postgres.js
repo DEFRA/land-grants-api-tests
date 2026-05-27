@@ -13,8 +13,10 @@ const region = process.env.POSTGRES_REGION
 
 async function getToken(options) {
   if (isLocal) {
+    console.log('Using local database password for authentication')
     return options.password
   } else {
+    console.log('Generating IAM auth token for RDS connection')
     const signer = new Signer({
       hostname: options.host,
       port: options.port,
@@ -38,6 +40,7 @@ export function getDBOptions() {
 }
 
 export function createDBPool(options) {
+  console.log('Creating DB pool with options:', options)
   if (isLocal) {
     return new Pool({
       port: options.port,
@@ -48,6 +51,7 @@ export function createDBPool(options) {
     })
   }
 
+  console.log('Creating secure context for RDS SSL connection')
   const context = createSecureContext()
   return new Pool({
     port: options.port,
