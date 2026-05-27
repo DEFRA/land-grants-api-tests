@@ -59,6 +59,7 @@ export function createDBPool(options) {
     port: options.port,
     user: options.user,
     password: async () => {
+      console.log('Getting database authentication token')
       return await getToken(options)
     },
     host: options.host,
