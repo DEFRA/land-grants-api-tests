@@ -1,15 +1,12 @@
 import tls from 'node:tls'
 
 function getTrustStoreCerts(envs) {
-  console.log('Extracting trust store certificates from environment variables')
-
   return Object.entries(envs)
     .map(([key, value]) => key.startsWith('TRUSTSTORE_') && value)
-    .filter((envValue) => {
-      console.log('envValue')
-      console.log(envValue)
-      return (envValue) => Boolean(envValue)
-    })
+    .filter(
+      /** @returns {envValue is string} */
+      (envValue) => Boolean(envValue)
+    )
     .map((envValue) => Buffer.from(envValue, 'base64').toString().trim())
 }
 
