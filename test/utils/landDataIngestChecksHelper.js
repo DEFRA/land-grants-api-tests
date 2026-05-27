@@ -3,7 +3,13 @@ import { createDBPool, getDBOptions } from './postgres.js'
 
 async function getLandDataCounts() {
   const options = getDBOptions()
-  console.log('Database connection options:', options)
+  console.log('Database connection options:')
+  console.log(options.host)
+  console.log(options.user)
+  console.log(options.database)
+  console.log(options.password)
+  console.log(options.port)
+  console.log(options.region)
   const pool = createDBPool(options)
   const client = await pool.connect()
   const testQuery = 'SELECT 1'
