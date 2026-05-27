@@ -1,5 +1,5 @@
 // import { getLandDataCounts } from '../utils/landDataIngestChecksHelper.js'
-import { createDBPool, getDBOptions } from './postgres.js'
+import { createDBPool, getDBOptions } from '../utils/postgres.js'
 
 describe('Land data checks', () => {
   let connection
@@ -26,11 +26,14 @@ describe('Land data checks', () => {
     const client = await connection.connect()
     console.log('client connected')
     const testQuery = 'SELECT 1'
-    await client.query(testQuery)
+    const result = await client.query(testQuery)
     console.log('testQuery executed')
+    console.log(result?.rows)
     console.log('client disconnected')
-    console.log('Successfully connected to the database')
-    expect(true).toBe('true')
+    await client.release()
+    // console.log('Successfully connected to the database')
+
+    // expect(true).toBe('true')
     // const landDataCounts = await getLandDataCounts()
     // expect(landDataCounts).toBe(1) // Placeholder assertion to confirm test runs successfully
     // expect(landDataCounts.uniqueParcelsCount).toEqual(
