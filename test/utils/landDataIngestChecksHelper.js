@@ -11,10 +11,14 @@ async function getLandDataCounts() {
   console.log(options.port)
   console.log(options.region)
   const pool = createDBPool(options)
+  console.log('pool created')
   const client = await pool.connect()
+  console.log('client connected')
   const testQuery = 'SELECT 1'
   await client.query(testQuery)
-  client.end()
+  console.log('testQuery executed')
+  await client.end()
+  console.log('client disconnected')
   console.log('Successfully connected to the database')
 
   // const uniqueParcelsSql = `

@@ -13,6 +13,10 @@ const database = process.env.POSTGRES_DATABASE
 const region = process.env.POSTGRES_REGION
 
 async function getToken(options) {
+  console.log('getToken called')
+  console.log(JSON.stringify(options, null, 2))
+  console.log('isLocal')
+  console.log(isLocal)
   if (isLocal) {
     console.log('Using local database password for authentication')
     return options.password
@@ -25,12 +29,15 @@ async function getToken(options) {
       credentials: fromNodeProviderChain(),
       region: options.region
     })
+    console.log('signer created')
+    console.log(signer)
     return signer.getAuthToken()
   }
 }
 
 export function getDBOptions() {
-  return {
+  console.log('getDBOptions called')
+  const options = {
     host,
     user,
     database,
@@ -38,6 +45,9 @@ export function getDBOptions() {
     port,
     region
   }
+  console.log('options')
+  console.log(options)
+  return options
 }
 
 export function createDBPool(options) {
@@ -55,6 +65,8 @@ export function createDBPool(options) {
 
   console.log('Creating secure context for RDS SSL connection')
   const context = createSecureContext()
+  console.log('context created')
+  console.log(context)
   return new Pool({
     port: options.port,
     user: options.user,
@@ -72,11 +84,8 @@ export function createDBPool(options) {
     idleTimeoutMillis: 0, // Prevent pg from closing idle connections, Aurora networks handle idle sockets better with keepalive
     connectionTimeoutMillis: 10000, // How long to wait for a free connection before failing, prevents requests from hanging under load
     allowExitOnIdle: false, // Keep Node.js process alive even when pool is idle, required for servers / APIs
-    ...(!isLocal &&
-      context && {
-        ssl: {
-          secureContext: context
-        }
-      })
+    ssl: {
+      secureContext: context
+    }
   })
 }
