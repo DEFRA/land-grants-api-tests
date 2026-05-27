@@ -85,7 +85,7 @@ export function createDBPool(options) {
     connectionTimeoutMillis: 10000, // How long to wait for a free connection before failing, prevents requests from hanging under load
     allowExitOnIdle: false, // Keep Node.js process alive even when pool is idle, required for servers / APIs
     ssl: {
-      secureContext: createSecureContext()
+      secureContext: context
     }
   })
 }
