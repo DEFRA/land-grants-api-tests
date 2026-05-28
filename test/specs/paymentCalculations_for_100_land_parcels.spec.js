@@ -6,7 +6,7 @@ import {
   validateSuccessMessage
 } from '../utils/validationsHelper.js'
 
-describe.skip('Payment Calculations V2 endpoint test with 100 land parcels', () => {
+describe('Payment Calculations V2 endpoint test with 100 land parcels', () => {
   it('should calculate payments for application with 100 land parcels having 3 actions each', async () => {
     const dataFiles = [
       './test/data/sfi/payments/paymentData_for_100_land_parcels.csv'
