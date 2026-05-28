@@ -13,7 +13,7 @@ import {
   applicationValidationRunCheck
 } from '../utils/validationsHelper.js'
 
-describe.skip('Validations V2 endpoint', () => {
+describe('Validations V2 endpoint', () => {
   it('should validate land actions in the application', async () => {
     const dataFiles = [
       './test/data/sfi/validations/applicationsValidationsData_CMOR1,UPL1,UPL2andUPL3_v2.csv',

@@ -15,7 +15,7 @@ import {
   validateActionGroups
 } from '../utils/parcelsHelper.js'
 
-describe.skip('Parcels V2 endpoint', () => {
+describe('Parcels V2 endpoint', () => {
   it('Should validate version2 parcels size, actions, SSSI Consent Required and available area taking existing agreements and planned actions into account', async () => {
     const dataFiles = [
       './test/data/sfi/parcels/parcelsData_groups.csv',
