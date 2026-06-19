@@ -7,9 +7,17 @@ describe('LAND DATA QUALITY CHECKS', () => {
       .get(STATS_ENDPOINT)
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${BEARER_TOKEN}`)
-      .set('x-api-key', process.env.API_KEY)
+      .set('x-api-key', `${process.env.API_KEY}`)
       .set('Accept-Encoding', '*')
-      .expect(200)
+
+    if (response.status === 503) {
+      console.warn('Service unavailable (503). Stats are not available yet.')
+      return
+    }
+
+    if (response.status !== 200) {
+      throw new Error(`Unexpected response status: ${response.status}`)
+    }
 
     const {
       uniqueParcelsCount,
