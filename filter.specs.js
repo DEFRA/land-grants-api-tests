@@ -3,7 +3,7 @@ import 'dotenv/config'
 const localDevSpecs = ['**/*.spec.js']
 const nonLocalDevSpecs = [
   '**/*.spec.js',
-  '!**/run-only-on-dev-in-local/*.spec.js'
+  '!**/run-only-on-dev-from-local/*.spec.js'
 ]
 
 export function getSpecsForEnv(

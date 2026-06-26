@@ -154,7 +154,14 @@ async function uploadFileToS3(uploadUrl, filePath, accessToken) {
 /**
  * Main function to run the ingestion process
  */
-export async function transferResource(landDataFile, resource, environment) {
+export async function transferResource(
+  landDataFile,
+  resource,
+  environment,
+  ingestId,
+  filename,
+  accessToken = null
+) {
   const { clientId, clientSecret } = config[environment]
 
   if (!clientId || !clientSecret) {
@@ -165,9 +172,9 @@ export async function transferResource(landDataFile, resource, environment) {
   const reference = new Date().toISOString().replace('T', ':').slice(0, 19)
   const customerId = 'QA_TEAM'
 
-  // get the access token from cognito
-  const accessToken = await getCognitoToken(environment)
-  console.log(`${accessToken !== undefined ? '✓' : '✗'} Access token retrieved`)
+  // get the access token from cognito unless one was supplied by the caller
+  const token = accessToken ?? (await getCognitoToken(environment))
+  console.log(`${token !== undefined ? '✓' : '✗'} Access token retrieved`)
 
   console.log(`✓ Start ingesting ${landDataFile}`)
 
@@ -175,25 +182,23 @@ export async function transferResource(landDataFile, resource, environment) {
     {
       reference,
       customerId,
-      resource
+      resource,
+      ingestId,
+      filename
     },
-    accessToken,
+    token,
     environment
   )
 
   console.log(`✓ Initiate upload successful for ${landDataFile}`)
 
   // Upload the file to S3
-  await uploadFileToS3(
-    initiateUploadResponse.uploadUrl,
-    landDataFile,
-    accessToken
-  )
+  await uploadFileToS3(initiateUploadResponse.uploadUrl, landDataFile, token)
 
   // Check the upload status, should be pending
   const uploadStatusResponse = await checkUploadStatus(
     initiateUploadResponse.uploadUrl.split('/').pop(),
-    accessToken,
+    token,
     environment
   )
 
