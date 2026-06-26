@@ -5,16 +5,16 @@ jest.setTimeout(30 * 60 * 1000)
 
 const parcelsDirectory = path.join(process.cwd(), 'test/land-data/land_parcels')
 
-const ingestId = 563
+const ingestId = 992
 
 describe('Land parcels ingest transfer endpoint', () => {
   it('should transfer the specified land parcel files to the dev environment', async () => {
     expect(ingestId).toBeTruthy()
 
     const filenamesToTransfer = [
-      'reference_parcels_1.csv_dates_1.csv',
-      'reference_parcels_1.csv_dates_2.csv',
-      'reference_parcels_1.csv_dates_3.csv'
+      'reference_parcels_1.csv_dates_1.csv.zip',
+      'reference_parcels_1.csv_dates_2.csv.zip',
+      'reference_parcels_1.csv_dates_3.csv.zip'
     ]
 
     const filesToTransfer = filenamesToTransfer.map((filename) =>

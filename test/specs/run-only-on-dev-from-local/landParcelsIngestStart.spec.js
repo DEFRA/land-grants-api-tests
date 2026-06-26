@@ -9,19 +9,21 @@ describe('Land parcels ingest start endpoint', () => {
   // {
   //   files: [
   //     {
-  //       filename: 'reference_parcels_1.csv_dates_1.csv',
+  //       filename: 'reference_parcels_1.csv_dates_1.csv.zip',
   //       rows: 36062
   //     },
   //     {
-  //       filename: 'reference_parcels_1.csv_dates_2.csv',
+  //       filename: 'reference_parcels_1.csv_dates_2.csv.zip',
   //       rows: 33259
   //     },
   //     {
-  //       filename: 'reference_parcels_1.csv_dates_3.csv',
+  //       filename: 'reference_parcels_1.csv_dates_3.csv.zip',
   //       rows: 3899
   //     }
   //   ]
   // }
+
+  console.log('payload:', payload)
 
   it('should start land parcels ingest with the provided file inventory', async () => {
     const response = await request(global.baseUrl)

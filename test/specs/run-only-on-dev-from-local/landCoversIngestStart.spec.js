@@ -9,19 +9,21 @@ describe('Land covers ingest start endpoint', () => {
   // {
   //   files: [
   //     {
-  //       filename: 'land_covers_1.csv_dates_1.csv',
+  //       filename: 'land_covers_1.csv_dates_1.csv.zip',
   //       rows: 45376
   //     },
   //     {
-  //       filename: 'land_covers_1.csv_dates_2.csv',
+  //       filename: 'land_covers_1.csv_dates_2.csv.zip',
   //       rows: 46981
   //     },
   //     {
-  //       filename: 'land_covers_1.csv_dates_3.csv',
+  //       filename: 'land_covers_1.csv_dates_3.csv.zip',
   //       rows: 23556
   //     }
   //   ]
   // }
+
+  console.log('payload:', payload)
 
   it('should start land covers ingest with the provided file inventory', async () => {
     const response = await request(global.baseUrl)
