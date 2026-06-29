@@ -66,11 +66,12 @@ async function initiateLandDataUpload(jsonData, accessToken, environment) {
     })
 
     if (!response.ok) {
+      const body = await response.text()
       console.log(
         `✗ Failed - Check if API is running at ${apiBaseUrl} - HTTP ${response.status}`
       )
       throw new Error(
-        `Failed to initiate land data upload - HTTP ${response.status}`
+        `Failed to initiate land data upload - HTTP ${response.status}\n${body}`
       )
     }
 
@@ -103,6 +104,43 @@ async function checkUploadStatus(uploadId, accessToken, environment) {
     console.log(`✗ Failed to check upload status - ${error}`)
     throw error
   }
+}
+
+function isSuccessfulUploadStatus(uploadStatusResponse) {
+  const status = `${uploadStatusResponse?.uploadStatus ?? ''}`
+    .trim()
+    .toLowerCase()
+
+  const successfulStatuses = new Set([
+    'initiated',
+    'accepted',
+    'received',
+    'queued',
+    'pending',
+    'uploaded',
+    'uploading',
+    'processing',
+    'processed',
+    'complete',
+    'completed',
+    'success',
+    'succeeded'
+  ])
+
+  const failureStatuses = new Set([
+    'failed',
+    'failure',
+    'error',
+    'errored',
+    'aborted',
+    'cancelled'
+  ])
+
+  if (failureStatuses.has(status)) {
+    return false
+  }
+
+  return successfulStatuses.has(status)
 }
 
 /**
@@ -195,21 +233,67 @@ export async function transferResource(
   // Upload the file to S3
   await uploadFileToS3(initiateUploadResponse.uploadUrl, landDataFile, token)
 
-  // Check the upload status, should be pending
+  // Check the upload status.
   const uploadStatusResponse = await checkUploadStatus(
     initiateUploadResponse.uploadUrl.split('/').pop(),
     token,
     environment
   )
 
-  if (uploadStatusResponse.uploadStatus === 'pending') {
+  if (isSuccessfulUploadStatus(uploadStatusResponse)) {
     console.log(
       `✓ File upload successful and ${uploadStatusResponse.uploadStatus} status for ${landDataFile}`
     )
   } else {
-    console.log(`✗ Upload status is not pending for ${landDataFile}`)
-    throw new Error(`Upload status is not pending`)
+    console.log(
+      `✗ Upload status is not successful for ${landDataFile}: ${uploadStatusResponse.uploadStatus}`
+    )
+    throw new Error(
+      `Upload status is not successful: ${uploadStatusResponse.uploadStatus}`
+    )
   }
 
   console.log('✓ Ingestion complete for : ' + resource)
+}
+
+export async function transferResources(
+  files,
+  resource,
+  environment,
+  ingestId,
+  delayMs = 2000,
+  accessToken = null
+) {
+  if (!Array.isArray(files) || files.length === 0) {
+    return
+  }
+
+  const token = accessToken ?? (await getCognitoToken(environment))
+
+  for (let index = 0; index < files.length; index += 1) {
+    const filePath = files[index]
+    const filename = path.basename(filePath)
+
+    if (!fs.existsSync(filePath)) {
+      console.log(`⚠ Skipping missing file: ${filePath}`)
+      continue
+    }
+
+    console.log(
+      `Transferring ${index + 1}/${files.length} file(s): ${filename}`
+    )
+
+    await transferResource(
+      filePath,
+      resource,
+      environment,
+      ingestId,
+      filename,
+      token
+    )
+
+    if (delayMs > 0 && index < files.length - 1) {
+      await new Promise((resolve) => setTimeout(resolve, delayMs))
+    }
+  }
 }
