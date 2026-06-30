@@ -5,6 +5,7 @@ import { transferResources } from '../../utils/ingestLandDataHelper.js'
 import { generateIngestPayload } from './utils/generateIngestStartPayload.js'
 
 jest.setTimeout(30 * 60 * 1000)
+const targetEnvironment = process.env.ENVIRONMENT || 'dev'
 
 const coversDirectory = path.join(process.cwd(), 'test/land-data/land_covers')
 const payload = generateIngestPayload('test/land-data/land_covers')
@@ -36,7 +37,7 @@ const filesToTransfer = filenamesToTransfer.map((filename) =>
 )
 
 describe('Land covers ingest transfer endpoint', () => {
-  it('should start and transfer the cover files to the dev environment', async () => {
+  it(`should start and transfer the cover files to the ${targetEnvironment} environment`, async () => {
     const startResponse = await request(global.baseUrl)
       .post('/ingest/land_covers/start')
       .send(payload)
@@ -55,6 +56,11 @@ describe('Land covers ingest transfer endpoint', () => {
       `Transferring ${filesToTransfer.length} cover file(s) with ingestId ${ingestId}`
     )
 
-    await transferResources(filesToTransfer, 'land_covers', 'dev', ingestId)
+    await transferResources(
+      filesToTransfer,
+      'land_covers',
+      targetEnvironment,
+      ingestId
+    )
   })
 })

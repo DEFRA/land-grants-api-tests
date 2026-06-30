@@ -4,35 +4,43 @@ import 'dotenv/config'
 
 // the client IDs and secrets for the different environments
 // set these values here or your preferred way to store them
+const DEV_CLIENT_ID = process.env.dev_ClientID || ''
+const DEV_CLIENT_SECRET = process.env.dev_ClientSecret || ''
+const TEST_CLIENT_ID = process.env.test_ClientID || ''
+const TEST_CLIENT_SECRET = process.env.test_ClientSecret || ''
+const PERF_TEST_CLIENT_ID = process.env.perf_test_ClientID || ''
+const PERF_TEST_CLIENT_SECRET = process.env.perf_test_ClientSecret || ''
+const EXT_TEST_CLIENT_ID = process.env.ext_test_ClientID || ''
+const EXT_TEST_CLIENT_SECRET = process.env.ext_test_ClientSecret || ''
 
 const config = {
   dev: {
-    clientId: process.env.CLIENT_ID_DEV || '',
-    clientSecret: process.env.CLIENT_SECRET_DEV || '',
+    clientId: DEV_CLIENT_ID || '',
+    clientSecret: DEV_CLIENT_SECRET || '',
     cdpUrl: 'https://cdp-uploader.dev.cdp-int.defra.cloud',
     apiBaseUrl: 'https://land-grants-api.api.dev.cdp-int.defra.cloud',
     tokenUrl:
       'https://land-grants-api-c63f2.auth.eu-west-2.amazoncognito.com/oauth2/token'
   },
   test: {
-    clientId: process.env.CLIENT_ID_TEST || '',
-    clientSecret: process.env.CLIENT_SECRET_TEST || '',
+    clientId: TEST_CLIENT_ID || '',
+    clientSecret: TEST_CLIENT_SECRET || '',
     cdpUrl: 'https://cdp-uploader.test.cdp-int.defra.cloud',
     apiBaseUrl: 'https://land-grants-api.api.test.cdp-int.defra.cloud',
     tokenUrl:
       'https://land-grants-api-6bf3a.auth.eu-west-2.amazoncognito.com/oauth2/token'
   },
   'perf-test': {
-    clientId: process.env.CLIENT_ID_PERF_TEST || '',
-    clientSecret: process.env.CLIENT_SECRET_PERF_TEST || '',
+    clientId: PERF_TEST_CLIENT_ID || '',
+    clientSecret: PERF_TEST_CLIENT_SECRET || '',
     cdpUrl: 'https://cdp-uploader.perf-test.cdp-int.defra.cloud',
     apiBaseUrl: 'https://land-grants-api.api.perf-test.cdp-int.defra.cloud',
     tokenUrl:
       'https://land-grants-api-05244.auth.eu-west-2.amazoncognito.com/oauth2/token'
   },
   'ext-test': {
-    clientId: process.env.CLIENT_ID_EXT_TEST || '',
-    clientSecret: process.env.CLIENT_SECRET_EXT_TEST || '',
+    clientId: EXT_TEST_CLIENT_ID || '',
+    clientSecret: EXT_TEST_CLIENT_SECRET || '',
     cdpUrl: 'https://cdp-uploader.ext-test.cdp-int.defra.cloud',
     apiBaseUrl: 'https://land-grants-api.api.ext-test.cdp-int.defra.cloud',
     tokenUrl:
