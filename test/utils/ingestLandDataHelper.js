@@ -13,6 +13,45 @@ const PERF_TEST_CLIENT_SECRET = process.env.perf_test_ClientSecret || ''
 const EXT_TEST_CLIENT_ID = process.env.ext_test_ClientID || ''
 const EXT_TEST_CLIENT_SECRET = process.env.ext_test_ClientSecret || ''
 
+function normalizeEnvironmentName(environment) {
+  return `${environment || ''}`.trim().toLowerCase().replace(/-/g, '_')
+}
+
+function getEnvironmentBearerToken(environment) {
+  const normalizedEnvironment = normalizeEnvironmentName(environment)
+
+  return (
+    process.env[`${normalizedEnvironment}_BEARER_TOKEN`] ||
+    process.env[`BEARER_TOKEN_${normalizedEnvironment.toUpperCase()}`] ||
+    process.env.BEARER_TOKEN ||
+    ''
+  )
+}
+
+function getEnvironmentApiKey(environment) {
+  const normalizedEnvironment = normalizeEnvironmentName(environment)
+
+  return (
+    process.env[`${normalizedEnvironment}_API_KEY`] ||
+    process.env[`API_KEY_${normalizedEnvironment.toUpperCase()}`] ||
+    process.env.API_KEY ||
+    ''
+  )
+}
+
+function shouldUseEphemeralGateway(environment) {
+  const runEnv = `${process.env.RUN_ENV || ''}`.trim().toLowerCase()
+  return environment !== 'local' && runEnv === 'local'
+}
+
+function getInitiateUploadBaseUrl(environment) {
+  if (shouldUseEphemeralGateway(environment)) {
+    return `https://ephemeral-protected.api.${environment}.cdp-int.defra.cloud/land-grants-api`
+  }
+
+  return config[environment].apiBaseUrl
+}
+
 const config = {
   dev: {
     clientId: DEV_CLIENT_ID || '',
@@ -79,18 +118,21 @@ async function getCognitoToken(environment) {
   }
 }
 
-async function initiateLandDataUpload(jsonData, accessToken, environment) {
+async function initiateLandDataUpload(
+  jsonData,
+  accessToken,
+  baseUrl,
+  additionalHeaders = {}
+) {
   try {
-    const apiBaseUrl = config[environment].apiBaseUrl
-    console.log(
-      `✓ Initiating land data upload to ${apiBaseUrl}/initiate-upload`
-    )
+    console.log(`✓ Initiating land data upload to ${baseUrl}/initiate-upload`)
 
-    const response = await fetch(`${apiBaseUrl}/initiate-upload`, {
+    const response = await fetch(`${baseUrl}/initiate-upload`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`,
+        ...additionalHeaders
       },
       body: JSON.stringify(jsonData)
     })
@@ -98,7 +140,7 @@ async function initiateLandDataUpload(jsonData, accessToken, environment) {
     if (!response.ok) {
       const body = await response.text()
       console.log(
-        `✗ Failed - Check if API is running at ${apiBaseUrl} - HTTP ${response.status}`
+        `✗ Failed - Check if API is running at ${baseUrl} - HTTP ${response.status}`
       )
       throw new Error(
         `Failed to initiate land data upload - HTTP ${response.status}\n${body}`
@@ -142,6 +184,7 @@ function isSuccessfulUploadStatus(uploadStatusResponse) {
     .toLowerCase()
 
   const successfulStatuses = new Set([
+    'ready',
     'initiated',
     'accepted',
     'received',
@@ -203,16 +246,72 @@ async function uploadFileToS3(uploadUrl, filePath, accessToken) {
       }
     }
 
-    await fetch(uploadUrl, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'content-type': contentType,
-        'x-filename': fileName
-      },
-      body: fileContent,
-      redirect: 'manual'
-    })
+    const maxRetries = 5
+    let lastError
+
+    for (let attempt = 1; attempt <= maxRetries; attempt += 1) {
+      try {
+        const response = await fetch(uploadUrl, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'content-type': contentType,
+            'x-filename': fileName
+          },
+          body: fileContent,
+          redirect: 'manual'
+        })
+
+        // 302 is the expected response from the upload endpoint (redirect: 'manual')
+        // treat transient gateway/backend errors as retryable
+        if (response.status >= 400) {
+          const body = await response.text()
+          const retryableHttpStatuses = new Set([
+            408, 425, 429, 500, 502, 503, 504
+          ])
+          const isRetryableHttpError =
+            retryableHttpStatuses.has(response.status) ||
+            body.toLowerCase().includes('ssl sidecar')
+
+          const httpError = new Error(
+            `Upload failed - HTTP ${response.status}\n${body.slice(0, 500)}`
+          )
+
+          if (isRetryableHttpError && attempt < maxRetries) {
+            lastError = httpError
+            console.log(
+              `⚠ Upload attempt ${attempt}/${maxRetries} failed with HTTP ${response.status}. Retrying...`
+            )
+            await new Promise((resolve) => setTimeout(resolve, attempt * 1000))
+            continue
+          }
+
+          throw httpError
+        }
+
+        return
+      } catch (error) {
+        const message = `${error?.message ?? ''}`.toLowerCase()
+        const isTransientNetworkError =
+          message.includes('epipe') ||
+          message.includes('econnreset') ||
+          message.includes('socket') ||
+          message.includes('fetch failed')
+
+        lastError = error
+
+        if (!isTransientNetworkError || attempt === maxRetries) {
+          throw error
+        }
+
+        console.log(
+          `⚠ Upload attempt ${attempt}/${maxRetries} failed (${error.message}). Retrying...`
+        )
+        await new Promise((resolve) => setTimeout(resolve, attempt * 1000))
+      }
+    }
+
+    throw lastError
   } catch (error) {
     console.log(`✗ Failed to upload file to S3 - ${error}`)
     throw error
@@ -231,9 +330,19 @@ export async function transferResource(
   accessToken = null
 ) {
   const { clientId, clientSecret } = config[environment]
+  const useEphemeralGateway = shouldUseEphemeralGateway(environment)
+  const initiateUploadBaseUrl = getInitiateUploadBaseUrl(environment)
+  const gatewayBearerToken = getEnvironmentBearerToken(environment)
+  const gatewayApiKey = getEnvironmentApiKey(environment)
 
-  if (!clientId || !clientSecret) {
+  if (!useEphemeralGateway && (!clientId || !clientSecret)) {
     throw new Error('CLIENT_ID and CLIENT_SECRET must be set')
+  }
+
+  if (useEphemeralGateway && (!gatewayBearerToken || !gatewayApiKey)) {
+    throw new Error(
+      'BEARER_TOKEN and API_KEY must be set for local ephemeral gateway runs'
+    )
   }
 
   // metadata for the ingestion, to identify who by and when the ingestion was performed
@@ -241,7 +350,11 @@ export async function transferResource(
   const customerId = 'QA_TEAM'
 
   // get the access token from cognito unless one was supplied by the caller
-  const token = accessToken ?? (await getCognitoToken(environment))
+  const token =
+    accessToken ??
+    (useEphemeralGateway
+      ? gatewayBearerToken
+      : await getCognitoToken(environment))
   console.log(`${token !== undefined ? '✓' : '✗'} Access token retrieved`)
 
   console.log(`✓ Start ingesting ${landDataFile}`)
@@ -255,7 +368,8 @@ export async function transferResource(
       filename
     },
     token,
-    environment
+    initiateUploadBaseUrl,
+    useEphemeralGateway ? { 'x-api-key': gatewayApiKey } : {}
   )
 
   console.log(`✓ Initiate upload successful for ${landDataFile}`)
@@ -298,7 +412,11 @@ export async function transferResources(
     return
   }
 
-  const token = accessToken ?? (await getCognitoToken(environment))
+  const token =
+    accessToken ??
+    (shouldUseEphemeralGateway(environment)
+      ? getEnvironmentBearerToken(environment)
+      : await getCognitoToken(environment))
 
   for (let index = 0; index < files.length; index += 1) {
     const filePath = files[index]

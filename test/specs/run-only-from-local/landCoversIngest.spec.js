@@ -1,6 +1,6 @@
 import request from 'supertest'
 import path from 'path'
-import { BEARER_TOKEN } from '../../utils/apiEndpoints.js'
+import { API_KEY, BEARER_TOKEN } from '../../utils/apiEndpoints.js'
 import { transferResources } from '../../utils/ingestLandDataHelper.js'
 import { generateIngestPayload } from './utils/generateIngestStartPayload.js'
 
@@ -29,7 +29,7 @@ const payload = generateIngestPayload('test/land-data/land_covers')
 
 const filenamesToTransfer = payload.files
   .map((file) => file.filename)
-  .filter((filename) => filename.endsWith('.csv.zip'))
+  .filter((filename) => filename.endsWith('.csv'))
   .sort()
 
 const filesToTransfer = filenamesToTransfer.map((filename) =>
@@ -43,7 +43,7 @@ describe('Land covers ingest transfer endpoint', () => {
       .send(payload)
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${BEARER_TOKEN}`)
-      .set('x-api-key', process.env.API_KEY)
+      .set('x-api-key', API_KEY)
       .set('Accept-Encoding', '*')
 
     expect([200]).toContain(startResponse.status)
