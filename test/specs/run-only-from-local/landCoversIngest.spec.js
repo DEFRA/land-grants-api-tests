@@ -12,15 +12,15 @@ const payload = generateIngestPayload('test/land-data/land_covers')
 // const payload = {
 //   files: [
 //     {
-//       filename: 'land_covers_1.csv_dates_1.csv',
+//       filename: 'land_covers_1.csv_dates_1.csv.zip',
 //       rows: 45376
 //     },
 //     {
-//       filename: 'land_covers_1.csv_dates_2.csv',
+//       filename: 'land_covers_1.csv_dates_2.csv.zip',
 //       rows: 46981
 //     },
 //     {
-//       filename: 'land_covers_1.csv_dates_3.csv',
+//       filename: 'land_covers_1.csv_dates_3.csv.zip',
 //       rows: 23556
 //     }
 //   ]

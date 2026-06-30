@@ -12,15 +12,15 @@ const payload = generateIngestPayload('test/land-data/land_parcels')
 // const payload = {
 //   files: [
 //     {
-//       filename: 'reference_parcels_1.csv_dates_1.csv',
+//       filename: 'reference_parcels_1.csv_dates_1.csv.zip',
 //       rows: 36062
 //     },
 //     {
-//       filename: 'reference_parcels_1.csv_dates_2.csv',
+//       filename: 'reference_parcels_1.csv_dates_2.csv.zip',
 //       rows: 33259
 //     },
 //     {
-//       filename: 'reference_parcels_1.csv_dates_3.csv',
+//       filename: 'reference_parcels_1.csv_dates_3.csv.zip',
 //       rows: 3899
 //     }
 //   ]
