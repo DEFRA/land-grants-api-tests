@@ -1,10 +1,7 @@
 import 'dotenv/config'
 
 const localDevSpecs = ['**/*.spec.js']
-const nonLocalDevSpecs = [
-  '**/*.spec.js',
-  '!**/run-only-on-dev-from-local/*.spec.js'
-]
+const nonLocalDevSpecs = ['**/*.spec.js', '!**/run-only-from-local/*.spec.js']
 
 export function getSpecsForEnv(
   env = process.env.ENVIRONMENT,
@@ -12,7 +9,7 @@ export function getSpecsForEnv(
 ) {
   const environment = (env || '').toLowerCase()
   const runEnvironment = (runEnv || '').toLowerCase()
-  return environment === 'dev' && runEnvironment === 'local'
+  return environment !== 'local' && runEnvironment === 'local'
     ? localDevSpecs
     : nonLocalDevSpecs
 }
