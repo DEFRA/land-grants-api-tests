@@ -19,6 +19,7 @@
     "test:local": "ENVIRONMENT=local npm run test",
     "test:dev": "ENVIRONMENT=dev npm run test",
     "test:test": "ENVIRONMENT=test npm run test",
+    "test:perf-test": "ENVIRONMENT=perf-test npm run test",
     "format": "prettier --write 'test/**/*.{js,md,json,config.js}'",
     "format:check": "prettier --check 'test/**/*.{js,md,json,config.js}'",
     "git:pre-commit-hook": "npm run format:check && npm run lint",
