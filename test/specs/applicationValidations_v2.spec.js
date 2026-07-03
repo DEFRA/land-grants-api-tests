@@ -3,7 +3,8 @@ import { runTestsAndRecordResults } from '../utils/recordResults.js'
 import {
   APPLICATION_VALIDATIONS_ENDPOINT_V2,
   APPLICATION_VALIDATION_RUN_ENDPOINT,
-  BEARER_TOKEN
+  BEARER_TOKEN,
+  API_KEY
 } from '../utils/apiEndpoints.js'
 import {
   validateStatusCode,
@@ -38,7 +39,7 @@ describe('Validations V2 endpoint', () => {
         .send({ applicationId, requester, sbi, applicantCrn, landActions })
         .set('Accept', 'application/json')
         .set('Authorization', `Bearer ${BEARER_TOKEN}`)
-        .set('x-api-key', `${process.env.API_KEY}`)
+        .set('x-api-key', API_KEY || '')
         .set('Accept-Encoding', '*')
 
       // Validate basic status code match before other validations
@@ -68,7 +69,7 @@ describe('Validations V2 endpoint', () => {
           .post(APPLICATION_VALIDATION_RUN_ENDPOINT + `/${runId}`)
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${BEARER_TOKEN}`)
-          .set('x-api-key', `${process.env.API_KEY}`)
+          .set('x-api-key', API_KEY || '')
           .set('Accept-Encoding', '*')
 
         // Validate basic status code match before other validations

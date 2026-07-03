@@ -1,5 +1,5 @@
 import request from 'supertest'
-import { STATS_ENDPOINT, BEARER_TOKEN } from '../utils/apiEndpoints.js'
+import { STATS_ENDPOINT, BEARER_TOKEN, API_KEY } from '../utils/apiEndpoints.js'
 
 describe('LAND DATA QUALITY CHECKS', () => {
   it('validates the expected land data quality summary counts', async () => {
@@ -7,7 +7,7 @@ describe('LAND DATA QUALITY CHECKS', () => {
       .get(STATS_ENDPOINT)
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${BEARER_TOKEN}`)
-      .set('x-api-key', `${process.env.API_KEY}`)
+      .set('x-api-key', API_KEY || '')
       .set('Accept-Encoding', '*')
 
     if (response.status === 503) {

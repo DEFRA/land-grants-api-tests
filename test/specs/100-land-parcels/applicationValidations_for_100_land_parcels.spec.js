@@ -1,13 +1,14 @@
 import request from 'supertest'
-import { runTestsAndRecordResults } from '../utils/recordResults.js'
+import { runTestsAndRecordResults } from '../../utils/recordResults.js'
 import {
   APPLICATION_VALIDATIONS_ENDPOINT_V2,
-  BEARER_TOKEN
-} from '../utils/apiEndpoints.js'
+  BEARER_TOKEN,
+  API_KEY
+} from '../../utils/apiEndpoints.js'
 import {
   validateStatusCode,
   validateSuccessMessage
-} from '../utils/validationsHelper.js'
+} from '../../utils/validationsHelper.js'
 
 describe('Validations V2 endpoint test with 100 land parcels', () => {
   it('should validate 3 actions each for 100 land parcels in the application', async () => {
@@ -31,7 +32,7 @@ describe('Validations V2 endpoint test with 100 land parcels', () => {
         .send({ applicationId, requester, sbi, applicantCrn, landActions })
         .set('Accept', 'application/json')
         .set('Authorization', `Bearer ${BEARER_TOKEN}`)
-        .set('x-api-key', `${process.env.API_KEY}`)
+        .set('x-api-key', API_KEY || '')
         .set('Accept-Encoding', '*')
 
       // Validate basic status code match before other validations
