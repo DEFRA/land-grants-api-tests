@@ -2,7 +2,8 @@ import request from 'supertest'
 import { runTestsAndRecordResults } from '../utils/recordResults.js'
 import {
   WMP_VALIDATIONS_ENDPOINT,
-  BEARER_TOKEN
+  BEARER_TOKEN,
+  API_KEY
 } from '../utils/apiEndpoints.js'
 import {
   validateStatusCode,
@@ -44,7 +45,7 @@ describe('WMP Validations V1 endpoint', () => {
         .send(payload)
         .set('Accept', 'application/json')
         .set('Authorization', `Bearer ${BEARER_TOKEN}`)
-        .set('x-api-key', `${process.env.API_KEY}`)
+        .set('x-api-key', API_KEY || '')
         .set('Accept-Encoding', '*')
 
       // Validate basic status code match before other validations

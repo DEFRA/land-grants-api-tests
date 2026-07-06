@@ -6,19 +6,74 @@ The tests are designed to run in the Dev and Test environments whenever a new ve
 
 Built on a CDP journey test suite, this repository has been enhanced to support data-driven tests by reading test data from a CSV file and executing them against the service's REST APIs.
 
-## Local Development
+## Run Tests
 
-Ensure you have Land-Grants-API service running locally.
-
-## Run Tests and Generate Reports
+Install dependencies:
 
 ```bash
-# Install dependencies
 npm install
+```
 
-# Run the tests
-npm test
+### Environment behavior
 
+The test suite behavior is controlled by `ENVIRONMENT` and `RUN_ENV`.
+
+1. `ENVIRONMENT=local` and `RUN_ENV=local`
+Runs the standard local suite plus the 100-parcel validation/payment suite.
+
+2. `ENVIRONMENT=dev|test|ext-test|perf-test` and `RUN_ENV=local`
+Runs the standard shared-environment suite.
+
+3. `ENVIRONMENT=dev|test|ext-test|perf-test` and `RUN_ENV` is not `local`
+Runs the standard shared-environment suite and the 100-parcel validation/payment suites.
+
+4. Ingest tests
+Runs only on demand when targeting `dev|test|ext-test|perf-test` from a local machine.
+
+### Commands by scenario
+
+Run against local API:
+
+```bash
+npm run test:local
+```
+
+This generates and opens the Allure report automatically after test completion.
+
+Run from local machine against shared envs:
+
+```bash
+RUN_ENV=local npm run test:dev
+RUN_ENV=local npm run test:test
+RUN_ENV=local npm run test:ext-test
+RUN_ENV=local npm run test:perf-test
+```
+
+These commands generate and open the Allure report automatically after test completion.
+
+Run ingest tests on demand from local machine:
+
+```bash
+npm run test:ingest:dev
+npm run test:ingest:test
+npm run test:ingest:ext-test
+npm run test:ingest:perf-test
+```
+
+Run non-local (for example CI/CD):
+
+```bash
+npm run test:dev
+npm run test:test
+npm run test:ext-test
+npm run test:perf-test
+```
+
+These commands also generate and open the Allure report automatically after test completion.
+
+## Generate Reports
+
+```bash
 # Generate Allure report
 npm run report
 

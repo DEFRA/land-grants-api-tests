@@ -1,6 +1,10 @@
 import request from 'supertest'
 import { runTestsAndRecordResults } from '../utils/recordResults.js'
-import { PARCELS_ENDPOINT_V2, BEARER_TOKEN } from '../utils/apiEndpoints.js'
+import {
+  PARCELS_ENDPOINT_V2,
+  BEARER_TOKEN,
+  API_KEY
+} from '../utils/apiEndpoints.js'
 import {
   validateStatusCode,
   validateSuccessMessage,
@@ -39,7 +43,7 @@ describe('Parcels V2 endpoint', () => {
           .send({ parcelIds, fields, plannedActions })
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${BEARER_TOKEN}`)
-          .set('x-api-key', `${process.env.API_KEY}`)
+          .set('x-api-key', API_KEY || '')
           .set('Accept-Encoding', '*')
       } else {
         response = await request(global.baseUrl)
@@ -47,7 +51,7 @@ describe('Parcels V2 endpoint', () => {
           .send({ parcelIds, fields })
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${BEARER_TOKEN}`)
-          .set('x-api-key', `${process.env.API_KEY}`)
+          .set('x-api-key', API_KEY || '')
           .set('Accept-Encoding', '*')
       }
 
