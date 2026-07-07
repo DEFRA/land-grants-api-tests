@@ -7,7 +7,6 @@ export const APPLICATION_VALIDATIONS_ENDPOINT_V2 =
 export const APPLICATION_VALIDATION_RUN_ENDPOINT = '/application/validation-run'
 export const WMP_VALIDATIONS_ENDPOINT = '/api/v1/wmp/validate'
 export const WMP_PAYMENTS_ENDPOINT = '/api/v1/wmp/payments/calculate'
-export const STATS_ENDPOINT = '/test/stats'
 
 const environment = `${process.env.ENVIRONMENT || ''}`
   .trim()
