@@ -33,6 +33,8 @@ describe('Parcels V2 endpoint', () => {
     const validateParcel = async (testCase, options = {}) => {
       const parcelIds = testCase.parcelIds.split(',')
       const fields = testCase.fields.split(',')
+      const sbi =
+        testCase.sbi && testCase.sbi.trim() !== '' ? testCase.sbi : '0123456789' // Default SBI if not provided
 
       // Make the real API request
       let response
@@ -40,19 +42,21 @@ describe('Parcels V2 endpoint', () => {
         const plannedActions = JSON.parse(testCase.plannedActions)
         response = await request(global.baseUrl)
           .post(PARCELS_ENDPOINT_V2)
-          .send({ parcelIds, fields, plannedActions })
+          .send({ parcelIds, fields, plannedActions, sbi })
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${BEARER_TOKEN}`)
           .set('x-api-key', API_KEY || '')
           .set('Accept-Encoding', '*')
+          .set('X-Forwarded-Authorization', 'TestToken') // Add this header to simulate the presence of the X-Forwarded-Authorization header
       } else {
         response = await request(global.baseUrl)
           .post(PARCELS_ENDPOINT_V2)
-          .send({ parcelIds, fields })
+          .send({ parcelIds, fields, sbi })
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${BEARER_TOKEN}`)
           .set('x-api-key', API_KEY || '')
           .set('Accept-Encoding', '*')
+          .set('X-Forwarded-Authorization', 'TestToken') // Add this header to simulate the presence of the X-Forwarded-Authorization header
       }
 
       // Validate basic status code match before other validations

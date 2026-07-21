@@ -29,7 +29,8 @@ describe('Validations V2 endpoint', () => {
           ? testCase.applicationId
           : `app-${Math.random().toString(36).substring(2, 10)}`
       const requester = testCase.requester
-      const sbi = testCase.sbi
+      const sbi =
+        testCase.sbi && testCase.sbi.trim() !== '' ? testCase.sbi : '0123456789' // Default SBI if not provided
       const applicantCrn = testCase.applicantCrn
       const landActions = JSON.parse(testCase.landActions)
 
@@ -41,6 +42,7 @@ describe('Validations V2 endpoint', () => {
         .set('Authorization', `Bearer ${BEARER_TOKEN}`)
         .set('x-api-key', API_KEY || '')
         .set('Accept-Encoding', '*')
+        .set('X-Forwarded-Authorization', 'TestToken')
 
       // Validate basic status code match before other validations
       validateStatusCode(
