@@ -21,12 +21,23 @@ import {
 
 describe('Parcels V2 endpoint', () => {
   it('Should validate version2 parcels size, actions, SSSI Consent Required and available area taking existing agreements and planned actions into account', async () => {
+    const environmentName = `${process.env.ENVIRONMENT || ''}`
+      .trim()
+      .toLowerCase()
+    const isDevOrLocalEnvironment =
+      environmentName === 'dev' || environmentName === 'local'
+
     const dataFiles = [
       './test/data/sfi/parcels/parcelsData_groups.csv',
       './test/data/sfi/parcels/parcelsData_CMOR1,UPL1,UPL2andUPL3_v2.csv',
       './test/data/sfi/parcels/parcelsData_UPL8andUPL10_v2.csv',
       './test/data/sfi/parcels/parcelsData_CLIG3_v2.csv',
-      './test/data/sfi/parcels/parcelsData_CSAM3_v2.csv'
+      './test/data/sfi/parcels/parcelsData_CSAM3_v2.csv',
+      ...(isDevOrLocalEnvironment
+        ? [
+            './test/data/sfi/parcels/AvailableAreaCalculation_Including_DAL_data.csv'
+          ]
+        : [])
     ]
 
     // validating each test case
