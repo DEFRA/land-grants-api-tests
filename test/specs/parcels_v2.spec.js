@@ -1,5 +1,5 @@
 import request from 'supertest'
-import { runTestsAndRecordResults } from '../utils/recordResults.js'
+import { runTestsAndRecordResultsForFiles } from '../utils/recordResults.js'
 import {
   PARCELS_ENDPOINT_V2,
   BEARER_TOKEN,
@@ -39,7 +39,6 @@ describe('Parcels V2 endpoint', () => {
           ]
         : [])
     ]
-
     // validating each test case
     const validateParcel = async (testCase, options = {}) => {
       const parcelIds = testCase.parcelIds.split(',')
@@ -100,8 +99,6 @@ describe('Parcels V2 endpoint', () => {
     }
 
     // Run tests with our helper that handles test result tracking for each data file
-    for (const dataFile of dataFiles) {
-      await runTestsAndRecordResults(dataFile, validateParcel)
-    }
+    await runTestsAndRecordResultsForFiles(dataFiles, validateParcel)
   })
 })

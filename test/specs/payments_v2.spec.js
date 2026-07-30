@@ -1,5 +1,5 @@
 import request from 'supertest'
-import { runTestsAndRecordResults } from '../utils/recordResults.js'
+import { runTestsAndRecordResultsForFiles } from '../utils/recordResults.js'
 import {
   BEARER_TOKEN,
   PAYMENTS_ENDPOINT_V2,
@@ -73,8 +73,6 @@ describe('Payments endpoint v2.0.0', () => {
       }
     }
     // Run tests with our helper that handles test result tracking
-    for (const dataFile of dataFiles) {
-      await runTestsAndRecordResults(dataFile, validatePayments)
-    }
+    await runTestsAndRecordResultsForFiles(dataFiles, validatePayments)
   })
 })

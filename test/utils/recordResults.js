@@ -5,7 +5,12 @@
  * @param {Object} options - Test options including runAllTests options
  * @returns {Promise<void>} - Resolves when all tests complete, rejects if any test fails
  */
-import { getAllure, safeAllureCall, cleanupAllure } from './allureHelper.js'
+import {
+  getAllure,
+  safeAllureCall,
+  cleanupAllure,
+  attachToAllure
+} from './allureHelper.js'
 import fs from 'node:fs'
 
 export const runTestsAndRecordResults = async (
@@ -26,10 +31,11 @@ export const runTestsAndRecordResults = async (
   // Record the overall test result to make sure it fails properly
   let testFailed = false
   let errorMessage = ''
+  let results = []
 
   try {
     // Run all test cases and check results
-    const results = await runAllTests(dataFile, testFunction, testOptions)
+    results = await runAllTests(dataFile, testFunction, testOptions)
 
     // Explicitly check for failures
     const failedTests = results.filter((r) => !r.success)
@@ -69,5 +75,55 @@ export const runTestsAndRecordResults = async (
       safeAllureCall(allure, 'status', 'failed')
     }
     throw new Error(errorMessage)
+  }
+
+  return results
+}
+
+export const runTestsAndRecordResultsForFiles = async (
+  dataFiles,
+  testFunction,
+  options = {}
+) => {
+  const summary = {
+    files: 0,
+    total: 0,
+    passed: 0,
+    failed: 0
+  }
+
+  const allResults = []
+
+  for (const dataFile of dataFiles) {
+    const results = await runTestsAndRecordResults(
+      dataFile,
+      testFunction,
+      options
+    )
+
+    summary.files += 1
+    summary.total += results.length
+    summary.passed += results.filter((result) => result.success).length
+    summary.failed += results.filter((result) => !result.success).length
+    allResults.push(...results)
+  }
+
+  const summaryMessage =
+    `Total test cases run across ${summary.files} data files: ` +
+    `${summary.total} (passed: ${summary.passed}, failed: ${summary.failed})`
+
+  const allure = getAllure()
+  if (allure && (options.allureReport ?? true)) {
+    safeAllureCall(allure, 'description', summaryMessage)
+    attachToAllure('Overall Test Summary', {
+      ...summary,
+      message: summaryMessage
+    })
+  }
+
+  return {
+    summary,
+    summaryMessage,
+    results: allResults
   }
 }

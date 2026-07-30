@@ -1,5 +1,5 @@
 import request from 'supertest'
-import { runTestsAndRecordResults } from '../utils/recordResults.js'
+import { runTestsAndRecordResultsForFiles } from '../utils/recordResults.js'
 import {
   APPLICATION_VALIDATIONS_ENDPOINT_V2,
   APPLICATION_VALIDATION_RUN_ENDPOINT,
@@ -116,8 +116,6 @@ describe('Validations V2 endpoint', () => {
       }
     }
     // Run tests with our helper that handles test result tracking
-    for (const dataFile of dataFiles) {
-      await runTestsAndRecordResults(dataFile, validateMessages)
-    }
+    await runTestsAndRecordResultsForFiles(dataFiles, validateMessages)
   })
 })
