@@ -47,15 +47,6 @@ describe('WMP Payments by total area endpoint v1.0.0', () => {
         .set('x-api-key', API_KEY || '')
         .set('Accept-Encoding', '*')
 
-      console.log(
-        `Request Payload for test case ${testCase.testCaseId}:`,
-        payload
-      )
-      console.log(
-        `Response for test case ${testCase.testCaseId}:`,
-        response.body
-      )
-
       // Validate basic status code match before other validations
       validateStatusCode(response, testCase)
 
