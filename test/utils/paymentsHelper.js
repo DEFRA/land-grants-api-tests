@@ -221,10 +221,14 @@ export function validateAgreementLevelItems(response, testCase, scheme) {
     const expectedCode = testCase.expectedCode
     const expectedDescription = testCase.expectedDescription
     const expectedVersion = testCase.expectedVersion
-    const expectedParcelIds = JSON.stringify(
-      testCase.parcelIds.split(',').map((parcelId) => parcelId.trim())
-    )
-    console.log(`Expected parcelIds: ${expectedParcelIds}`)
+    const expectedParcelIds = testCase.parcelIds
+      ? JSON.stringify(
+          testCase.parcelIds.split(',').map((parcelId) => parcelId.trim())
+        )
+      : null
+    if (expectedParcelIds) {
+      console.log(`Expected parcelIds: ${expectedParcelIds}`)
+    }
     const expectedActivePaymentTier = Number(testCase.expectedActivePaymentTier)
     const expectedQuantityInActiveTier = Number(
       testCase.expectedQuantityInActiveTier
@@ -259,7 +263,7 @@ export function validateAgreementLevelItems(response, testCase, scheme) {
       )
     }
 
-    if (actualParcelIds !== expectedParcelIds) {
+    if (expectedParcelIds && actualParcelIds !== expectedParcelIds) {
       throw new Error(
         `Expected Agreement Item parcelIds are ${expectedParcelIds} but got ${actualParcelIds}`
       )
