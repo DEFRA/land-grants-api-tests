@@ -20,7 +20,8 @@ describe('Validations V2 endpoint', () => {
       './test/data/sfi/validations/applicationsValidationsData_CMOR1,UPL1,UPL2andUPL3_v2.csv',
       './test/data/sfi/validations/applicationsValidationsData_UPL8andUPL10_v2.csv',
       './test/data/sfi/validations/applicationsValidationsData_CLIG3_v2.csv',
-      './test/data/sfi/validations/applicationsValidationsData_CSAM3_v2.csv'
+      './test/data/sfi/validations/applicationsValidationsData_CSAM3_v2.csv',
+      './test/data/sfi/validations/applicationsValidationsData_SCR2_v2.csv'
     ]
 
     const validateMessages = async (testCase, options = {}) => {
