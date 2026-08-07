@@ -326,8 +326,13 @@ export function validatePaymentAmountsAndDates(response, testCase, scheme) {
   const payments = response.body.payment.payments
 
   // Validate the number of payment items is 4 for SFI scheme and 1 for WMP scheme
-  if (scheme === 'sfi' && payments.length !== 4) {
-    throw new Error(`Expected 4 payment items but got ${payments.length}`)
+  if (
+    scheme === 'sfi' &&
+    payments.length !== Number(testCase.expectedNumberOfPayments)
+  ) {
+    throw new Error(
+      `Expected ${testCase.expectedNumberOfPayments} payment items but got ${payments.length}`
+    )
   }
   if (scheme === 'wmp' && payments.length !== 1) {
     throw new Error(`Expected 1 payment item but got ${payments.length}`)
@@ -343,7 +348,7 @@ export function validatePaymentAmountsAndDates(response, testCase, scheme) {
 
   // Validate payment amount from 2nd payment onwards only for SFI scheme
   if (scheme === 'sfi') {
-    const PaymentAmount = Number(testCase.Payment2ToPayment4_totalPaymentPence)
+    const PaymentAmount = Number(testCase.remainingPayments_totalPaymentPence)
     payments.forEach((payment, index) => {
       if (index >= 1 && payment.totalPaymentPence !== PaymentAmount) {
         throw new Error(
