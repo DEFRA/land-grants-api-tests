@@ -348,11 +348,27 @@ export function validatePaymentAmountsAndDates(response, testCase, scheme) {
 
   // Validate payment amount from 2nd payment onwards only for SFI scheme
   if (scheme === 'sfi') {
-    const PaymentAmount = Number(testCase.remainingPayments_totalPaymentPence)
     payments.forEach((payment, index) => {
-      if (index >= 1 && payment.totalPaymentPence !== PaymentAmount) {
+      if (index < 1) {
+        return
+      }
+
+      const paymentNumber = index + 1
+      let expectedPaymentAmount = Number(
+        testCase.remainingPayments_totalPaymentPence
+      )
+
+      if (
+        paymentNumber >= 2 &&
+        paymentNumber <= 4 &&
+        testCase.Payment2to4_totalPaymentPence
+      ) {
+        expectedPaymentAmount = Number(testCase.Payment2to4_totalPaymentPence)
+      }
+
+      if (payment.totalPaymentPence !== expectedPaymentAmount) {
         throw new Error(
-          `Expected totalPaymentPence for Payment ${index + 1} is ${PaymentAmount} but got ${payment.totalPaymentPence}`
+          `Expected totalPaymentPence for Payment ${index + 1} is ${expectedPaymentAmount} but got ${payment.totalPaymentPence}`
         )
       }
     })
