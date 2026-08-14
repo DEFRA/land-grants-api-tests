@@ -72,17 +72,17 @@ describe('Parcels V2 endpoint', () => {
         .set('Accept-Encoding', '*')
         .set('X-Forwarded-Authorization', 'TestToken')
 
-      console.debug(
-        'Parcels API response:',
-        JSON.stringify(
-          {
-            status: response.status,
-            body: response.body
-          },
-          null,
-          2
-        )
-      )
+      // console.debug(
+      //   'Parcels API response:',
+      //   JSON.stringify(
+      //     {
+      //       status: response.status,
+      //       body: response.body
+      //     },
+      //     null,
+      //     2
+      //   )
+      // )
 
       // Validate basic status code match before other validations
       validateStatusCode(response, testCase)
