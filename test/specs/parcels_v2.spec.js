@@ -63,38 +63,26 @@ describe('Parcels V2 endpoint', () => {
       //   JSON.stringify(requestPayload, null, 2)
       // )
 
-      let response
-      if (testCase.plannedActions) {
-        response = await request(global.baseUrl)
-          .post(PARCELS_ENDPOINT_V2)
-          .send(requestPayload)
-          .set('Accept', 'application/json')
-          .set('Authorization', `Bearer ${BEARER_TOKEN}`)
-          .set('x-api-key', API_KEY || '')
-          .set('Accept-Encoding', '*')
-          .set('X-Forwarded-Authorization', 'TestToken') // Add this header to simulate the presence of the X-Forwarded-Authorization header
-      } else {
-        response = await request(global.baseUrl)
-          .post(PARCELS_ENDPOINT_V2)
-          .send(requestPayload)
-          .set('Accept', 'application/json')
-          .set('Authorization', `Bearer ${BEARER_TOKEN}`)
-          .set('x-api-key', API_KEY || '')
-          .set('Accept-Encoding', '*')
-          .set('X-Forwarded-Authorization', 'TestToken') // Add this header to simulate the presence of the X-Forwarded-Authorization header
-      }
+      const response = await request(global.baseUrl)
+        .post(PARCELS_ENDPOINT_V2)
+        .send(requestPayload)
+        .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${BEARER_TOKEN}`)
+        .set('x-api-key', API_KEY || '')
+        .set('Accept-Encoding', '*')
+        .set('X-Forwarded-Authorization', 'TestToken')
 
-      // console.debug(
-      //   'Parcels API response:',
-      //   JSON.stringify(
-      //     {
-      //       status: response.status,
-      //       body: response.body
-      //     },
-      //     null,
-      //     2
-      //   )
-      // )
+      console.debug(
+        'Parcels API response:',
+        JSON.stringify(
+          {
+            status: response.status,
+            body: response.body
+          },
+          null,
+          2
+        )
+      )
 
       // Validate basic status code match before other validations
       validateStatusCode(response, testCase)
