@@ -168,7 +168,11 @@ export function validateAvailability(response, testCase) {
   const expectedActionDescription = testCase.expectedActionDescription
   const expectedAvailabilityUnit = testCase.expectedAvailabilityUnit
   const expectedAvailabilityType = testCase.AvailabilityType
-  const expectedAvailabilityValue = Number(testCase.expectedAvailabilityValue)
+  const expectedAvailabilityValue =
+    typeof testCase.expectedAvailabilityValue === 'string' &&
+    testCase.expectedAvailabilityValue.trim().toLowerCase() === 'null'
+      ? null
+      : Number(testCase.expectedAvailabilityValue)
 
   const parcels = response.body.parcels
 
