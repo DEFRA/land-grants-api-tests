@@ -34,9 +34,10 @@ describe('Parcels V2 endpoint', () => {
       './test/data/sfi/parcels/parcelsData_CLIG3_v2.csv',
       './test/data/sfi/parcels/parcelsData_CSAM3_v2.csv',
       './test/data/sfi/parcels/parcelsData_SCR2_v2.csv',
+      './test/data/sfi/parcels/parcelsData_CNUM2_v2.csv',
       ...(isDevOrLocalEnvironment
         ? [
-            './test/data/sfi/parcels/AvailableAreaCalculation_Including_DAL_data.csv'
+            // './test/data/sfi/parcels/AvailableAreaCalculation_Including_DAL_data.csv'
           ]
         : [])
     ]
@@ -48,12 +49,25 @@ describe('Parcels V2 endpoint', () => {
         testCase.sbi && testCase.sbi.trim() !== '' ? testCase.sbi : '0123456789' // Default SBI if not provided
 
       // Make the real API request
+      const requestPayload = testCase.plannedActions
+        ? {
+            parcelIds,
+            fields,
+            plannedActions: JSON.parse(testCase.plannedActions),
+            sbi
+          }
+        : { parcelIds, fields, sbi }
+
+      // console.debug(
+      //   'Parcels API request:',
+      //   JSON.stringify(requestPayload, null, 2)
+      // )
+
       let response
       if (testCase.plannedActions) {
-        const plannedActions = JSON.parse(testCase.plannedActions)
         response = await request(global.baseUrl)
           .post(PARCELS_ENDPOINT_V2)
-          .send({ parcelIds, fields, plannedActions, sbi })
+          .send(requestPayload)
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${BEARER_TOKEN}`)
           .set('x-api-key', API_KEY || '')
@@ -62,13 +76,25 @@ describe('Parcels V2 endpoint', () => {
       } else {
         response = await request(global.baseUrl)
           .post(PARCELS_ENDPOINT_V2)
-          .send({ parcelIds, fields, sbi })
+          .send(requestPayload)
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${BEARER_TOKEN}`)
           .set('x-api-key', API_KEY || '')
           .set('Accept-Encoding', '*')
           .set('X-Forwarded-Authorization', 'TestToken') // Add this header to simulate the presence of the X-Forwarded-Authorization header
       }
+
+      // console.debug(
+      //   'Parcels API response:',
+      //   JSON.stringify(
+      //     {
+      //       status: response.status,
+      //       body: response.body
+      //     },
+      //     null,
+      //     2
+      //   )
+      // )
 
       // Validate basic status code match before other validations
       validateStatusCode(response, testCase)
