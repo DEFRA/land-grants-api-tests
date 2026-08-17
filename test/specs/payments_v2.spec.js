@@ -18,13 +18,12 @@ import {
 describe('Payments endpoint v2.0.0', () => {
   it('should validate version2 payment amounts and dates', async () => {
     const dataFiles = [
-      // './test/data/sfi/payments/paymentsData_CMOR1,UPL1,UPL2andUPL3_v2.csv',
-      // './test/data/sfi/payments/paymentsData_UPL8andUPL10_v2.csv',
-      // './test/data/sfi/payments/paymentsData_CLIG3_v2.csv',
-      './test/data/sfi/payments/paymentsData_CSAM3_v2.csv'
-      // ,
-      // './test/data/sfi/payments/paymentsData_SCR2_v2.csv',
-      // './test/data/sfi/payments/paymentsData_CNUM2_v2.csv'
+      './test/data/sfi/payments/paymentsData_CMOR1,UPL1,UPL2andUPL3_v2.csv',
+      './test/data/sfi/payments/paymentsData_UPL8andUPL10_v2.csv',
+      './test/data/sfi/payments/paymentsData_CLIG3_v2.csv',
+      './test/data/sfi/payments/paymentsData_CSAM3_v2.csv',
+      './test/data/sfi/payments/paymentsData_SCR2_v2.csv',
+      './test/data/sfi/payments/paymentsData_CNUM2_v2.csv'
     ]
 
     const validatePayments = async (testCase, options = {}) => {
@@ -40,7 +39,7 @@ describe('Payments endpoint v2.0.0', () => {
         payload.applicationId = applicationId
       }
 
-      console.debug('Payments API request:', JSON.stringify(payload, null, 2))
+      // console.debug('Payments API request:', JSON.stringify(payload, null, 2))
 
       // Make the real API request
       const response = await request(global.baseUrl)
@@ -51,17 +50,17 @@ describe('Payments endpoint v2.0.0', () => {
         .set('x-api-key', API_KEY || '')
         .set('Accept-Encoding', '*')
 
-      console.debug(
-        'Payments API response:',
-        JSON.stringify(
-          {
-            status: response.status,
-            body: response.body
-          },
-          null,
-          2
-        )
-      )
+      // console.debug(
+      //   'Payments API response:',
+      //   JSON.stringify(
+      //     {
+      //       status: response.status,
+      //       body: response.body
+      //     },
+      //     null,
+      //     2
+      //   )
+      // )
 
       // Validate basic status code match before other validations
       validateStatusCode(response, testCase)
