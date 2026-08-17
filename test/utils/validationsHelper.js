@@ -278,10 +278,11 @@ export function validateApplicationRules(response, testCase) {
           )
         }
 
-        // check caveat details if a consent is required from Natural England'
+        // check caveat details if a consent is required from Natural England or if manual pond check is required
         if (
           actualRuleReason === 'A consent is required from Natural England' ||
-          actualRuleReason === 'A hefer is needed from Historic England'
+          actualRuleReason === 'A hefer is needed from Historic England' ||
+          actualRuleReason === 'A manual pond check is required'
         ) {
           const caveat = rule.caveat
           const actualRuleCaveatCode = caveat.code
@@ -350,13 +351,17 @@ export function validateApplicationRules(response, testCase) {
             )
           }
 
-          if (actualPercentageOverlap !== Number(expectedPercentageOverlap)) {
+          if (
+            expectedPercentageOverlap &&
+            actualPercentageOverlap !== Number(expectedPercentageOverlap)
+          ) {
             throw new Error(
               `Validation failed: expected actions${actionIndex + 1}_rules${ruleIndex + 1}_caveat_metadata_percentageOverlap to be ${expectedPercentageOverlap} but got ${actualPercentageOverlap}`
             )
           }
 
           if (
+            expectedOverlapAreaHectares &&
             actualOverlapAreaHectares !== Number(expectedOverlapAreaHectares)
           ) {
             throw new Error(
