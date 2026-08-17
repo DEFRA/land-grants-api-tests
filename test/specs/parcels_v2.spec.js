@@ -10,7 +10,7 @@ import {
   validateSuccessMessage,
   validateParcelsStructure,
   validateActionCode,
-  validateAvailableArea,
+  validateAvailability,
   validateSizeUnit,
   validateSizeValue,
   validateSSSIConsentRequired,
@@ -35,6 +35,7 @@ describe('Parcels V2 endpoint', () => {
       './test/data/sfi/parcels/parcelsData_CSAM3_v2.csv',
       './test/data/sfi/parcels/parcelsData_SCR2_v2.csv',
       './test/data/sfi/parcels/parcelsData_CNUM2_v2.csv',
+      './test/data/sfi/parcels/parcelsData_WBD1_v2.csv',
       ...(isDevOrLocalEnvironment
         ? [
             './test/data/sfi/parcels/AvailableAreaCalculation_Including_DAL_data.csv'
@@ -100,7 +101,7 @@ describe('Parcels V2 endpoint', () => {
         // Validate action code
         validateActionCode(response, testCase)
         // Validate available area value
-        validateAvailableArea(response, testCase)
+        validateAvailability(response, testCase)
         // Validate SSSI consent required
         validateSSSIConsentRequired(response, testCase)
         // Validate HEFER required
