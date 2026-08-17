@@ -1,4 +1,4 @@
-TestDescription,parcelIds,plannedActions,fields,expectedStatusCode,expectedMessage,expectedSheetId,expectedParcelId,expectedSizeUnit,expectedSizeValue,expectedActionCode,expectedActionDescription,expectedAvailableAreaUnit,expectedAvailableAreaValue,expectedSSSIConsentRequired,expectedHEFERRequired,expectedGroups,Comments
+TestDescription,parcelIds,plannedActions,fields,expectedStatusCode,expectedMessage,expectedSheetId,expectedParcelId,expectedSizeUnit,expectedSizeValue,expectedActionCode,expectedActionDescription,expectedAvailabilityUnit,expectedAvailabilityValue,expectedSSSIConsentRequired,expectedHEFERRequired,expectedGroups,Comments
 1.Request parcels endpoint for parcel size of a single parcel-Validate size of parcel 1 of 1,SD5267-5941,,size,200,success,SD5267,5941,ha,5.1185,,,,,,,,
 2.Request parcels endpoint for parcel size of Multiple parcels-Validate size of parcel 1 of 2,"SD5267-5941,SD7846-7013",,size,200,success,SD5267,5941,ha,5.1185,,,,,,,,
 3.Request parcels endpoint for parcel size of Multiple parcels-Validate size of parcel 2 of 2,"SD5267-5941,SD7846-7013",,size,200,success,SD7846,7013,ha,8.9902,,,,,,,,

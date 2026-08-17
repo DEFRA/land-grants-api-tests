@@ -157,17 +157,23 @@ export function validateActionCode(response, testCase) {
 /**
  * Validate available area from the parcel
  */
-export function validateAvailableArea(response, testCase) {
+export function validateAvailability(response, testCase) {
   if (
     !testCase.fields.includes('actions') ||
-    !testCase.expectedAvailableAreaValue
+    !testCase.expectedAvailabilityValue
   )
     return
 
   const expectedActionCode = testCase.expectedActionCode
   const expectedActionDescription = testCase.expectedActionDescription
-  const expectedAvailableAreaUnit = testCase.expectedAvailableAreaUnit
-  const expectedAvailableAreaValue = Number(testCase.expectedAvailableAreaValue)
+  const expectedAvailabilityUnit = testCase.expectedAvailabilityUnit
+  const expectedAvailabilityType = testCase.AvailabilityType
+  const expectedAvailabilityValue =
+    typeof testCase.expectedAvailabilityValue === 'string' &&
+    testCase.expectedAvailabilityValue.trim().toLowerCase() === 'null'
+      ? null
+      : Number(testCase.expectedAvailabilityValue)
+
   const parcels = response.body.parcels
 
   // fetching the required parcel for validation
@@ -182,23 +188,33 @@ export function validateAvailableArea(response, testCase) {
 
     if (actualActionCode === expectedActionCode) {
       const actualActionDescription = action.description
-      const actualAvailableAreaUnit = action.availableArea.unit
-      const actualAvailableAreaValue = action.availableArea.value
+      const actualAvailabilityType = action.availability.type
+      const actualAvailabilityUnit = action.availability.unit
+      const actualAvailabilityValue = action.availability.value
       if (actualActionDescription !== expectedActionDescription) {
         throw new Error(
           `Action description validation failed: expected ${expectedActionDescription} but got ${actualActionDescription}`
         )
       }
 
-      if (actualAvailableAreaUnit !== expectedAvailableAreaUnit) {
+      if (
+        expectedAvailabilityType &&
+        actualAvailabilityType !== expectedAvailabilityType
+      ) {
         throw new Error(
-          `Available area unit validation failed: expected ${expectedAvailableAreaUnit} but got ${actualAvailableAreaUnit}`
+          `Availability type validation failed: expected ${expectedAvailabilityType} but got ${actualAvailabilityType}`
         )
       }
 
-      if (expectedAvailableAreaValue !== actualAvailableAreaValue) {
+      if (actualAvailabilityUnit !== expectedAvailabilityUnit) {
         throw new Error(
-          `Available area value validation failed: expected ${expectedAvailableAreaValue} but got ${actualAvailableAreaValue}`
+          `Availability unit validation failed: expected ${expectedAvailabilityUnit} but got ${actualAvailabilityUnit}`
+        )
+      }
+
+      if (expectedAvailabilityValue !== actualAvailabilityValue) {
+        throw new Error(
+          `Availability value validation failed: expected ${expectedAvailabilityValue} but got ${actualAvailabilityValue}`
         )
       }
     }

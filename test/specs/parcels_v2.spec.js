@@ -10,7 +10,7 @@ import {
   validateSuccessMessage,
   validateParcelsStructure,
   validateActionCode,
-  validateAvailableArea,
+  validateAvailability,
   validateSizeUnit,
   validateSizeValue,
   validateSSSIConsentRequired,
@@ -101,7 +101,7 @@ describe('Parcels V2 endpoint', () => {
         // Validate action code
         validateActionCode(response, testCase)
         // Validate available area value
-        validateAvailableArea(response, testCase)
+        validateAvailability(response, testCase)
         // Validate SSSI consent required
         validateSSSIConsentRequired(response, testCase)
         // Validate HEFER required
