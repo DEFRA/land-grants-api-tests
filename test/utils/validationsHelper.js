@@ -176,6 +176,127 @@ export function applicationValidationRunCheck(
   }
 }
 
+function parseExpectedAction(testCase, actionIndex) {
+  const expectedAction = testCase[`action${actionIndex + 1}Expected`]
+
+  if (!expectedAction || expectedAction.trim() === '') {
+    return null
+  }
+
+  return JSON.parse(expectedAction)
+}
+
+function parseExpectedActions(testCase) {
+  const expectedActions = []
+  let actionIndex = 0
+
+  while (true) {
+    const expectedAction = parseExpectedAction(testCase, actionIndex)
+
+    if (!expectedAction) {
+      break
+    }
+
+    expectedActions.push(expectedAction)
+    actionIndex += 1
+  }
+
+  return expectedActions
+}
+
+function shouldValidateRuleCaveat(actualRuleReason) {
+  return (
+    actualRuleReason === 'A consent is required from Natural England' ||
+    actualRuleReason === 'A hefer is needed from Historic England' ||
+    actualRuleReason === 'A manual pond check is required'
+  )
+}
+
+function normalizeCaveat(caveat) {
+  if (!caveat) {
+    return undefined
+  }
+
+  const metadata = {}
+
+  if (caveat.metadata?.actionCode !== undefined) {
+    metadata.actionCode = caveat.metadata.actionCode
+  }
+
+  if (caveat.metadata?.sheetId !== undefined) {
+    metadata.sheetId = caveat.metadata.sheetId
+  }
+
+  if (caveat.metadata?.parcelId !== undefined) {
+    metadata.parcelId = caveat.metadata.parcelId
+  }
+
+  if (caveat.metadata?.percentageOverlap !== undefined) {
+    metadata.percentageOverlap = caveat.metadata.percentageOverlap
+  }
+
+  if (caveat.metadata?.overlapAreaHectares !== undefined) {
+    metadata.overlapAreaHectares = caveat.metadata.overlapAreaHectares
+  }
+
+  const normalizedCaveat = {
+    code: caveat.code,
+    description: caveat.description
+  }
+
+  if (Object.keys(metadata).length > 0) {
+    normalizedCaveat.metadata = metadata
+  }
+
+  return normalizedCaveat
+}
+
+function normalizeRule(rule) {
+  const normalizedRule = {
+    name: rule.name,
+    passed: rule.passed,
+    reason: rule.reason,
+    description: rule.description
+  }
+
+  if (shouldValidateRuleCaveat(rule.reason) && rule.caveat) {
+    normalizedRule.caveat = normalizeCaveat(rule.caveat)
+  }
+
+  return normalizedRule
+}
+
+function normalizeAction(action) {
+  return {
+    actionCode: action.actionCode,
+    version: action.version,
+    sheetId: action.sheetId,
+    parcelId: action.parcelId,
+    hasPassed: action.hasPassed,
+    rules: (action.rules || []).map(normalizeRule)
+  }
+}
+
+// validateExpectedAction compares normalized objects only.
+// Validated action fields: actionCode, version, sheetId, parcelId, hasPassed.
+// Validated rule fields: name, passed, reason, description, and conditional caveat.
+// Validated caveat fields: code, description.
+// Validated caveat metadata fields (when present): actionCode, sheetId, parcelId, percentageOverlap, overlapAreaHectares.
+// Other fields from API responses (for example explanations) are intentionally ignored.
+function validateExpectedAction(actualAction, expectedAction, path) {
+  const normalizedActualAction = normalizeAction(actualAction)
+  const normalizedExpectedAction = normalizeAction(expectedAction)
+
+  if (
+    JSON.stringify(normalizedActualAction) !==
+    JSON.stringify(normalizedExpectedAction)
+  ) {
+    throw new Error(
+      `Validation failed: expected ${path} to equal ${JSON.stringify(normalizedExpectedAction)} but got ${JSON.stringify(normalizedActualAction)}`
+    )
+  }
+}
+
 /**
  * Validate application rules and their results
  */
@@ -190,186 +311,20 @@ export function validateApplicationRules(response, testCase) {
   // check actions of the application
   if (response.status === 200) {
     const actions = response.body.actions
+    const expectedActions = parseExpectedActions(testCase)
+
+    if (actions.length !== expectedActions.length) {
+      throw new Error(
+        `Validation failed: expected ${expectedActions.length} actions but got ${actions.length}`
+      )
+    }
 
     actions.forEach((action, actionIndex) => {
-      const actualCode = action.actionCode
-      const actualSheetId = action.sheetId
-      const actualParcelId = action.parcelId
-      const actualResult = action.hasPassed
-      const actualConfigVersion = action.version
-      const expectedCode = testCase[`actions${actionIndex + 1}_actionCode`]
-      const expectedSheetId = testCase[`actions${actionIndex + 1}_sheetId`]
-      const expectedParcelId = testCase[`actions${actionIndex + 1}_parcelId`]
-      const expectedResult = testCase[`actions${actionIndex + 1}_hasPassed`]
-      const expectedConfigVersion =
-        testCase[`actions${actionIndex + 1}_version`]
-
-      if (actualCode !== expectedCode) {
-        throw new Error(
-          `Validation failed: expected actions${actionIndex + 1}_actionCode to be ${expectedCode} but got ${actualCode}`
-        )
-      }
-
-      if (String(actualSheetId) !== String(expectedSheetId)) {
-        throw new Error(
-          `Validation failed: expected actions${actionIndex + 1}_sheetId to be ${expectedSheetId} but got ${actualSheetId}`
-        )
-      }
-
-      if (String(actualParcelId) !== String(expectedParcelId)) {
-        throw new Error(
-          `Validation failed: expected actions${actionIndex + 1}_parcelId to be ${expectedParcelId} but got ${actualParcelId}`
-        )
-      }
-
-      if (String(actualResult) !== String(expectedResult).toLowerCase()) {
-        throw new Error(
-          `Validation failed: expected actions${actionIndex + 1}_hasPassed to be ${expectedResult} but got ${actualResult}`
-        )
-      }
-
-      if (actualConfigVersion !== expectedConfigVersion) {
-        throw new Error(
-          `Validation failed: expected actions${actionIndex + 1}_version to be ${expectedConfigVersion} but got ${actualConfigVersion}`
-        )
-      }
-
-      // check rules within each action
-      const rules = action.rules
-      rules.forEach((rule, ruleIndex) => {
-        const actualRuleName = rule.name
-        const actualRulePassed = rule.passed
-        const actualRuleReason = rule.reason
-        const actualRuleDescription = rule.description
-        const expectedRuleName =
-          testCase[`actions${actionIndex + 1}_rules${ruleIndex + 1}_name`]
-        const expectedRulePassed =
-          testCase[`actions${actionIndex + 1}_rules${ruleIndex + 1}_passed`]
-        const expectedRuleReason =
-          testCase[`actions${actionIndex + 1}_rules${ruleIndex + 1}_reason`]
-        const expectedRuleDescription =
-          testCase[
-            `actions${actionIndex + 1}_rules${ruleIndex + 1}_description`
-          ]
-
-        if (actualRuleName !== expectedRuleName) {
-          throw new Error(
-            `Validation failed: expected actions${actionIndex + 1}_rules${ruleIndex + 1}_name to be ${expectedRuleName} but got ${actualRuleName}`
-          )
-        }
-
-        if (
-          String(actualRulePassed) !== String(expectedRulePassed).toLowerCase()
-        ) {
-          throw new Error(
-            `Validation failed: expected actions${actionIndex + 1}_rules${ruleIndex + 1}_passed to be ${expectedRulePassed} but got ${actualRulePassed}`
-          )
-        }
-
-        if (actualRuleReason !== expectedRuleReason) {
-          throw new Error(
-            `Validation failed: expected actions${actionIndex + 1}_rules${ruleIndex + 1}_reason to be ${expectedRuleReason} but got ${actualRuleReason}`
-          )
-        }
-
-        if (actualRuleDescription !== expectedRuleDescription) {
-          throw new Error(
-            `Validation failed: expected actions${actionIndex + 1}_rules${ruleIndex + 1}_description to be ${expectedRuleDescription} but got ${actualRuleDescription}`
-          )
-        }
-
-        // check caveat details if a consent is required from Natural England or if manual pond check is required
-        if (
-          actualRuleReason === 'A consent is required from Natural England' ||
-          actualRuleReason === 'A hefer is needed from Historic England' ||
-          actualRuleReason === 'A manual pond check is required'
-        ) {
-          const caveat = rule.caveat
-          const actualRuleCaveatCode = caveat.code
-          const actualRuleCaveatDescription = caveat.description
-          const actualActionCode = caveat.metadata.actionCode
-          const actualParcelId = caveat.metadata.parcelId
-          const actualSheetId = caveat.metadata.sheetId
-          const actualPercentageOverlap = caveat.metadata.percentageOverlap
-          const actualOverlapAreaHectares = caveat.metadata.overlapAreaHectares
-          const expectedRuleCaveatCode =
-            testCase[
-              `actions${actionIndex + 1}_rules${ruleIndex + 1}_caveat_code`
-            ]
-          const expectedRuleCaveatDescription =
-            testCase[
-              `actions${actionIndex + 1}_rules${ruleIndex + 1}_caveat_description`
-            ]
-          const expectedActionCode =
-            testCase[
-              `actions${actionIndex + 1}_rules${ruleIndex + 1}_caveat_metadata_actionCode`
-            ]
-          const expectedParcelId =
-            testCase[
-              `actions${actionIndex + 1}_rules${ruleIndex + 1}_caveat_metadata_parcelId`
-            ]
-          const expectedSheetId =
-            testCase[
-              `actions${actionIndex + 1}_rules${ruleIndex + 1}_caveat_metadata_sheetId`
-            ]
-          const expectedPercentageOverlap =
-            testCase[
-              `actions${actionIndex + 1}_rules${ruleIndex + 1}_caveat_metadata_percentageOverlap`
-            ]
-          const expectedOverlapAreaHectares =
-            testCase[
-              `actions${actionIndex + 1}_rules${ruleIndex + 1}_caveat_metadata_overlapAreaHectares`
-            ]
-
-          if (actualRuleCaveatCode !== expectedRuleCaveatCode) {
-            throw new Error(
-              `Validation failed: expected actions${actionIndex + 1}_rules${ruleIndex + 1}_caveat_code to be ${expectedRuleCaveatCode} but got ${actualRuleCaveatCode}`
-            )
-          }
-
-          if (actualRuleCaveatDescription !== expectedRuleCaveatDescription) {
-            throw new Error(
-              `Validation failed: expected actions${actionIndex + 1}_rules${ruleIndex + 1}_caveat_description to be ${expectedRuleCaveatDescription} but got ${actualRuleCaveatDescription}`
-            )
-          }
-
-          if (actualActionCode !== expectedActionCode) {
-            throw new Error(
-              `Validation failed: expected actions${actionIndex + 1}_rules${ruleIndex + 1}_caveat_metadata_actionCode to be ${expectedActionCode} but got ${actualActionCode}`
-            )
-          }
-
-          if (String(actualParcelId) !== String(expectedParcelId)) {
-            throw new Error(
-              `Validation failed: expected actions${actionIndex + 1}_rules${ruleIndex + 1}_caveat_metadata_parcelId to be ${expectedParcelId} but got ${actualParcelId}`
-            )
-          }
-
-          if (String(actualSheetId) !== String(expectedSheetId)) {
-            throw new Error(
-              `Validation failed: expected actions${actionIndex + 1}_rules${ruleIndex + 1}_caveat_metadata_sheetId to be ${expectedSheetId} but got ${actualSheetId}`
-            )
-          }
-
-          if (
-            expectedPercentageOverlap &&
-            actualPercentageOverlap !== Number(expectedPercentageOverlap)
-          ) {
-            throw new Error(
-              `Validation failed: expected actions${actionIndex + 1}_rules${ruleIndex + 1}_caveat_metadata_percentageOverlap to be ${expectedPercentageOverlap} but got ${actualPercentageOverlap}`
-            )
-          }
-
-          if (
-            expectedOverlapAreaHectares &&
-            actualOverlapAreaHectares !== Number(expectedOverlapAreaHectares)
-          ) {
-            throw new Error(
-              `Validation failed: expected actions${actionIndex + 1}_rules${ruleIndex + 1}_caveat_metadata_overlapAreaHectares to be ${expectedOverlapAreaHectares} but got ${actualOverlapAreaHectares}`
-            )
-          }
-        }
-      })
+      validateExpectedAction(
+        action,
+        expectedActions[actionIndex],
+        `actions${actionIndex + 1}`
+      )
     })
   } else if (response.status === 400) {
     response.body.errorMessages.forEach((errorMessage, index) => {
