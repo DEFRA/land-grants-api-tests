@@ -22,7 +22,8 @@ describe('Validations V2 endpoint', () => {
       './test/data/sfi/validations/applicationsValidationsData_CLIG3_v2.csv',
       './test/data/sfi/validations/applicationsValidationsData_CSAM3_v2.csv',
       './test/data/sfi/validations/applicationsValidationsData_SCR2_v2.csv',
-      './test/data/sfi/validations/applicationsValidationsData_WBD1_v2.csv'
+      './test/data/sfi/validations/applicationsValidationsData_WBD1_v2.csv',
+      './test/data/sfi/validations/applicationsValidationsData_CNUM2_v2.csv'
     ]
 
     const validateMessages = async (testCase, options = {}) => {
@@ -36,16 +37,40 @@ describe('Validations V2 endpoint', () => {
       const applicantCrn = testCase.applicantCrn
       const landActions = JSON.parse(testCase.landActions)
 
+      const validationRequestPayload = {
+        applicationId,
+        requester,
+        sbi,
+        applicantCrn,
+        landActions
+      }
+
+      // console.debug(
+      //   'Application validation request:',
+      //   JSON.stringify(validationRequestPayload, null, 2)
+      // )
+
       // Make the API request to /application/validate endpoint
       const validationResponse = await request(global.baseUrl)
         .post(APPLICATION_VALIDATIONS_ENDPOINT_V2)
-        .send({ applicationId, requester, sbi, applicantCrn, landActions })
+        .send(validationRequestPayload)
         .set('Accept', 'application/json')
         .set('Authorization', `Bearer ${BEARER_TOKEN}`)
         .set('x-api-key', API_KEY || '')
         .set('Accept-Encoding', '*')
         .set('X-Forwarded-Authorization', 'TestToken')
 
+      // console.debug(
+      //   'Application validation response:',
+      //   JSON.stringify(
+      //     {
+      //       status: validationResponse.status,
+      //       body: validationResponse.body
+      //     },
+      //     null,
+      //     2
+      //   )
+      // )
       // Validate basic status code match before other validations
       validateStatusCode(
         validationResponse,
