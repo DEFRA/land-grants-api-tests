@@ -277,6 +277,104 @@ function normalizeAction(action) {
   }
 }
 
+function assertFieldValue(actual, expected, path) {
+  if (actual !== expected) {
+    throw new Error(
+      `Validation failed: ${path}: expected ${JSON.stringify(expected)} but got ${JSON.stringify(actual)}`
+    )
+  }
+}
+
+function assertCaveatFields(actualCaveat, expectedCaveat, path) {
+  if (!actualCaveat && !expectedCaveat) {
+    return
+  }
+
+  if (!actualCaveat || !expectedCaveat) {
+    throw new Error(
+      `Validation failed: ${path}: expected ${JSON.stringify(expectedCaveat)} but got ${JSON.stringify(actualCaveat)}`
+    )
+  }
+
+  assertFieldValue(actualCaveat.code, expectedCaveat.code, `${path}.code`)
+  assertFieldValue(
+    actualCaveat.description,
+    expectedCaveat.description,
+    `${path}.description`
+  )
+
+  const metadataKeys = [
+    'actionCode',
+    'sheetId',
+    'parcelId',
+    'percentageOverlap',
+    'overlapAreaHectares'
+  ]
+
+  metadataKeys.forEach((key) => {
+    assertFieldValue(
+      actualCaveat.metadata?.[key],
+      expectedCaveat.metadata?.[key],
+      `${path}.metadata.${key}`
+    )
+  })
+}
+
+function assertRuleFields(actualRule, expectedRule, path) {
+  assertFieldValue(actualRule.name, expectedRule.name, `${path}.name`)
+  assertFieldValue(actualRule.passed, expectedRule.passed, `${path}.passed`)
+  assertFieldValue(actualRule.reason, expectedRule.reason, `${path}.reason`)
+  assertFieldValue(
+    actualRule.description,
+    expectedRule.description,
+    `${path}.description`
+  )
+
+  assertCaveatFields(actualRule.caveat, expectedRule.caveat, `${path}.caveat`)
+}
+
+function assertActionFields(actualAction, expectedAction, path) {
+  assertFieldValue(
+    actualAction.actionCode,
+    expectedAction.actionCode,
+    `${path}.actionCode`
+  )
+  assertFieldValue(
+    actualAction.version,
+    expectedAction.version,
+    `${path}.version`
+  )
+  assertFieldValue(
+    actualAction.sheetId,
+    expectedAction.sheetId,
+    `${path}.sheetId`
+  )
+  assertFieldValue(
+    actualAction.parcelId,
+    expectedAction.parcelId,
+    `${path}.parcelId`
+  )
+  assertFieldValue(
+    actualAction.hasPassed,
+    expectedAction.hasPassed,
+    `${path}.hasPassed`
+  )
+
+  assertFieldValue(
+    actualAction.rules.length,
+    expectedAction.rules.length,
+    `${path}.rules.length`
+  )
+
+  actualAction.rules.forEach((actualRule, ruleIndex) => {
+    assertRuleFields(
+      actualRule,
+      expectedAction.rules[ruleIndex],
+      `${path}.rules[${ruleIndex}]`
+    )
+  })
+}
+
 // validateExpectedAction compares normalized objects only.
 // Validated action fields: actionCode, version, sheetId, parcelId, hasPassed.
 // Validated rule fields: name, passed, reason, description, and conditional caveat.
@@ -287,14 +385,7 @@ function validateExpectedAction(actualAction, expectedAction, path) {
   const normalizedActualAction = normalizeAction(actualAction)
   const normalizedExpectedAction = normalizeAction(expectedAction)
 
-  if (
-    JSON.stringify(normalizedActualAction) !==
-    JSON.stringify(normalizedExpectedAction)
-  ) {
-    throw new Error(
-      `Validation failed: expected ${path} to equal ${JSON.stringify(normalizedExpectedAction)} but got ${JSON.stringify(normalizedActualAction)}`
-    )
-  }
+  assertActionFields(normalizedActualAction, normalizedExpectedAction, path)
 }
 
 /**
