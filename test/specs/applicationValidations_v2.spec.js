@@ -23,7 +23,8 @@ describe('Validations V2 endpoint', () => {
       './test/data/sfi/validations/applicationsValidationsData_CSAM3_v2.csv',
       './test/data/sfi/validations/applicationsValidationsData_SCR2_v2.csv',
       './test/data/sfi/validations/applicationsValidationsData_WBD1_v2.csv',
-      './test/data/sfi/validations/applicationsValidationsData_CNUM2_v2.csv'
+      './test/data/sfi/validations/applicationsValidationsData_CNUM2_v2.csv',
+      './test/data/sfi/validations/applicationsValidationsData_HEF1_v2.csv'
     ]
 
     const validateMessages = async (testCase, options = {}) => {
