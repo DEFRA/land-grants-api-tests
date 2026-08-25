@@ -31,15 +31,7 @@ export function shouldUseCsvVersion(testCase = {}) {
   const description = String(testCase.TestDescription || '').trim()
 
   return (
-    description.includes(
-      'Application with configs provided for an existing application'
-    ) ||
-    description.includes(
-      'Validations for an existing application with the same action configs used at the time of application'
-    ) ||
-    description.includes(
-      'Calculate payments for an existing application with the same action configs used at the time of application'
-    ) ||
+    description.includes('existing application') ||
     description.includes('Application with configs provided') ||
     description.includes(
       'Application with configs provided for a new application'
