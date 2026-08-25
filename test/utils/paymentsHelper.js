@@ -1,3 +1,5 @@
+import { getExpectedActionVersion } from './actionVersions.js'
+
 // Helper functions for /payments/calculate endpoint API testing
 /**
  * Validate response status code
@@ -130,8 +132,11 @@ export function validateParcelItems(response, testCase) {
     const expectedParcelItemDurationYears = Number(
       testCase[`parcelItem${parcelItemId}_durationYears`]
     )
-    const expectedParcelItemversion =
+    const expectedParcelItemversion = getExpectedActionVersion(
+      actualItem.code,
+      testCase,
       testCase[`parcelItem${parcelItemId}_version`]
+    )
 
     // Validate parcelItem code for each parcelItemId
     if (actualItem.code !== expectedParcelItemCode) {
