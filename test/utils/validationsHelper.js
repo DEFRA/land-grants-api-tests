@@ -1,3 +1,5 @@
+import { getExpectedActionVersion } from './actionVersions.js'
+
 // Helper functions for /application/validate and /api/v2/application/validate endpoints API testing
 
 /**
@@ -381,9 +383,22 @@ function assertActionFields(actualAction, expectedAction, path) {
 // Validated caveat fields: code, description.
 // Validated caveat metadata fields (when present): actionCode, sheetId, parcelId, percentageOverlap, overlapAreaHectares.
 // Other fields from API responses (for example explanations) are intentionally ignored.
-function validateExpectedAction(actualAction, expectedAction, path) {
+function validateExpectedAction(
+  actualAction,
+  expectedAction,
+  path,
+  testCase = {}
+) {
+  const expectedVersion = getExpectedActionVersion(
+    actualAction?.actionCode,
+    testCase,
+    expectedAction?.version
+  )
   const normalizedActualAction = normalizeAction(actualAction)
-  const normalizedExpectedAction = normalizeAction(expectedAction)
+  const normalizedExpectedAction = normalizeAction({
+    ...expectedAction,
+    version: expectedVersion
+  })
 
   assertActionFields(normalizedActualAction, normalizedExpectedAction, path)
 }
@@ -414,7 +429,8 @@ export function validateApplicationRules(response, testCase) {
       validateExpectedAction(
         action,
         expectedActions[actionIndex],
-        `actions${actionIndex + 1}`
+        `actions${actionIndex + 1}`,
+        testCase
       )
     })
   } else if (response.status === 400) {
