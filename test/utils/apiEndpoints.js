@@ -9,6 +9,9 @@ export const WMP_VALIDATIONS_ENDPOINT = '/api/v1/wmp/validate'
 export const WMP_PAYMENTS_ENDPOINT = '/api/v1/wmp/payments/calculate'
 export const WMP_PAYMENTS_CALCULATE_BY_TOTAL_AREA_ENDPOINT =
   '/api/v1/wmp/payments/calculate-by-total-area'
+export const PARCEL_TILES_ENDPOINT_V1 = (z, x, y) =>
+  `/api/v1/parcel-tiles/${z}/${x}/${y}`
+export const PARCEL_TILES_LOCATE_ENDPOINT_V1 = '/api/v1/parcel-tiles/locate'
 
 const environment = `${process.env.ENVIRONMENT || ''}`
   .trim()

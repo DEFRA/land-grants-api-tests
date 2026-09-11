@@ -7,12 +7,12 @@
  * continues to validate the saved action configuration for that case.
  */
 const LATEST_ACTION_VERSIONS = {
-  CMOR1: '2.0.0',
-  UPL1: '3.1.0',
-  UPL2: '3.1.0',
-  UPL3: '3.1.0',
-  UPL8: '1.0.0',
-  UPL10: '1.0.0',
+  CMOR1: '2.1.0',
+  UPL1: '3.2.0',
+  UPL2: '3.2.0',
+  UPL3: '3.2.0',
+  UPL8: '1.1.0',
+  UPL10: '1.1.0',
   CLIG3: '1.1.0',
   CSAM3: '1.2.0',
   SCR2: '1.1.0',

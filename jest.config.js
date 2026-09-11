@@ -29,7 +29,10 @@ export default {
   transformIgnorePatterns: [
     `node_modules/(?!${[
       '@defra/hapi-tracing', // Supports ESM only
-      'node-fetch' // Supports ESM only
+      'node-fetch', // Supports ESM only
+      '@mapbox/vector-tile', // Supports ESM only
+      '@mapbox/point-geometry', // Supports ESM only
+      'pbf' // Supports ESM only
     ].join('|')}/)`
   ]
 }
