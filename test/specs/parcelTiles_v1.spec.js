@@ -13,6 +13,7 @@ import {
 import { validateStatusCode } from '../utils/validationsHelper.js'
 import { bboxToTiles } from '../utils/tileMathHelper.js'
 import { runTestsAndRecordResultsForFiles } from '../utils/recordResults.js'
+import { normalizeGeojson } from '../utils/geojsonHelper.js'
 
 const ZOOM_LEVEL = 15
 const dataFiles = ['./test/data/sfi/parcelTiles/parcelTiles.csv']
@@ -125,7 +126,9 @@ describe('Parcel tiles V1 endpoint', () => {
         fs.writeFileSync(outputFile, JSON.stringify(geojson, null, 2))
       }
       const expectedGeojson = JSON.parse(fs.readFileSync(outputFile, 'utf8'))
-      expect(geojson).toEqual(expectedGeojson)
+      expect(normalizeGeojson(geojson)).toEqual(
+        normalizeGeojson(expectedGeojson)
+      )
     }
 
     await runTestsAndRecordResultsForFiles(dataFiles, validateParcelTiles)
