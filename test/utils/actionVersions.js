@@ -14,9 +14,9 @@ const LATEST_ACTION_VERSIONS = {
   UPL8: '1.1.0',
   UPL10: '1.1.0',
   CLIG3: '1.1.0',
-  CSAM3: '1.2.0',
+  CSAM3: '1.3.0',
   SCR2: '1.1.0',
-  CNUM2: '1.0.1',
+  CNUM2: '1.1.0',
   WBD1: '1.0.0'
 }
 
