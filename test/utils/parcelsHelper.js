@@ -167,7 +167,9 @@ export function validateAvailability(response, testCase) {
   const expectedActionCode = testCase.expectedActionCode
   const expectedActionDescription = testCase.expectedActionDescription
   const expectedAvailabilityUnit = testCase.expectedAvailabilityUnit
-  const expectedAvailabilityType = testCase.AvailabilityType
+  const expectedQuantityRequired = String(
+    testCase.expectedQuantityRequired
+  ).toLowerCase()
   const expectedAvailabilityValue =
     typeof testCase.expectedAvailabilityValue === 'string' &&
     testCase.expectedAvailabilityValue.trim().toLowerCase() === 'null'
@@ -188,7 +190,9 @@ export function validateAvailability(response, testCase) {
 
     if (actualActionCode === expectedActionCode) {
       const actualActionDescription = action.description
-      const actualAvailabilityType = action.availability.type
+      const actualQuantityRequired = String(
+        action.quantityRequired
+      ).toLowerCase()
       const actualAvailabilityUnit = action.availability.unit
       const actualAvailabilityValue = action.availability.value
       if (actualActionDescription !== expectedActionDescription) {
@@ -198,11 +202,11 @@ export function validateAvailability(response, testCase) {
       }
 
       if (
-        expectedAvailabilityType &&
-        actualAvailabilityType !== expectedAvailabilityType
+        expectedQuantityRequired &&
+        actualQuantityRequired !== expectedQuantityRequired
       ) {
         throw new Error(
-          `Availability type validation failed: expected ${expectedAvailabilityType} but got ${actualAvailabilityType}`
+          `Quantity required validation failed: expected ${expectedQuantityRequired} but got ${actualQuantityRequired}`
         )
       }
 
