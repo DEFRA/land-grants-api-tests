@@ -17,7 +17,7 @@ const LATEST_ACTION_VERSIONS = {
   CSAM3: '1.3.0',
   SCR2: '1.1.0',
   CNUM2: '1.1.0',
-  WBD1: '1.0.0'
+  WBD1: '1.1.0'
 }
 
 /**
