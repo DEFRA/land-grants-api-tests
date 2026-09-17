@@ -170,6 +170,8 @@ export function validateAvailability(response, testCase) {
   const expectedQuantityRequired = String(
     testCase.expectedQuantityRequired
   ).toLowerCase()
+  const expectedDisplayUnit = testCase.expectedDisplayUnit
+  const expectedDisplayUnitPlural = testCase.expectedDisplayUnitPlural
   const expectedAvailabilityValue =
     typeof testCase.expectedAvailabilityValue === 'string' &&
     testCase.expectedAvailabilityValue.trim().toLowerCase() === 'null'
@@ -193,6 +195,8 @@ export function validateAvailability(response, testCase) {
       const actualQuantityRequired = String(
         action.quantityRequired
       ).toLowerCase()
+      const actualDisplayUnit = action.displayUnit
+      const actualDisplayUnitPlural = action.displayUnitPlural
       const actualAvailabilityUnit = action.availability.unit
       const actualAvailabilityValue = action.availability.value
       if (actualActionDescription !== expectedActionDescription) {
@@ -207,6 +211,21 @@ export function validateAvailability(response, testCase) {
       ) {
         throw new Error(
           `Quantity required validation failed: expected ${expectedQuantityRequired} but got ${actualQuantityRequired}`
+        )
+      }
+
+      if (expectedDisplayUnit && actualDisplayUnit !== expectedDisplayUnit) {
+        throw new Error(
+          `Display unit validation failed: expected ${expectedDisplayUnit} but got ${actualDisplayUnit}`
+        )
+      }
+
+      if (
+        expectedDisplayUnitPlural &&
+        actualDisplayUnitPlural !== expectedDisplayUnitPlural
+      ) {
+        throw new Error(
+          `Display unit plural validation failed: expected ${expectedDisplayUnitPlural} but got ${actualDisplayUnitPlural}`
         )
       }
 
