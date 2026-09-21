@@ -26,7 +26,7 @@ describe('Parcels V2 endpoint', () => {
       .toLowerCase()
     const isDevOrLocalEnvironment =
       environmentName === 'dev' || environmentName === 'local'
-
+    const isTestEnvironment = environmentName === 'test'
     const dataFiles = [
       './test/data/sfi/parcels/parcelsData_groups.csv',
       './test/data/sfi/parcels/parcelsData_CMOR1,UPL1,UPL2andUPL3_v2.csv',
@@ -39,7 +39,12 @@ describe('Parcels V2 endpoint', () => {
       './test/data/sfi/parcels/parcelsData_HEF1_v2.csv',
       ...(isDevOrLocalEnvironment
         ? [
-            './test/data/sfi/parcels/AvailableAreaCalculation_Including_DAL_data.csv'
+            './test/data/sfi/parcels/AvailableAreaCalculation_with_mock_DAL_data.csv'
+          ]
+        : []),
+      ...(isTestEnvironment
+        ? [
+            './test/data/sfi/parcels/AvailableAreaCalculation_with_real_DAL_data.csv'
           ]
         : [])
     ]
