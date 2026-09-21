@@ -22,26 +22,39 @@ export function getSpecsForEnv(
   const runEnvironment = (runEnv || '').toLowerCase()
   const scope = `${testScope || ''}`.trim().toLowerCase()
 
+  // GSPS-635 :  Files to skip specifically when running against the 'test' environment
+  const skipInTest = [
+    'test/specs/parcels_v2.spec.js',
+    'test/specs/applicationValidations_v2.spec.js'
+  ]
+
   if (scope === 'ingest') {
     // Jest matches testMatch against full paths; prefixing with **/ keeps explicit file matches reliable.
-    return ingestSpecs.map((spec) => `**/${spec}`)
+    let specs = ingestSpecs.map((spec) => `**/${spec}`)
+    if (environment === 'test') specs = [...specs, ...excludeSpecs(skipInTest)]
+    return specs
   }
 
+  let baseSpecs
   if (
     environment !== 'local' &&
     runEnvironment === 'local' &&
     localTargetEnvironments.has(environment)
   ) {
-    return [
+    baseSpecs = [
       ...allSpecs,
       ...excludeSpecs(ingestSpecs),
       ...excludeSpecs(localAndNonLocalSharedSpecs)
     ]
+  } else if (environment === 'local' && runEnvironment === 'local') {
+    baseSpecs = [...allSpecs, ...excludeSpecs(ingestSpecs)]
+  } else {
+    baseSpecs = [...allSpecs, ...excludeSpecs(ingestSpecs)]
   }
 
-  if (environment === 'local' && runEnvironment === 'local') {
-    return [...allSpecs, ...excludeSpecs(ingestSpecs)]
+  if (environment === 'test') {
+    baseSpecs = [...baseSpecs, ...excludeSpecs(skipInTest)]
   }
 
-  return [...allSpecs, ...excludeSpecs(ingestSpecs)]
+  return baseSpecs
 }
