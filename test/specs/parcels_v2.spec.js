@@ -29,14 +29,14 @@ describe('Parcels V2 endpoint', () => {
     const isTestEnvironment = environmentName === 'test'
     const dataFiles = [
       './test/data/sfi/parcels/parcelsData_groups.csv',
-      './test/data/sfi/parcels/parcelsData_CMOR1,UPL1,UPL2andUPL3_v2.csv',
-      './test/data/sfi/parcels/parcelsData_UPL8andUPL10_v2.csv',
-      './test/data/sfi/parcels/parcelsData_CLIG3_v2.csv',
-      './test/data/sfi/parcels/parcelsData_CSAM3_v2.csv',
-      './test/data/sfi/parcels/parcelsData_SCR2_v2.csv',
-      './test/data/sfi/parcels/parcelsData_CNUM2_v2.csv',
-      './test/data/sfi/parcels/parcelsData_WBD1_v2.csv',
-      './test/data/sfi/parcels/parcelsData_HEF1_v2.csv',
+      './test/data/sfi/parcels/parcelsData_CMOR1,UPL1_26,UPL2_26andUPL3_26_v2.csv',
+      './test/data/sfi/parcels/parcelsData_UPL8_26andUPL10_26_v2.csv',
+      './test/data/sfi/parcels/parcelsData_CLIG3_26_v2.csv',
+      './test/data/sfi/parcels/parcelsData_CSAM3_26_v2.csv',
+      './test/data/sfi/parcels/parcelsData_SCR2_26_v2.csv',
+      './test/data/sfi/parcels/parcelsData_CNUM2_26_v2.csv',
+      './test/data/sfi/parcels/parcelsData_WBD1_26_v2.csv',
+      './test/data/sfi/parcels/parcelsData_HEF1_26_v2.csv',
       ...(isDevOrLocalEnvironment
         ? [
             './test/data/sfi/parcels/AvailableAreaCalculation_with_mock_DAL_data.csv'

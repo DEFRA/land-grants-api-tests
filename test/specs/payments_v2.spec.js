@@ -18,14 +18,14 @@ import {
 describe('Payments endpoint v2.0.0', () => {
   it('should validate version2 payment amounts and dates', async () => {
     const dataFiles = [
-      './test/data/sfi/payments/paymentsData_CMOR1,UPL1,UPL2andUPL3_v2.csv',
-      './test/data/sfi/payments/paymentsData_UPL8andUPL10_v2.csv',
-      './test/data/sfi/payments/paymentsData_CLIG3_v2.csv',
-      './test/data/sfi/payments/paymentsData_CSAM3_v2.csv',
-      './test/data/sfi/payments/paymentsData_SCR2_v2.csv',
-      './test/data/sfi/payments/paymentsData_CNUM2_v2.csv',
-      './test/data/sfi/payments/paymentsData_WBD1_v2.csv',
-      './test/data/sfi/payments/paymentsData_HEF1_v2.csv'
+      './test/data/sfi/payments/paymentsData_CMOR1,UPL1_26,UPL2_26andUPL3_26_v2.csv',
+      './test/data/sfi/payments/paymentsData_UPL8_26andUPL10_26_v2.csv',
+      './test/data/sfi/payments/paymentsData_CLIG3_26_v2.csv',
+      './test/data/sfi/payments/paymentsData_CSAM3_26_v2.csv',
+      './test/data/sfi/payments/paymentsData_SCR2_26_v2.csv',
+      './test/data/sfi/payments/paymentsData_CNUM2_26_v2.csv',
+      './test/data/sfi/payments/paymentsData_WBD1_26_v2.csv',
+      './test/data/sfi/payments/paymentsData_HEF1_26_v2.csv'
     ]
 
     const validatePayments = async (testCase, options = {}) => {
