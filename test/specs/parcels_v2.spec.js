@@ -29,8 +29,12 @@ describe('Parcels V2 endpoint', () => {
     const isTestEnvironment = environmentName === 'test'
     const dataFiles = [
       './test/data/sfi/parcels/parcelsData_groups.csv',
-      './test/data/sfi/parcels/parcelsData_CMOR1,UPL1_26,UPL2_26andUPL3_26_v2.csv',
-      './test/data/sfi/parcels/parcelsData_UPL8_26andUPL10_26_v2.csv',
+      './test/data/sfi/parcels/parcelsData_CMOR1_v2.csv',
+      './test/data/sfi/parcels/parcelsData_UPL1_26_v2.csv',
+      './test/data/sfi/parcels/parcelsData_UPL2_26_v2.csv',
+      './test/data/sfi/parcels/parcelsData_UPL3_26_v2.csv',
+      './test/data/sfi/parcels/parcelsData_UPL8_26_v2.csv',
+      './test/data/sfi/parcels/parcelsData_UPL10_26_v2.csv',
       './test/data/sfi/parcels/parcelsData_CLIG3_26_v2.csv',
       './test/data/sfi/parcels/parcelsData_CSAM3_26_v2.csv',
       './test/data/sfi/parcels/parcelsData_SCR2_26_v2.csv',
