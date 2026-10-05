@@ -29,7 +29,7 @@ const LATEST_ACTION_VERSIONS = {
   CNUM2_26: '1.0.0',
   WBD1_26: '1.0.0',
   GRH12_26: '1.0.0',
-  HEF1_26: '1.1.0',
+  HEF1_26: '1.2.0',
   BND1_26: '1.0.0'
 }
 
