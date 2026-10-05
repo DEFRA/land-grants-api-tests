@@ -1,5 +1,4 @@
 // Helper functions for /parcels endpoint API testing
-
 /**
  * Validate response status code
  */
@@ -158,11 +157,7 @@ export function validateActionCode(response, testCase) {
  * Validate available area from the parcel
  */
 export function validateAvailability(response, testCase) {
-  if (
-    !testCase.fields.includes('actions') ||
-    !testCase.expectedAvailabilityValue
-  )
-    return
+  if (!testCase.fields.includes('actions')) return
 
   const expectedActionCode = testCase.expectedActionCode
   const expectedActionDescription = testCase.expectedActionDescription
@@ -191,6 +186,16 @@ export function validateAvailability(response, testCase) {
     const actualActionCode = action.code
 
     if (actualActionCode === expectedActionCode) {
+      const expectedIsAvailable =
+        String(testCase.expectedIsAvailable).toLowerCase() === 'true'
+      if (action.isAvailable !== expectedIsAvailable) {
+        throw new Error(
+          `Availability validation failed: expected '${expectedIsAvailable}' but got '${action.isAvailable}'`
+        )
+      }
+
+      if (!testCase.expectedAvailabilityValue) return
+
       const actualActionDescription = action.description
       const actualQuantityRequired = String(
         action.quantityRequired
@@ -541,11 +546,11 @@ export function validateActionGroups(response, testCase) {
       (actualGroup) => expectedGroup.name === actualGroup.name
     )
 
-    // Compare actions arrays by content (order-sensitive)
-    if (
-      JSON.stringify(expectedGroup.actions) !==
-      JSON.stringify(actualGroup.actions)
-    ) {
+    const expectedActions = [...expectedGroup.actions].sort()
+    const actualActions = [...actualGroup.actions].sort()
+
+    // Compare action codes without depending on API response order
+    if (JSON.stringify(expectedActions) !== JSON.stringify(actualActions)) {
       throw new Error(
         `Expected actions for group '${expectedGroup.name}' is ${JSON.stringify(expectedGroup.actions)} but got ${JSON.stringify(actualGroup.actions)}`
       )
