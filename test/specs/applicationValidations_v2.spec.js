@@ -34,8 +34,11 @@ describe('Validations V2 endpoint', () => {
           : `app-${Math.random().toString(36).substring(2, 10)}`
       const requester = testCase.requester
       const sbi =
-        testCase.sbi && testCase.sbi.trim() !== '' ? testCase.sbi : '0123456789' // Default SBI if not provided
-      const applicantCrn = testCase.applicantCrn
+        testCase.sbi && testCase.sbi.trim() !== '' ? testCase.sbi : '121428499' // Default SBI if not provided
+      const applicantCrn =
+        testCase.applicantCrn?.trim() !== ''
+          ? testCase.applicantCrn
+          : '1102760349' // Default CRN if not provided
       const landActions = JSON.parse(testCase.landActions)
 
       const validationRequestPayload = {
