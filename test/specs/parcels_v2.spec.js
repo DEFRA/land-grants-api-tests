@@ -57,7 +57,11 @@ describe('Parcels V2 endpoint', () => {
       const parcelIds = testCase.parcelIds.split(',')
       const fields = testCase.fields.split(',')
       const sbi =
-        testCase.sbi && testCase.sbi.trim() !== '' ? testCase.sbi : '0123456789' // Default SBI if not provided
+        testCase.sbi && testCase.sbi.trim() !== '' ? testCase.sbi : '121428499' // Default SBI if not provided
+      // const applicantCrn =
+      //   testCase.applicantCrn?.trim() !== ''
+      //     ? testCase.applicantCrn
+      //     : '1102760349' // Default CRN if not provided
 
       // Make the real API request
       const requestPayload = testCase.plannedActions
