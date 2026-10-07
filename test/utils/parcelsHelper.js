@@ -194,6 +194,31 @@ export function validateAvailability(response, testCase) {
         )
       }
 
+      const expectedUnavailableReason = testCase.expectedUnavailableReason
+      const actualUnavailableReason = JSON.stringify(action.unavailableReason)
+
+      // unavailableReason must exist when the action is not available
+      if (
+        action.isAvailable === false &&
+        (actualUnavailableReason === undefined ||
+          actualUnavailableReason === null ||
+          String(actualUnavailableReason).trim() === '')
+      ) {
+        throw new Error(
+          `Unavailable reason validation failed: expected unavailableReason to exist when isAvailable is false but got ${actualUnavailableReason}`
+        )
+      }
+
+      // compare with the expected value when provided in the data file
+      if (
+        expectedUnavailableReason &&
+        actualUnavailableReason !== expectedUnavailableReason
+      ) {
+        throw new Error(
+          `Unavailable reason validation failed: expected ${expectedUnavailableReason} but got ${actualUnavailableReason}`
+        )
+      }
+
       if (!testCase.expectedAvailabilityValue) return
 
       const actualActionDescription = action.description
