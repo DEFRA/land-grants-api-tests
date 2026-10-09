@@ -41,6 +41,7 @@ describe('Parcels V2 endpoint', () => {
       './test/data/sfi/parcels/parcelsData_CNUM2_26_v2.csv',
       './test/data/sfi/parcels/parcelsData_WBD1_26_v2.csv',
       './test/data/sfi/parcels/parcelsData_HEF1_26_v2.csv',
+      './test/data/sfi/parcels/parcelsData_GRH12_26_v2.csv',
       ...(isDevOrLocalEnvironment
         ? [
             './test/data/sfi/parcels/AvailableAreaCalculation_with_mock_DAL_data.csv'

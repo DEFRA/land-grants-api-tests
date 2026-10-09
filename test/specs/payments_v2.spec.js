@@ -25,7 +25,8 @@ describe('Payments endpoint v2.0.0', () => {
       './test/data/sfi/payments/paymentsData_SCR2_26_v2.csv',
       './test/data/sfi/payments/paymentsData_CNUM2_26_v2.csv',
       './test/data/sfi/payments/paymentsData_WBD1_26_v2.csv',
-      './test/data/sfi/payments/paymentsData_HEF1_26_v2.csv'
+      './test/data/sfi/payments/paymentsData_HEF1_26_v2.csv',
+      './test/data/sfi/payments/paymentsData_GRH12_26_v2.csv'
     ]
 
     const validatePayments = async (testCase, options = {}) => {
