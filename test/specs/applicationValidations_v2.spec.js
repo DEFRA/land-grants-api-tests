@@ -24,7 +24,8 @@ describe('Validations V2 endpoint', () => {
       './test/data/sfi/validations/applicationsValidationsData_SCR2_26_v2.csv',
       './test/data/sfi/validations/applicationsValidationsData_WBD1_26_v2.csv',
       './test/data/sfi/validations/applicationsValidationsData_CNUM2_26_v2.csv',
-      './test/data/sfi/validations/applicationsValidationsData_HEF1_26_v2.csv'
+      './test/data/sfi/validations/applicationsValidationsData_HEF1_26_v2.csv',
+      './test/data/sfi/validations/applicationsValidationsData_GRH12_26_v2.csv'
     ]
 
     const validateMessages = async (testCase, options = {}) => {
