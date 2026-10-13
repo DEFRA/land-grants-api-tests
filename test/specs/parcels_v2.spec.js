@@ -28,6 +28,8 @@ describe('Parcels V2 endpoint', () => {
       environmentName === 'dev' || environmentName === 'local'
     const isTestEnvironment = environmentName === 'test'
     const dataFiles = [
+      './test/data/sfi/parcels/parcelsData_size.csv',
+      './test/data/sfi/parcels/AAC_with_mock_agreements_from_postgres_data.csv',
       './test/data/sfi/parcels/parcelsData_groups.csv',
       './test/data/sfi/parcels/parcelsData_CMOR1_v2.csv',
       './test/data/sfi/parcels/parcelsData_UPL1_26_v2.csv',
@@ -43,14 +45,10 @@ describe('Parcels V2 endpoint', () => {
       './test/data/sfi/parcels/parcelsData_HEF1_26_v2.csv',
       './test/data/sfi/parcels/parcelsData_GRH12_26_v2.csv',
       ...(isDevOrLocalEnvironment
-        ? [
-            './test/data/sfi/parcels/AvailableAreaCalculation_with_mock_DAL_data.csv'
-          ]
+        ? ['./test/data/sfi/parcels/AAC_with_mock_agreements_from_DAL_data.csv']
         : []),
       ...(isTestEnvironment
-        ? [
-            './test/data/sfi/parcels/AvailableAreaCalculation_with_real_DAL_data.csv'
-          ]
+        ? ['./test/data/sfi/parcels/AAC_with_real_agreements_from_DAL_data.csv']
         : [])
     ]
     // validating each test case

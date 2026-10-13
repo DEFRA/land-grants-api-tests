@@ -1,3 +1,5 @@
+import { isDeepStrictEqual } from 'node:util'
+
 // Helper functions for /parcels endpoint API testing
 /**
  * Validate response status code
@@ -210,13 +212,33 @@ export function validateAvailability(response, testCase) {
       }
 
       // compare with the expected value when provided in the data file
-      if (
-        expectedUnavailableReason &&
-        actualUnavailableReason !== expectedUnavailableReason
-      ) {
-        throw new Error(
-          `Unavailable reason validation failed: expected ${expectedUnavailableReason} but got ${actualUnavailableReason}`
-        )
+      if (expectedUnavailableReason) {
+        const expectedReason =
+          typeof expectedUnavailableReason === 'string'
+            ? JSON.parse(expectedUnavailableReason)
+            : expectedUnavailableReason
+        const sortExistingActions = (reason) => {
+          const existingActions = reason?.metadata?.existingActions
+          if (!Array.isArray(existingActions)) return reason
+
+          return {
+            ...reason,
+            metadata: {
+              ...reason.metadata,
+              existingActions: [...existingActions].sort((left, right) =>
+                JSON.stringify(left).localeCompare(JSON.stringify(right))
+              )
+            }
+          }
+        }
+        const sortedExpectedReason = sortExistingActions(expectedReason)
+        const sortedActualReason = sortExistingActions(action.unavailableReason)
+
+        if (!isDeepStrictEqual(sortedExpectedReason, sortedActualReason)) {
+          throw new Error(
+            `Unavailable reason validation failed: expected ${expectedUnavailableReason} but got ${actualUnavailableReason}`
+          )
+        }
       }
 
       if (!testCase.expectedAvailabilityValue) return
