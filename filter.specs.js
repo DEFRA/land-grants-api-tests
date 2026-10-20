@@ -22,10 +22,12 @@ export function getSpecsForEnv(
   const runEnvironment = (runEnv || '').toLowerCase()
   const scope = `${testScope || ''}`.trim().toLowerCase()
 
-  // GSPS-635 :  Files to skip specifically when running against the 'test' environment
+  // GSPS-635 :  Files to skip specifically when running against the 'test' environment because on test env these endpoints need a real Defra Id to send to DAL and
+  // currently we don't have a way to retrieve and send Defra Id without login to UI.
   const skipInTest = [
     'test/specs/parcels_v2.spec.js',
-    'test/specs/applicationValidations_v2.spec.js'
+    'test/specs/applicationValidations_v2.spec.js',
+    'test/specs/100-land-parcels/applicationValidations_for_100_land_parcels.spec.js'
   ]
 
   if (scope === 'ingest') {
