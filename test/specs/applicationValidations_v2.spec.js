@@ -25,9 +25,11 @@ describe('Validations V2 endpoint', () => {
       './test/data/sfi/validations/applicationsValidationsData_WBD1_26_v2.csv',
       './test/data/sfi/validations/applicationsValidationsData_CNUM2_26_v2.csv',
       './test/data/sfi/validations/applicationsValidationsData_HEF1_26_v2.csv',
-      './test/data/sfi/validations/applicationsValidationsData_GRH12_26_v2.csv'
+      './test/data/sfi/validations/applicationsValidationsData_GRH12_26_v2.csv',
+      './test/data/sfi/validations/applicationsValidationsData_BND2_26_v2.csv'
     ]
-
+    const DEBUG_LOGS =
+      process.env.DEBUG_LOGS === 'true' || process.env.DEBUG === 'true'
     const validateMessages = async (testCase, options = {}) => {
       const applicationId =
         testCase.applicationId && testCase.applicationId.trim() !== ''
@@ -50,10 +52,12 @@ describe('Validations V2 endpoint', () => {
         landActions
       }
 
-      // console.debug(
-      //   'Application validation request:',
-      //   JSON.stringify(validationRequestPayload, null, 2)
-      // )
+      if (DEBUG_LOGS) {
+        console.debug(
+          'Application validation request:',
+          JSON.stringify(validationRequestPayload, null, 2)
+        )
+      }
 
       // Make the API request to /application/validate endpoint
       const validationResponse = await request(global.baseUrl)
@@ -65,17 +69,19 @@ describe('Validations V2 endpoint', () => {
         .set('Accept-Encoding', '*')
         .set('X-Forwarded-Authorization', 'TestToken')
 
-      // console.debug(
-      //   'Application validation response:',
-      //   JSON.stringify(
-      //     {
-      //       status: validationResponse.status,
-      //       body: validationResponse.body
-      //     },
-      //     null,
-      //     2
-      //   )
-      // )
+      if (DEBUG_LOGS) {
+        console.debug(
+          'Application validation response:',
+          JSON.stringify(
+            {
+              status: validationResponse.status,
+              body: validationResponse.body
+            },
+            null,
+            2
+          )
+        )
+      }
       // Validate basic status code match before other validations
       validateStatusCode(
         validationResponse,

@@ -26,9 +26,11 @@ describe('Payments endpoint v2.0.0', () => {
       './test/data/sfi/payments/paymentsData_CNUM2_26_v2.csv',
       './test/data/sfi/payments/paymentsData_WBD1_26_v2.csv',
       './test/data/sfi/payments/paymentsData_HEF1_26_v2.csv',
-      './test/data/sfi/payments/paymentsData_GRH12_26_v2.csv'
+      './test/data/sfi/payments/paymentsData_GRH12_26_v2.csv',
+      './test/data/sfi/payments/paymentsData_BND2_26_v2.csv'
     ]
-
+    const DEBUG_LOGS =
+      process.env.DEBUG_LOGS === 'true' || process.env.DEBUG === 'true'
     const validatePayments = async (testCase, options = {}) => {
       const startDate = testCase.startDate
       const parcel = JSON.parse(testCase.parcel)
@@ -42,7 +44,9 @@ describe('Payments endpoint v2.0.0', () => {
         payload.applicationId = applicationId
       }
 
-      // console.debug('Payments API request:', JSON.stringify(payload, null, 2))
+      if (DEBUG_LOGS) {
+        console.debug('Payments API request:', JSON.stringify(payload, null, 2))
+      }
 
       // Make the real API request
       const response = await request(global.baseUrl)
@@ -53,17 +57,19 @@ describe('Payments endpoint v2.0.0', () => {
         .set('x-api-key', API_KEY || '')
         .set('Accept-Encoding', '*')
 
-      // console.debug(
-      //   'Payments API response:',
-      //   JSON.stringify(
-      //     {
-      //       status: response.status,
-      //       body: response.body
-      //     },
-      //     null,
-      //     2
-      //   )
-      // )
+      if (DEBUG_LOGS) {
+        console.debug(
+          'Payments API response:',
+          JSON.stringify(
+            {
+              status: response.status,
+              body: response.body
+            },
+            null,
+            2
+          )
+        )
+      }
 
       // Validate basic status code match before other validations
       validateStatusCode(response, testCase)
