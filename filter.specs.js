@@ -25,7 +25,8 @@ export function getSpecsForEnv(
   // GSPS-635 :  Files to skip specifically when running against the 'test' environment
   const skipInTest = [
     'test/specs/parcels_v2.spec.js',
-    'test/specs/applicationValidations_v2.spec.js'
+    'test/specs/applicationValidations_v2.spec.js',
+    'test/specs/100-land-parcels/applicationValidations_for_100_land_parcels.spec.js'
   ]
 
   if (scope === 'ingest') {
