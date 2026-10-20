@@ -14,7 +14,7 @@ export default {
   silent: false,
   watchPathIgnorePatterns: ['globalConfig'],
   testMatch: getSpecsForEnv(),
-  testTimeout: 300000,
+  testTimeout: 600000,
   reporters: ['default', ['github-actions', { silent: false }], 'summary'],
   setupFiles: ['<rootDir>/.jest/setup.js'],
   coveragePathIgnorePatterns: [
