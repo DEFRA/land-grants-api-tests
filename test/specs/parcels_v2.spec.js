@@ -1,5 +1,6 @@
 import request from 'supertest'
 import { runTestsAndRecordResultsForFiles } from '../utils/recordResults.js'
+import { debugLog } from '../utils/debugLogger.js'
 import {
   PARCELS_ENDPOINT_V2,
   BEARER_TOKEN,
@@ -45,6 +46,7 @@ describe('Parcels V2 endpoint', () => {
       './test/data/sfi/parcels/parcelsData_HEF1_26_v2.csv',
       './test/data/sfi/parcels/parcelsData_BND1_26_v2.csv',
       './test/data/sfi/parcels/parcelsData_BND2_26_v2.csv',
+      './test/data/sfi/parcels/parcelsData_LinearActions_v2.csv',
       './test/data/sfi/parcels/parcelsData_GRH12_26_v2.csv',
       ...(isDevOrLocalEnvironment
         ? ['./test/data/sfi/parcels/AAC_with_mock_agreements_from_DAL_data.csv']
@@ -70,10 +72,7 @@ describe('Parcels V2 endpoint', () => {
           }
         : { parcelIds, fields, sbi }
 
-      // console.debug(
-      //   'Parcels API request:',
-      //   JSON.stringify(requestPayload, null, 2)
-      // )
+      debugLog('Parcels API request:', requestPayload)
 
       const response = await request(global.baseUrl)
         .post(PARCELS_ENDPOINT_V2)
@@ -84,17 +83,10 @@ describe('Parcels V2 endpoint', () => {
         .set('Accept-Encoding', '*')
         .set('X-Forwarded-Authorization', 'TestToken')
 
-      // console.debug(
-      //   'Parcels API response:',
-      //   JSON.stringify(
-      //     {
-      //       status: response.status,
-      //       body: response.body
-      //     },
-      //     null,
-      //     2
-      //   )
-      // )
+      debugLog('Parcels API response:', {
+        status: response.status,
+        body: response.body
+      })
 
       // Validate basic status code match before other validations
       validateStatusCode(response, testCase)
