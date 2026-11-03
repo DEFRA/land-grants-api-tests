@@ -46,10 +46,12 @@ describe('Parcels V2 endpoint', () => {
       './test/data/sfi/parcels/parcelsData_HEF1_26_v2.csv',
       './test/data/sfi/parcels/parcelsData_BND1_26_v2.csv',
       './test/data/sfi/parcels/parcelsData_BND2_26_v2.csv',
-      './test/data/sfi/parcels/ALC_LinearActions_v2.csv',
       './test/data/sfi/parcels/parcelsData_GRH12_26_v2.csv',
       ...(isDevOrLocalEnvironment
-        ? ['./test/data/sfi/parcels/AAC_with_mock_agreements_from_DAL_data.csv']
+        ? [
+            './test/data/sfi/parcels/AAC_with_mock_agreements_from_DAL_data.csv',
+            './test/data/sfi/parcels/ALC_LinearActions_with_mock_agreements_from_DAL_v2.csv'
+          ]
         : []),
       ...(isTestEnvironment
         ? ['./test/data/sfi/parcels/AAC_with_real_agreements_from_DAL_data.csv']
