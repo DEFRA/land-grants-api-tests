@@ -1,4 +1,5 @@
 import request from 'supertest'
+import { debugLog } from '../utils/debugLogger.js'
 import { runTestsAndRecordResultsForFiles } from '../utils/recordResults.js'
 import {
   BEARER_TOKEN,
@@ -44,7 +45,7 @@ describe('Payments endpoint v2.0.0', () => {
         payload.applicationId = applicationId
       }
 
-      // console.debug('Payments API request:', JSON.stringify(payload, null, 2))
+      debugLog('Payments API request:', payload)
 
       // Make the real API request
       const response = await request(global.baseUrl)
@@ -55,17 +56,10 @@ describe('Payments endpoint v2.0.0', () => {
         .set('x-api-key', API_KEY || '')
         .set('Accept-Encoding', '*')
 
-      // console.debug(
-      //   'Payments API response:',
-      //   JSON.stringify(
-      //     {
-      //       status: response.status,
-      //       body: response.body
-      //     },
-      //     null,
-      //     2
-      //   )
-      // )
+      debugLog('Payments API response:', {
+        status: response.status,
+        body: response.body
+      })
 
       // Validate basic status code match before other validations
       validateStatusCode(response, testCase)

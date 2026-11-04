@@ -1,4 +1,5 @@
 import request from 'supertest'
+import { debugLog } from '../utils/debugLogger.js'
 import { runTestsAndRecordResultsForFiles } from '../utils/recordResults.js'
 import {
   APPLICATION_VALIDATIONS_ENDPOINT_V2,
@@ -52,10 +53,7 @@ describe('Validations V2 endpoint', () => {
         landActions
       }
 
-      // console.debug(
-      //   'Application validation request:',
-      //   JSON.stringify(validationRequestPayload, null, 2)
-      // )
+      debugLog('Application validation request:', validationRequestPayload)
 
       // Make the API request to /application/validate endpoint
       const validationResponse = await request(global.baseUrl)
@@ -67,17 +65,10 @@ describe('Validations V2 endpoint', () => {
         .set('Accept-Encoding', '*')
         .set('X-Forwarded-Authorization', 'TestToken')
 
-      // console.debug(
-      //   'Application validation response:',
-      //   JSON.stringify(
-      //     {
-      //       status: validationResponse.status,
-      //       body: validationResponse.body
-      //     },
-      //     null,
-      //     2
-      //   )
-      // )
+      debugLog('Application validation response:', {
+        status: validationResponse.status,
+        body: validationResponse.body
+      })
       // Validate basic status code match before other validations
       validateStatusCode(
         validationResponse,
@@ -107,6 +98,11 @@ describe('Validations V2 endpoint', () => {
           .set('Authorization', `Bearer ${BEARER_TOKEN}`)
           .set('x-api-key', API_KEY || '')
           .set('Accept-Encoding', '*')
+
+        debugLog('Application validation run response:', {
+          status: validationRunResponse.status,
+          body: validationRunResponse.body
+        })
 
         // Validate basic status code match before other validations
         validateStatusCode(
