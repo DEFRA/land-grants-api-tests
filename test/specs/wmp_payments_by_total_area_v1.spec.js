@@ -29,13 +29,15 @@ describe('WMP Payments by total area endpoint v1.0.0', () => {
       const crn = testCase.crn && testCase.crn.trim()
       const sbi = testCase.sbi && testCase.sbi.trim()
       const totalAreaHa = testCase.totalAreaHa
+      const originalTotalAreaHa = testCase.originalTotalAreaHa
 
       const payload = {
         startDate,
         applicationId,
         crn,
         sbi,
-        totalAreaHa
+        totalAreaHa,
+        originalTotalAreaHa
       }
 
       // Make the real API request
