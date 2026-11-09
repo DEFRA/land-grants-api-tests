@@ -31,7 +31,7 @@ const LATEST_ACTION_VERSIONS = {
   GRH12_26: '1.2.0',
   HEF1_26: '1.2.0',
   BND1_26: '1.2.0',
-  BND2_26: '1.1.0'
+  BND2_26: '1.1.1'
 }
 
 /**
