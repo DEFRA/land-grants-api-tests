@@ -16,6 +16,7 @@ import {
   validateSizeValue,
   validateSSSIConsentRequired,
   validateHEFERRequired,
+  validateHasSupplements,
   validateErrorMessage,
   validateActionGroups
 } from '../utils/parcelsHelper.js'
@@ -112,6 +113,8 @@ describe('Parcels V2 endpoint', () => {
         validateSSSIConsentRequired(response, testCase)
         // Validate HEFER required
         validateHEFERRequired(response, testCase)
+        // Validate hasSupplements
+        validateHasSupplements(response, testCase)
         // validate action groups
         validateActionGroups(response, testCase)
       } else {
