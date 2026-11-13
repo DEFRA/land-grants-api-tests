@@ -559,6 +559,54 @@ export function validateHEFERRequired(response, testCase) {
 }
 
 /**
+ * Validate whether the expected action has supplements.
+ */
+export function validateHasSupplements(response, testCase) {
+  if (!testCase.fields.includes('actions')) {
+    return
+  }
+
+  const parcel = response.body.parcels.find(
+    (parcel) =>
+      parcel.sheetId === testCase.expectedSheetId &&
+      parcel.parcelId === testCase.expectedParcelId
+  )
+  const action = parcel?.actions?.find(
+    (action) => action.code === testCase.expectedActionCode
+  )
+
+  if (!action) {
+    throw new Error(
+      `Action '${testCase.expectedActionCode}' was not found for hasSupplements validation`
+    )
+  }
+
+  if (typeof action.hasSupplements !== 'boolean') {
+    throw new Error(
+      `Action ${action.code} does not contain a boolean hasSupplements value`
+    )
+  }
+
+  const expectedHasSupplements = String(
+    testCase.expectedHasSupplements || 'false'
+  ).toLowerCase()
+
+  if (!['true', 'false'].includes(expectedHasSupplements)) {
+    throw new Error(
+      `Invalid expectedHasSupplements value: ${testCase.expectedHasSupplements}`
+    )
+  }
+
+  const expectedValue = expectedHasSupplements === 'true'
+
+  if (action.hasSupplements !== expectedValue) {
+    throw new Error(
+      `hasSupplements validation failed for ${action.code}: expected ${expectedValue} but got ${action.hasSupplements}`
+    )
+  }
+}
+
+/**
  * Validate Action Groups field if expected
  */
 export function validateActionGroups(response, testCase) {
