@@ -3,7 +3,8 @@ import { debugLog } from '../utils/debugLogger.js'
 import { runTestsAndRecordResultsForFiles } from '../utils/recordResults.js'
 import {
   APPLICATION_VALIDATIONS_ENDPOINT_V2,
-  APPLICATION_VALIDATION_RUN_ENDPOINT,
+  CM_APPLICATION_VALIDATION_RUN_ENDPOINT,
+  CM_APPLICATION_VALIDATION_RERUN_ENDPOINT,
   BEARER_TOKEN,
   API_KEY
 } from '../utils/apiEndpoints.js'
@@ -12,7 +13,7 @@ import {
   validateSuccessMessage,
   validateErrorMessage,
   validateApplicationRules,
-  applicationValidationRunCheck
+  applicationReRunValidationCheck
 } from '../utils/validationsHelper.js'
 
 describe('Validations V2 endpoint', () => {
@@ -92,42 +93,46 @@ describe('Validations V2 endpoint', () => {
         // Extract the runId from the validation response
         const runId = validationResponse.body.id
 
-        // Make the API request to /application/validation-run/{id} endpoint
-        const validationRunResponse = await request(global.baseUrl)
-          .post(APPLICATION_VALIDATION_RUN_ENDPOINT + `/${runId}`)
+        // Make the GET API request to /case-management-adapter/application/validation-run/{id} endpoint
+        const cmValidationRunResponse = await request(global.baseUrl)
+          .get(CM_APPLICATION_VALIDATION_RUN_ENDPOINT + `/${runId}`)
           .set('Accept', 'application/json')
           .set('Authorization', `Bearer ${BEARER_TOKEN}`)
           .set('x-api-key', API_KEY || '')
           .set('Accept-Encoding', '*')
 
-        debugLog('Application validation run response:', {
-          status: validationRunResponse.status,
-          body: validationRunResponse.body
-        })
+        // Validate the status code of the CM validation run response
+        validateStatusCode(cmValidationRunResponse, 200)
 
-        // Validate basic status code match before other validations
-        validateStatusCode(
-          validationRunResponse,
-          testCase,
-          'expectedValidationRunStatusCode'
-        )
+        // Make the POST API request to /case-management-adapter/application/validation-run/rerun/{id} endpoint
+        const cmReRunValidationPayload = {
+          requesterUsername: 'TestUser',
+          id: runId
+        }
+
+        const cmReRunValidationResponse = await request(global.baseUrl)
+          .post(CM_APPLICATION_VALIDATION_RERUN_ENDPOINT)
+          .send(cmReRunValidationPayload)
+          .set('Accept', 'application/json')
+          .set('Authorization', `Bearer ${BEARER_TOKEN}`)
+          .set('x-api-key', API_KEY || '')
+          .set('Accept-Encoding', '*')
+          .set('Defra-Email', 'testuser@example.com')
+
+        // Validate the status code of the CM validation run response
+        validateStatusCode(cmReRunValidationResponse, 200)
 
         // For 200 responses, perform detailed validations
-        if (validationRunResponse.status === 200) {
+        if (cmReRunValidationResponse.status === 200) {
           // Validate success message
           validateSuccessMessage(
-            validationRunResponse,
+            cmReRunValidationResponse,
             testCase,
             'expectedValidationRunMessage'
           )
 
-          // validate application validation run
-          applicationValidationRunCheck(
-            validationRunResponse,
-            applicationId,
-            testCase,
-            runId
-          )
+          // validate application re-run response
+          applicationReRunValidationCheck(cmReRunValidationResponse, testCase)
         }
       } else {
         // For non-200 responses, validate status code

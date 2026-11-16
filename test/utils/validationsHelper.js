@@ -112,68 +112,15 @@ export function validateErrorMessage(response, testCase) {
   }
 }
 
-/** Validate application validation run details
+/** Validate application validationre-run response details
  */
-export function applicationValidationRunCheck(
-  response,
-  applicationId,
-  testCase,
-  runId
-) {
-  // Check if id matches
-  if (response.body.applicationValidationRun.id !== runId) {
-    throw new Error(
-      `Validation failed: expected id to be ${runId} but got ${response.body.applicationValidationRun.id}`
-    )
-  }
-
-  // Check if applicationId matches
+export function applicationReRunValidationCheck(response, testCase) {
   if (
-    String(response.body.applicationValidationRun.application_id) !==
-    applicationId
+    String(response.body.valid).toLowerCase() !==
+    String(testCase.hasPassed).toLowerCase()
   ) {
     throw new Error(
-      `Validation failed: expected applicationId to be ${applicationId} but got ${response.body.applicationValidationRun.application_id}`
-    )
-  }
-
-  // Check if sbi matches
-  if (
-    String(response.body.applicationValidationRun.sbi) !== String(testCase.sbi)
-  ) {
-    throw new Error(
-      `Validation failed: expected sbi to be ${testCase.sbi} but got ${response.body.applicationValidationRun.sbi}`
-    )
-  }
-
-  // Check if crn matches
-  if (
-    String(response.body.applicationValidationRun.crn) !==
-    String(testCase.applicantCrn)
-  ) {
-    throw new Error(
-      `Validation failed: expected crn to be ${testCase.applicantCrn} but got ${response.body.applicationValidationRun.crn}`
-    )
-  }
-
-  // Check if hasPassed matches
-  if (
-    String(
-      response.body.applicationValidationRun.data.hasPassed
-    ).toLowerCase() !== String(testCase.hasPassed).toLowerCase()
-  ) {
-    throw new Error(
-      `Validation failed: expected has_passed to be ${testCase.hasPassed} but got ${response.body.applicationValidationRun.data.hasPassed}`
-    )
-  }
-
-  // Check if requester matches
-  if (
-    String(response.body.applicationValidationRun.data.requester) !==
-    String(testCase.requester)
-  ) {
-    throw new Error(
-      `Validation failed: expected requester to be ${testCase.requester} but got ${response.body.applicationValidationRun.data.requester}`
+      `Validation failed: expected hasPassed to be ${testCase.hasPassed} but got ${response.body.valid}`
     )
   }
 }
