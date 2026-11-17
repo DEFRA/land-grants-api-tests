@@ -4,7 +4,10 @@ export const PARCELS_ENDPOINT_V2 = '/api/v2/parcels'
 export const PAYMENTS_ENDPOINT_V2 = '/api/v2/payments/calculate'
 export const APPLICATION_VALIDATIONS_ENDPOINT_V2 =
   '/api/v2/application/validate'
-export const APPLICATION_VALIDATION_RUN_ENDPOINT = '/application/validation-run'
+export const CM_APPLICATION_VALIDATION_RUN_ENDPOINT =
+  '/case-management-adapter/application/validation-run'
+export const CM_APPLICATION_VALIDATION_RERUN_ENDPOINT =
+  '/case-management-adapter/application/validation-run/rerun'
 export const WMP_VALIDATIONS_ENDPOINT = '/api/v1/wmp/validate'
 export const WMP_PAYMENTS_ENDPOINT = '/api/v1/wmp/payments/calculate'
 export const WMP_PAYMENTS_CALCULATE_BY_TOTAL_AREA_ENDPOINT =
