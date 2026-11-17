@@ -1,0 +1,13 @@
+TestDescription,parcelId,baseActionCode,baseActionQuantity,baseActionUnit,selectedSupplements,expectedStatusCode,expectedMessage,expectedSheetId,expectedParcelId,expectedBaseActionCode,expectedSupplementCode,expectedAvailabilityUnit,expectedAvailabilityValue,expectedIsAvailable,Comments
+1.Returns not found when parcel ID does not exist,AB1234-9999,CLIG3_26,2,ha,[],404,Land parcels not found: AB1234-9999,,,,,,,,
+2.Returns not found when base action code is unknown,SY7587-0431,ABCD1,2,ha,[],404,Base action not found: ABCD1,,,,,,,,
+3.Rejects a base action quantity of zero,SY7587-0431,CLIG3_26,0,ha,[],400,"""baseAction.quantity"" must be a positive number",,,,,,,,
+4.Rejects a base action unit other than ha or sqm,SY7587-0431,CLIG3_26,2,m,[],400,"""baseAction.unit"" must be one of [ha, sqm]",,,,,,,,
+5.Rejects zero quantity and an unsupported base action unit,SY7587-0431,CLIG3_26,0,m,[],400,"""baseAction.quantity"" must be a positive number. ""baseAction.unit"" must be one of [ha, sqm]",,,,,,,,
+6.Returns available supplements when selectedSupplements is omitted,SY7587-0431,CLIG3_26,2,ha,,200,success,SY7587,0431,CLIG3_26,GRH7_26,ha,2,TRUE,
+7.Marks a supplement unavailable when its quantity exceeds the base action area,SY7587-0431,CLIG3_26,2,ha,"[{""actionCode"":""GRH7_26"",""quantity"":22,""unit"":""ha""}]",200,success,SY7587,0431,CLIG3_26,GRH7_26,ha,2,FALSE,
+8.Marks a supplement available when its quantity is within the base action area,SY7587-0431,CLIG3_26,2,ha,"[{""actionCode"":""GRH7_26"",""quantity"":1,""unit"":""ha""}]",200,success,SY7587,0431,CLIG3_26,GRH7_26,ha,2,TRUE,
+9.Rejects a negative base action quantity,SY7587-0431,CLIG3_26,-1,ha,[],400,"""baseAction.quantity"" must be a positive number",,,,,,,,
+10.Rejects selected supplement with zero quantity and unsupported unit,SY7587-0431,CLIG3_26,2,ha,"[{""actionCode"":""GRH7_26"",""quantity"":0,""unit"":""m""}]",400,"""selectedSupplements[0].quantity"" must be a positive number. ""selectedSupplements[0].unit"" must be one of [ha, sqm]",,,,,,,,
+11.Rejects action code that is not a supplement of the base action,SY7587-0431,CLIG3_26,2,ha,"[{""actionCode"":""GRH7_26_A"",""quantity"":1,""unit"":""ha""}]",400,Not supplements of CLIG3_26: GRH7_26_A,,,,,,,,
+12.Returns no supplements for CMOR1 when selectedSupplements is omitted,SY7587-0431,CMOR1,11,ha,,200,success,SY7587,0431,CMOR1,,,,,
