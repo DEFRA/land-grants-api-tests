@@ -1,6 +1,7 @@
 import 'dotenv/config'
 
 export const PARCELS_ENDPOINT_V2 = '/api/v2/parcels'
+export const PARCEL_SUPPLEMENTS_ENDPOINT_V2 = '/api/v2/parcels/supplements'
 export const PAYMENTS_ENDPOINT_V2 = '/api/v2/payments/calculate'
 export const APPLICATION_VALIDATIONS_ENDPOINT_V2 =
   '/api/v2/application/validate'

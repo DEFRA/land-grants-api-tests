@@ -26,6 +26,7 @@ export function getSpecsForEnv(
   // currently we don't have a way to retrieve and send Defra Id without login to UI.
   const skipInTest = [
     'test/specs/parcels_v2.spec.js',
+    'test/specs/parcel_supplements_v2.spec.js',
     'test/specs/applicationValidations_v2.spec.js',
     'test/specs/100-land-parcels/applicationValidations_for_100_land_parcels.spec.js'
   ]
