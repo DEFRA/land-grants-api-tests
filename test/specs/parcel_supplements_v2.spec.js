@@ -17,16 +17,10 @@ describe('Parcel supplements V2 endpoint', () => {
 
     const validateSupplement = async (testCase) => {
       const payload = {
+        sbi: testCase.sbi,
         parcelId: testCase.parcelId,
-        baseAction: {
-          actionCode: testCase.baseActionCode,
-          quantity: Number(testCase.baseActionQuantity),
-          unit: testCase.baseActionUnit
-        }
-      }
-
-      if (testCase.selectedSupplements?.trim()) {
-        payload.selectedSupplements = JSON.parse(testCase.selectedSupplements)
+        baseAction: testCase.baseAction,
+        plannedActions: JSON.parse(testCase.plannedActions)
       }
 
       debugLog('Parcel supplements API request:', {
