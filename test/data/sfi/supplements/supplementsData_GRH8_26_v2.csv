@@ -1,2 +1,2 @@
-TestDescription,sbi,parcelId,baseAction,plannedActions,expectedStatusCode,expectedMessage,expectedSheetId,expectedParcelId,expectedBaseActionCode,expectedSupplementCode,expectedAvailabilityUnit,expectedAvailabilityValue,expectedIsAvailable,Comments
+TestDescription,sbi,parcelId,baseActionCode,plannedActions,expectedStatusCode,expectedMessage,expectedSheetId,expectedParcelId,expectedBaseActionCode,expectedSupplementCode,expectedAvailabilityUnit,expectedAvailabilityValue,expectedIsAvailable,Comments
 1.GRH8_26 available for CLIG3_26 on a parcel,800000001,SY7587-0431,CLIG3_26,"[{""actionCode"":""CLIG3_26"",""quantity"":2,""unit"":""ha""}]",200,success,SY7587,0431,CLIG3_26,GRH8_26,ha,2,TRUE,

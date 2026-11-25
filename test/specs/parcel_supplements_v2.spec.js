@@ -19,7 +19,7 @@ describe('Parcel supplements V2 endpoint', () => {
       const payload = {
         sbi: testCase.sbi,
         parcelId: testCase.parcelId,
-        baseAction: testCase.baseAction,
+        baseActionCode: testCase.baseActionCode,
         plannedActions: JSON.parse(testCase.plannedActions)
       }
 
